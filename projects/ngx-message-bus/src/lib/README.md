@@ -13,7 +13,7 @@
 - ### Module lifetime
 
 ```
-import {MessageBusModule} from 'message-bus.module';
+import {RxMessageBusModule} from 'message-bus.module';
 
 @NgModule({
   declarations: [],
@@ -26,7 +26,7 @@ import {MessageBusModule} from 'message-bus.module';
     // Application modules.
     SharedModule,
     AppRouteModule,
-    MessageBusModule
+    RxMessageBusModule
   ],
   providers: [
     AppSettings
@@ -63,7 +63,7 @@ export class ParentComponent implements OnInit {
   providers: [
     {
       provide: 'IMessageBusService',
-      useFactory: () => new MessageBusService()
+      useFactory: () => new RxMessageBusService()
     }
   ]
 })

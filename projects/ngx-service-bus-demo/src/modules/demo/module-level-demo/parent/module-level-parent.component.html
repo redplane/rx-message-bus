@@ -1,0 +1,7 @@
+<!--Emit message trigger-->
+<button mat-button [color]="'primary'" (click)="clickSendMessage()">
+  <span>Emit message from {{name}}</span>
+</button>
+
+<!--Allow child content to be projected in this component-->
+<ng-content></ng-content>

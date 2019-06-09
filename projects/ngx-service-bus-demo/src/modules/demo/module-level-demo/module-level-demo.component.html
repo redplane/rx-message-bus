@@ -1,0 +1,102 @@
+<div class="mb-20" fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-header class="mat-card-header">
+      <div class="mat-card-header-text">
+        <mat-card-title class="mat-card-title">Description</mat-card-title>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <ul>
+        <li>Every component will be in the same <b>message bus lifetime</b></li>
+        <li>Message will be published to all components in the module, regardless their hierarchical position.</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<div class="mb-20"
+     fxFlex
+     fxLayout="row"
+     fxLayout.lt-md="column"
+     fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group [color]="'primary'">
+
+        <!--Preview-->
+        <mat-tab label="{{'Preview' | translate}}">
+          <ul>
+            <li>
+              <single-lifetime-parent [name]="'Level 01'">
+                <ul>
+                  <li>
+                    <single-lifetime-child></single-lifetime-child>
+                  </li>
+                  <li>
+                    <single-lifetime-child></single-lifetime-child>
+                  </li>
+                  <li>
+                    <single-lifetime-parent [name]="'Level 02'">
+                      <ul>
+                        <li>
+                          <single-lifetime-child></single-lifetime-child>
+                        </li>
+                        <li>
+                          <single-lifetime-parent [name]="'Level 03'">
+                            <ul>
+                              <li>
+                                <single-lifetime-child></single-lifetime-child>
+                              </li>
+                            </ul>
+                          </single-lifetime-parent>
+                        </li>
+                      </ul>
+                    </single-lifetime-parent>
+                  </li>
+                </ul>
+              </single-lifetime-parent>
+            </li>
+          </ul>
+        </mat-tab>
+
+        <mat-tab label="module-level-child.component.html">
+          <pre>
+            &lt;div&gt;
+              &lt;span&gt;Received message: &lt;b&gt;{{message}}&lt;/b&gt;&lt;/span&gt;
+            &lt;/div&gt;
+          </pre>
+        </mat-tab>
+
+        <mat-tab label="module-level-child.component.ts">
+          <pre [innerHTML]="moduleLevelChildTypescript">
+          </pre>
+        </mat-tab>
+
+        <mat-tab label="module-level-parent.component.html">
+          <pre>
+            &lt;!--Emit message trigger--&gt;
+            &lt;button mat-button [color]=&quot;'primary'&quot; (click)=&quot;clickSendMessage()&quot;&gt;
+              &lt;span&gt;Emit message from {{name}}&lt;/span&gt;
+            &lt;/button&gt;
+
+            &lt;!--Allow child content to be projected in this component--&gt;
+            &lt;ng-content&gt;&lt;/ng-content&gt;
+          </pre>
+        </mat-tab>
+
+        <mat-tab label="module-level-parent.component.ts">
+          <pre [innerHTML]="moduleLevelParentTypescript">
+          </pre>
+        </mat-tab>
+
+        <mat-tab label="module.ts">
+          <pre [innerHTML]="moduleTypescript">
+          </pre>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+

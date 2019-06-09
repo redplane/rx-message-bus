@@ -1,4 +1,4 @@
-export interface IMessageBusOption {
+export interface IRxMessageBusOption {
 
   //#region Properties
 
@@ -20,7 +20,7 @@ export interface IMessageBusOption {
   /*
   * Amount of time between 2 connection retries.
   * */
-  channelConnectionAttemptDelay: number;
+  channelConnectionAttemptDelay?: number;
 
   //#endregion
 }

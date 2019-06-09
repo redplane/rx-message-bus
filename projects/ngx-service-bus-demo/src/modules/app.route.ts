@@ -5,8 +5,12 @@ import {RouterModule, Routes} from "@angular/router";
 
 const routes: Routes = [
   {
+    path: 'demo',
+    loadChildren: './demo/demo.module#DemoModule'
+  },
+  {
     path: '**',
-    loadChildren: './main/main.module#MainModule'
+    redirectTo: 'demo'
   }
 ];
 

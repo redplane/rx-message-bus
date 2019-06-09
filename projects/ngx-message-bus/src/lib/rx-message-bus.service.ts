@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {IMessageBusService} from './message-bus-service.interface';
+import {IRxMessageBusService} from './rx-message-bus-service.interface';
 import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
-import {delay, flatMap, map, retryWhen} from 'rxjs/operators';
-import {IMessageBusOption} from './message-bus-option.interface';
+import {delay, flatMap, retryWhen, switchMap} from 'rxjs/operators';
+import {IRxMessageBusOption} from './rx-message-bus-option.interface';
 
 @Injectable()
-export class MessageBusService implements IMessageBusService {
+export class RxMessageBusService implements IRxMessageBusService {
 
   //#region Properties
 
@@ -32,7 +32,7 @@ export class MessageBusService implements IMessageBusService {
   /*
   * Message bus service options.
   * */
-  private _options: IMessageBusOption;
+  private _options: IRxMessageBusOption;
 
   //#endregion
 
@@ -41,42 +41,7 @@ export class MessageBusService implements IMessageBusService {
   /*
   * Initialize service with injectors.
   * */
-  public constructor(options: IMessageBusOption = null) {
-
-    // Option is not specified.
-    if (!options) {
-      options = {
-        subscriptionAttemptMode: 'times',
-        channelSubscriptionAttemptDuration: this._defaultChannelSubscriptionDuration,
-        channelSubscriptionAttemptTimes: this._defaultChannelSubscriptionAttemptTimes,
-        channelConnectionAttemptDelay: this._defaultSubscriptionAttemptDelayTime
-      };
-    }
-
-    // Attempt time is not valid.
-    if (options.channelSubscriptionAttemptTimes < 0) {
-      options.channelSubscriptionAttemptTimes = this._defaultChannelSubscriptionAttemptTimes;
-    }
-
-    // Attempt duration is not valid.
-    if (options.channelSubscriptionAttemptDuration < 0) {
-      options.channelSubscriptionAttemptDuration = this._defaultChannelSubscriptionDuration;
-    }
-
-    // Subscription attempt delay is not valid.
-    if (options.channelConnectionAttemptDelay < 500) {
-      options.channelConnectionAttemptDelay = this._defaultSubscriptionAttemptDelayTime;
-    }
-
-    // No mode is specify for message bus.
-    const availableAttemptModes = ['duration', 'times', 'infinite'];
-    if (!options.subscriptionAttemptMode || availableAttemptModes.indexOf(options.subscriptionAttemptMode) === -1) {
-      options.subscriptionAttemptMode = 'duration';
-    }
-
-    // Update options to message bus.
-    this._options = options;
-
+  public constructor() {
     // Initialize list of channel mappings.
     this._mChannel = new Map<string, Map<string, Subject<any>>>();
   }
@@ -118,7 +83,7 @@ export class MessageBusService implements IMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  public hookMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean): Observable<T> {
+  public hookMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean, messageBusOptions?: IRxMessageBusOption): Observable<T> {
 
     // Number of subscription retry.
     let subscriptionRetryTimes = 0;
@@ -126,8 +91,14 @@ export class MessageBusService implements IMessageBusService {
     // Time when the first retry was made.
     const firstRetryTime = new Date().getTime();
 
-    return this.loadMessageChannel(channelName, eventName, autoCreate)
+    // Base on mode, we have different attempt strategy.
+    const options = this.loadMessageBusOptions(messageBusOptions);
+
+    return of(null)
       .pipe(
+
+        switchMap(() => this.loadMessageChannel(channelName, eventName, autoCreate)),
+
         flatMap((behaviourSubject: Observable<T>) => {
           if (!behaviourSubject) {
             return throwError('Channel is not found');
@@ -135,10 +106,8 @@ export class MessageBusService implements IMessageBusService {
 
           return behaviourSubject;
         }),
-        retryWhen(exceptionObservable => {
 
-          // Base on mode, we have different attempt strategy.
-          const options = this._options;
+        retryWhen(exceptionObservable => {
           switch (options.subscriptionAttemptMode) {
 
             case 'times':
@@ -251,6 +220,52 @@ export class MessageBusService implements IMessageBusService {
     return of(behaviourSubject);
   }
 
+  /*
+  * Load message from options.
+  * Default message bus option will be used if no option is defined.
+  * */
+  protected loadMessageBusOptions(originalOptions?: IRxMessageBusOption): IRxMessageBusOption {
+
+    // Get options.
+    let options = Object.assign({}, originalOptions || this._options);
+
+    // Option is not specified.
+    if (!options) {
+
+      // Get predefined options.
+      options = {
+        subscriptionAttemptMode: 'times',
+        channelSubscriptionAttemptDuration: this._defaultChannelSubscriptionDuration,
+        channelSubscriptionAttemptTimes: this._defaultChannelSubscriptionAttemptTimes,
+        channelConnectionAttemptDelay: this._defaultSubscriptionAttemptDelayTime
+      };
+
+      this._options = options;
+    }
+
+    // Attempt time is not valid.
+    if (!options.channelSubscriptionAttemptTimes || options.channelSubscriptionAttemptTimes < 0) {
+      options.channelSubscriptionAttemptTimes = this._defaultChannelSubscriptionAttemptTimes;
+    }
+
+    // Attempt duration is not valid.
+    if (!options.channelSubscriptionAttemptDuration || options.channelSubscriptionAttemptDuration < 0) {
+      options.channelSubscriptionAttemptDuration = this._defaultChannelSubscriptionDuration;
+    }
+
+    // Subscription attempt delay is not valid.
+    if (!options.channelConnectionAttemptDelay || options.channelConnectionAttemptDelay < 500) {
+      options.channelConnectionAttemptDelay = this._defaultSubscriptionAttemptDelayTime;
+    }
+
+    // No mode is specify for message bus.
+    const availableAttemptModes = ['duration', 'times', 'infinite'];
+    if (!options.subscriptionAttemptMode || availableAttemptModes.indexOf(options.subscriptionAttemptMode) === -1) {
+      options.subscriptionAttemptMode = 'duration';
+    }
+
+    return options;
+  }
 
   //#endregion
 
