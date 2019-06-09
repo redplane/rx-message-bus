@@ -38,7 +38,7 @@ export class ChildComponent implements OnDestroy {
         MessageEventNameConstant.sendParentMessage,
         false, {
           subscriptionAttemptMode: 'infinite',
-          channelConnectionAttemptDelay: 250
+          channelConnectionAttemptDelay: 100
         })
       .subscribe((message: string) => {
         this._message = message;

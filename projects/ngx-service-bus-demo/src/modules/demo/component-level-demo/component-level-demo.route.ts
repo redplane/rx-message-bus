@@ -1,13 +1,13 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
-import {ModuleLevelDemoComponent} from "./module-level-demo.component";
+import {ComponentLevelDemoComponent} from "./component-level-demo.component";
 
 //#region Routes
 
 const routes: Routes = [
   {
     path: '',
-    component: ModuleLevelDemoComponent
+    component: ComponentLevelDemoComponent
   }
 ];
 
@@ -20,7 +20,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ]
 })
-export class ModuleLevelDemoRouteModule {
+export class ComponentLevelDemoRouteModule {
 
 }
 

@@ -2,14 +2,13 @@
   <mat-card>
     <mat-card-header class="mat-card-header">
       <div class="mat-card-header-text">
-        <mat-card-title class="mat-card-title">Module level demo</mat-card-title>
-        <mat-card-subtitle>Description</mat-card-subtitle>
+        <mat-card-title class="mat-card-title">Description</mat-card-title>
       </div>
     </mat-card-header>
     <mat-card-content>
       <ul>
-        <li>Every component will be in the same <b>message bus lifetime</b></li>
-        <li>Message will be published to all components in the module, regardless their hierarchical position.</li>
+        <li>Every component will be in the <h3>different message bus lifetime</h3></li>
+        <li>Message will be published to all components in the <h3>COMPONENT</h3>, base on their hierarchical position.</li>
       </ul>
     </mat-card-content>
   </mat-card>
@@ -29,34 +28,34 @@
         <mat-tab label="{{'Preview' | translate}}">
           <ul>
             <li>
-              <module-level-parent [name]="'Level 01'">
+              <component-level-parent [name]="'Level 01'">
                 <ul>
                   <li>
-                    <module-level-child></module-level-child>
+                    <component-level-child></component-level-child>
                   </li>
                   <li>
-                    <module-level-child></module-level-child>
+                    <component-level-child></component-level-child>
                   </li>
                   <li>
-                    <module-level-parent [name]="'Level 02'">
+                    <component-level-parent [name]="'Level 02'">
                       <ul>
                         <li>
-                          <module-level-child></module-level-child>
+                          <component-level-child></component-level-child>
                         </li>
                         <li>
-                          <module-level-parent [name]="'Level 03'">
+                          <component-level-parent [name]="'Level 03'">
                             <ul>
                               <li>
-                                <module-level-child></module-level-child>
+                                <component-level-child></component-level-child>
                               </li>
                             </ul>
-                          </module-level-parent>
+                          </component-level-parent>
                         </li>
                       </ul>
-                    </module-level-parent>
+                    </component-level-parent>
                   </li>
                 </ul>
-              </module-level-parent>
+              </component-level-parent>
             </li>
           </ul>
         </mat-tab>
@@ -70,7 +69,7 @@
         </mat-tab>
 
         <mat-tab label="module-level-child.component.ts">
-          <pre [innerHTML]="moduleLevelChildTypescript">
+          <pre [innerHTML]="childTypescript">
           </pre>
         </mat-tab>
 
@@ -87,7 +86,7 @@
         </mat-tab>
 
         <mat-tab label="module-level-parent.component.ts">
-          <pre [innerHTML]="moduleLevelParentTypescript">
+          <pre [innerHTML]="parentTypescript">
           </pre>
         </mat-tab>
 

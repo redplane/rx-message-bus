@@ -3,12 +3,16 @@ import {ParentComponent} from "../../parent.component";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
 import {IRxMessageBusService} from "../../../../../../ngx-message-bus/src/lib/rx-message-bus-service.interface";
+import {RxMessageBusService} from "../../../../../../ngx-message-bus/src/lib/rx-message-bus.service";
 
 @Component({
-  selector: 'module-level-parent',
-  templateUrl: 'module-level-parent.component.html'
+  selector: 'component-level-parent',
+  templateUrl: 'component-level-parent.component.html',
+  providers: [
+    {provide: 'IRxMessageBusService', useClass: RxMessageBusService}
+  ]
 })
-export class ModuleLevelParentComponent extends ParentComponent {
+export class ComponentLevelParentComponent extends ParentComponent {
 
   //#region Properties
 

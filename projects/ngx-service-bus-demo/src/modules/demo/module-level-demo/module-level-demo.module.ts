@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {ModuleLevelDemoComponent} from "./module-level-demo.component";
 import {RxMessageBusModule} from "../../../../../ngx-message-bus/src/public_api";
-import {SingletonServiceDemoRouteModule} from "./module-level-demo.route";
+import {ModuleLevelDemoRouteModule} from "./module-level-demo.route";
 import {RouterModule} from "@angular/router";
 import {MatButtonModule, MatCardModule, MatTabsModule} from "@angular/material";
 import {TranslateModule} from "@ngx-translate/core";
@@ -15,13 +15,12 @@ import {ModuleLevelChildComponent} from "./child/module-level-child.component";
       subscriptionAttemptMode: 'infinite'
     }),
 
-    RouterModule,
-
-    SingletonServiceDemoRouteModule,
     MatCardModule,
     MatTabsModule,
     TranslateModule.forChild(),
-    MatButtonModule
+    MatButtonModule,
+
+    ModuleLevelDemoRouteModule
   ],
   declarations: [
     ModuleLevelParentComponent,

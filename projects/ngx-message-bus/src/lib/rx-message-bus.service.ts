@@ -34,6 +34,11 @@ export class RxMessageBusService implements IRxMessageBusService {
   * */
   private _options: IRxMessageBusOption;
 
+  /*
+  * Special channel which raises a message when an ordinary channel is created.
+  * */
+  private _channelAddedEvent: Subject<{channelName: string, eventName: string}>;
+
   //#endregion
 
   //#region Constructor
@@ -42,6 +47,10 @@ export class RxMessageBusService implements IRxMessageBusService {
   * Initialize service with injectors.
   * */
   public constructor() {
+
+    // Initialize special channel.
+    this._channelAddedEvent = new BehaviorSubject(null);
+
     // Initialize list of channel mappings.
     this._mChannel = new Map<string, Map<string, Subject<any>>>();
   }
@@ -58,9 +67,9 @@ export class RxMessageBusService implements IRxMessageBusService {
     // Find channel mapping.
     const mChannel = this._mChannel;
 
-    // Channel is not available.
     let mEventMessageEmitter: Map<string, Subject<any>>;
 
+    // Channel is available.
     if (mChannel.has(channelName)) {
       mEventMessageEmitter = mChannel.get(channelName);
     } else {
@@ -74,6 +83,10 @@ export class RxMessageBusService implements IRxMessageBusService {
 
     const behaviorSubject = new BehaviorSubject(null);
     mEventMessageEmitter.set(eventName, behaviorSubject);
+
+    // Raise an event about newly created channel.
+    this._channelAddedEvent.next({channelName, eventName});
+
     return <BehaviorSubject<T>>behaviorSubject;
   }
 
@@ -167,6 +180,19 @@ export class RxMessageBusService implements IRxMessageBusService {
   }
 
   /*
+  * Subscribe to a special channel which emits message when an ordinary channel is created.
+  * */
+  public hookChannelAddedEvent(): Observable<{ channelName: string; eventName: string }> {
+
+    // Special channel hasn't been initialized.
+    if (!this._channelAddedEvent) {
+      this._channelAddedEvent = new BehaviorSubject(null);
+    }
+
+    return this._channelAddedEvent;
+  }
+
+  /*
   * Load message channel using channel name and event name.
   * Specifying auto create will trigger channel creation if it is not available.
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
@@ -215,6 +241,9 @@ export class RxMessageBusService implements IRxMessageBusService {
       }
       behaviourSubject = new BehaviorSubject<any>(null);
       mEventMessageEmitter.set(eventName, behaviourSubject);
+
+      // Raise an event about newly created channel.
+      this._channelAddedEvent.next({channelName, eventName});
     }
 
     return of(behaviourSubject);

@@ -26,6 +26,11 @@ export interface IRxMessageBusService {
   * */
   addMessage<T>(channelName: string, eventName: string, data?: T): void;
 
+  /*
+  * Publish a message when a channel is created.
+  * */
+  hookChannelAddedEvent(): Observable<{channelName: string, eventName: string}>;
+
   //#endregion
 
 }
