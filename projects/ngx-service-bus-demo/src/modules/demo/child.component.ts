@@ -57,7 +57,6 @@ export class ChildComponent implements OnDestroy {
     if (this._subscription && !this._subscription.closed) {
       this._subscription.unsubscribe();
     }
-
   }
 
   //#endregion

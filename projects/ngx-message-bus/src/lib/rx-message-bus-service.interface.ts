@@ -29,7 +29,7 @@ export interface IRxMessageBusService {
   /*
   * Publish a message when a channel is created.
   * */
-  hookChannelAddedEvent(): Observable<{channelName: string, eventName: string}>;
+  onChannelInitialized(): Observable<{channelName: string, eventName: string}>;
 
   //#endregion
 

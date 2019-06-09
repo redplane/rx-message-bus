@@ -182,7 +182,7 @@ export class RxMessageBusService implements IRxMessageBusService {
   /*
   * Subscribe to a special channel which emits message when an ordinary channel is created.
   * */
-  public hookChannelAddedEvent(): Observable<{ channelName: string; eventName: string }> {
+  public onChannelInitialized(): Observable<{ channelName: string; eventName: string }> {
 
     // Special channel hasn't been initialized.
     if (!this._channelAddedEvent) {
