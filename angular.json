@@ -2,5 +2,169 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "ngx-service-bus-demo": {
+      "root": "projects/ngx-service-bus-demo/",
+      "sourceRoot": "projects/ngx-service-bus-demo/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/ngx-service-bus-demo",
+            "index": "projects/ngx-service-bus-demo/src/index.html",
+            "main": "projects/ngx-service-bus-demo/src/main.ts",
+            "polyfills": "projects/ngx-service-bus-demo/src/polyfills.ts",
+            "tsConfig": "projects/ngx-service-bus-demo/tsconfig.app.json",
+            "assets": [
+              "projects/ngx-service-bus-demo/src/favicon.ico",
+              "projects/ngx-service-bus-demo/src/assets"
+            ],
+            "styles": [
+              "projects/ngx-service-bus-demo/src/styles/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/ngx-service-bus-demo/src/environments/environment.ts",
+                  "with": "projects/ngx-service-bus-demo/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "ngx-service-bus-demo:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ngx-service-bus-demo:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "ngx-service-bus-demo:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-service-bus-demo/src/test.ts",
+            "polyfills": "projects/ngx-service-bus-demo/src/polyfills.ts",
+            "tsConfig": "projects/ngx-service-bus-demo/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-service-bus-demo/karma.conf.js",
+            "styles": [
+              "projects/ngx-service-bus-demo/src/styles/styles.scss"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/ngx-service-bus-demo/src/favicon.ico",
+              "projects/ngx-service-bus-demo/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-service-bus-demo/tsconfig.app.json",
+              "projects/ngx-service-bus-demo/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ngx-service-bus-demo-e2e": {
+      "root": "projects/ngx-service-bus-demo-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/ngx-service-bus-demo-e2e/protractor.conf.js",
+            "devServerTarget": "ngx-service-bus-demo:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ngx-service-bus-demo:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/ngx-service-bus-demo-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "ngx-message-bus": {
+      "root": "projects/ngx-message-bus",
+      "sourceRoot": "projects/ngx-message-bus/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-message-bus/tsconfig.lib.json",
+            "project": "projects/ngx-message-bus/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-message-bus/src/test.ts",
+            "tsConfig": "projects/ngx-message-bus/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-message-bus/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-message-bus/tsconfig.lib.json",
+              "projects/ngx-message-bus/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ngx-service-bus-demo"
 }
