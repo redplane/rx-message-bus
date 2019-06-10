@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
 
-    "build:lib": "ng-packagr -p lib/package.json"
+    "build:lib": "ng-packagr -p projects/ngrx-message-bus/package.json"
   },
   "private": true,
   "dependencies": {

@@ -4,6 +4,7 @@ import {IRxMessageBusOption} from "./rx-message-bus-option.interface";
 
 //#region Module declaration
 
+// @dynamic
 @NgModule({
   providers: [
     {
