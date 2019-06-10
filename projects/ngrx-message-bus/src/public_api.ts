@@ -1,5 +1,5 @@
 /*
- * Public API Surface of ngx-message-bus
+ * Public API Surface of ngrx-message-bus
  */
 export * from './lib/rx-message-bus.service';
 export * from './lib/rx-message-bus-option.interface';

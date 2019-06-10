@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core";
 import {ModuleLevelDemoComponent} from "./module-level-demo.component";
-import {RxMessageBusModule} from "../../../../../ngx-message-bus/src/public_api";
+import {RxMessageBusModule} from "../../../../../ngrx-message-bus/src/public_api";
 import {ModuleLevelDemoRouteModule} from "./module-level-demo.route";
 import {RouterModule} from "@angular/router";
 import {MatButtonModule, MatCardModule, MatTabsModule} from "@angular/material";

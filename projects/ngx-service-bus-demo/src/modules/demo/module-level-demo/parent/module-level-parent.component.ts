@@ -2,7 +2,7 @@ import {Component, Inject} from "@angular/core";
 import {ParentComponent} from "../../parent.component";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
-import {IRxMessageBusService} from "../../../../../../ngx-message-bus/src/lib/rx-message-bus-service.interface";
+import {IRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/rx-message-bus-service.interface";
 
 @Component({
   selector: 'module-level-parent',

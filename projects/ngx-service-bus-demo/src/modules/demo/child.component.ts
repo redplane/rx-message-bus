@@ -1,5 +1,5 @@
 import {Inject, OnDestroy} from "@angular/core";
-import {IRxMessageBusService} from "../../../../ngx-message-bus/src/lib/rx-message-bus-service.interface";
+import {IRxMessageBusService} from "../../../../ngrx-message-bus/src/lib/rx-message-bus-service.interface";
 import {Subscription} from "rxjs";
 import {MessageChannelNameConstant} from "../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../constants/message-event-name.constant";

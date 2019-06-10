@@ -37,7 +37,7 @@ export class RxMessageBusService implements IRxMessageBusService {
   /*
   * Special channel which raises a message when an ordinary channel is created.
   * */
-  private _channelAddedEvent: Subject<{channelName: string, eventName: string}>;
+  private _channelAddedEvent: Subject<{ channelName: string, eventName: string }>;
 
   //#endregion
 
@@ -46,8 +46,11 @@ export class RxMessageBusService implements IRxMessageBusService {
   /*
   * Initialize service with injectors.
   * */
-  public constructor() {
+  public constructor(options?: IRxMessageBusOption) {
 
+    // Setup initial option.
+    this._options = options;
+    
     // Initialize special channel.
     this._channelAddedEvent = new BehaviorSubject(null);
 
@@ -109,7 +112,6 @@ export class RxMessageBusService implements IRxMessageBusService {
 
     return of(null)
       .pipe(
-
         switchMap(() => this.loadMessageChannel(channelName, eventName, autoCreate)),
 
         flatMap((behaviourSubject: Observable<T>) => {

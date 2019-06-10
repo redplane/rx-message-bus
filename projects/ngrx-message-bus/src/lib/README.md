@@ -63,25 +63,7 @@ export class ParentComponent implements OnInit {
   providers: [
     {
       provide: 'IMessageBusService',
-      useFactory: () => new RxMessageBusService()
-    }
-  ]
-})
-export class ParentComponent implements OnInit {
-}
-```
-
-**OR**
-
-```
-@Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'parent, [parent-comp]',
-  templateUrl: 'parent.component.html',
-  providers: [
-    {
-      provide: 'IMessageBusService',
-      useClass: RxMessageBusService
+      useFactory: () => new NgrxMessageBusService()
     }
   ]
 })

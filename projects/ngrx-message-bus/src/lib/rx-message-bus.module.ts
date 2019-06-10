@@ -20,7 +20,7 @@ export class RxMessageBusModule {
       providers: [
         {
           provide: 'IRxMessageBusService',
-          useFactory: () => new RxMessageBusService()
+          useFactory: () => new RxMessageBusService(options)
         }
       ]
     };

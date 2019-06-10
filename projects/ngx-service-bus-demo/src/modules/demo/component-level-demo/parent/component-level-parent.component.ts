@@ -2,14 +2,14 @@ import {Component, Inject} from "@angular/core";
 import {ParentComponent} from "../../parent.component";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
-import {IRxMessageBusService} from "../../../../../../ngx-message-bus/src/lib/rx-message-bus-service.interface";
-import {RxMessageBusService} from "../../../../../../ngx-message-bus/src/lib/rx-message-bus.service";
+import {IRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/rx-message-bus-service.interface";
+import {RxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/rx-message-bus.service";
 
 @Component({
   selector: 'component-level-parent',
   templateUrl: 'component-level-parent.component.html',
   providers: [
-    {provide: 'IRxMessageBusService', useClass: RxMessageBusService}
+    {provide: 'IRxMessageBusService', useFactory: () => new RxMessageBusService()}
   ]
 })
 export class ComponentLevelParentComponent extends ParentComponent {
