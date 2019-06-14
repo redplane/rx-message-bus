@@ -63,7 +63,7 @@
         <mat-tab label="module-level-child.component.html">
           <pre>
             &lt;div&gt;
-              &lt;span&gt;Received message: &lt;b&gt;{{message}}&lt;/b&gt;&lt;/span&gt;
+              &lt;span&gt;Received message: &lt;b&gt;%7B%7Bmessage%7D%7D&lt;/b&gt;&lt;/span&gt;
             &lt;/div&gt;
           </pre>
         </mat-tab>
@@ -77,7 +77,7 @@
           <pre>
             &lt;!--Emit message trigger--&gt;
             &lt;button mat-button [color]=&quot;'primary'&quot; (click)=&quot;clickSendMessage()&quot;&gt;
-              &lt;span&gt;Emit message from {{name}}&lt;/span&gt;
+              &lt;span&gt;Emit message from %7B%7Bname%7D%7D&lt;/span&gt;
             &lt;/button&gt;
 
             &lt;!--Allow child content to be projected in this component--&gt;

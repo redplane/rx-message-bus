@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, Optional} from '@angular/core';
 import {IRxMessageBusService} from './rx-message-bus-service.interface';
 import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
 import {delay, flatMap, retryWhen, switchMap} from 'rxjs/operators';
@@ -46,7 +46,7 @@ export class RxMessageBusService implements IRxMessageBusService {
   /*
   * Initialize service with injectors.
   * */
-  public constructor(options?: IRxMessageBusOption) {
+  public constructor(@Inject('IMessageBusOption') @Optional() options?: IRxMessageBusOption) {
 
     // Setup initial option.
     this._options = options;

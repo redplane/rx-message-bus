@@ -20,7 +20,8 @@
             "tsConfig": "projects/ngx-service-bus-demo/tsconfig.app.json",
             "assets": [
               "projects/ngx-service-bus-demo/src/favicon.ico",
-              "projects/ngx-service-bus-demo/src/assets"
+              "projects/ngx-service-bus-demo/src/assets",
+              "projects/ngx-service-bus-demo/src/netlify.toml"
             ],
             "styles": [
               "projects/ngx-service-bus-demo/src/styles/styles.scss"

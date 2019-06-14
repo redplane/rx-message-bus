@@ -9,25 +9,28 @@ import {IRxMessageBusOption} from "./rx-message-bus-option.interface";
   providers: [
     {
       provide: 'IRxMessageBusService',
-      useFactory: () => new RxMessageBusService()
+      useClass: RxMessageBusService
     }
   ]
 })
 export class RxMessageBusModule {
 
   public static forRoot(options: IRxMessageBusOption) {
+
     return {
       ngModule: RxMessageBusModule,
       providers: [
         {
+          provide: 'IMessageBusOption',
+          useValue: options
+        },
+        {
           provide: 'IRxMessageBusService',
-          useFactory: () => new RxMessageBusService(options)
+          useClass: RxMessageBusService
         }
       ]
     };
-
   }
-
 }
 
 //#endregion
