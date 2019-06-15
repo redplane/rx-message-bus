@@ -2,17 +2,17 @@ import {Component, Inject} from "@angular/core";
 import {ParentComponent} from "../../parent.component";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
-import {NgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus.service";
 import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus-service.interface";
+import {NgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus.service";
 
 @Component({
-  selector: 'component-level-parent',
-  templateUrl: 'component-level-parent.component.html',
+  selector: 'hook-level-parent',
+  templateUrl: 'hook-channel-event-parent.component.html',
   providers: [
-    {provide: 'IRxMessageBusService', useFactory: () => new NgRxMessageBusService()}
+    {provide: 'INgRxMessageBusService', useFactory: () => new NgRxMessageBusService()}
   ]
 })
-export class ComponentLevelParentComponent extends ParentComponent {
+export class HookChannelEventParentComponent extends ParentComponent {
 
   //#region Properties
 
@@ -20,7 +20,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
     super();
   }
 

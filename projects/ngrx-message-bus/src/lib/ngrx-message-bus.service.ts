@@ -1,11 +1,12 @@
 import {Inject, Injectable, Optional} from '@angular/core';
-import {IRxMessageBusService} from './rx-message-bus-service.interface';
-import {BehaviorSubject, Observable, of, Subject, throwError} from 'rxjs';
+import {AsyncSubject, BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
 import {delay, flatMap, retryWhen, switchMap} from 'rxjs/operators';
-import {IRxMessageBusOption} from './rx-message-bus-option.interface';
+import {INgRxMessageBusService} from "./ngrx-message-bus-service.interface";
+import {INgRxMessageBusOptions} from "./ngrx-message-bus-option.interface";
+import {Replacement} from "tslint";
 
 @Injectable()
-export class RxMessageBusService implements IRxMessageBusService {
+export class NgRxMessageBusService implements INgRxMessageBusService {
 
   //#region Properties
 
@@ -32,12 +33,12 @@ export class RxMessageBusService implements IRxMessageBusService {
   /*
   * Message bus service options.
   * */
-  private _options: IRxMessageBusOption;
+  private _options: INgRxMessageBusOptions;
 
   /*
   * Special channel which raises a message when an ordinary channel is created.
   * */
-  private _channelAddedEvent: Subject<{ channelName: string, eventName: string }>;
+  public readonly channelAddedEvent: Subject<{ channelName: string, eventName: string }>;
 
   //#endregion
 
@@ -46,13 +47,13 @@ export class RxMessageBusService implements IRxMessageBusService {
   /*
   * Initialize service with injectors.
   * */
-  public constructor(@Inject('IMessageBusOption') @Optional() options?: IRxMessageBusOption) {
+  public constructor(@Inject('IMessageBusOption') @Optional() options?: INgRxMessageBusOptions) {
 
     // Setup initial option.
     this._options = options;
-    
+
     // Initialize special channel.
-    this._channelAddedEvent = new BehaviorSubject(null);
+    this.channelAddedEvent = new ReplaySubject(1);
 
     // Initialize list of channel mappings.
     this._mChannel = new Map<string, Map<string, Subject<any>>>();
@@ -88,7 +89,7 @@ export class RxMessageBusService implements IRxMessageBusService {
     mEventMessageEmitter.set(eventName, behaviorSubject);
 
     // Raise an event about newly created channel.
-    this._channelAddedEvent.next({channelName, eventName});
+    this.channelAddedEvent.next({channelName, eventName});
 
     return <BehaviorSubject<T>>behaviorSubject;
   }
@@ -99,7 +100,7 @@ export class RxMessageBusService implements IRxMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  public hookMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean, messageBusOptions?: IRxMessageBusOption): Observable<T> {
+  public hookMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean, messageBusOptions?: INgRxMessageBusOptions): Observable<T> {
 
     // Number of subscription retry.
     let subscriptionRetryTimes = 0;
@@ -174,24 +175,15 @@ export class RxMessageBusService implements IRxMessageBusService {
       mEventMessageEmitter = new Map<string, Subject<any>>();
       mEventMessageEmitter.set(eventName, behaviourSubject);
       mChannel.set(channelName, mEventMessageEmitter);
+
+      // Raise an event about newly created channel.
+      this.channelAddedEvent.next({channelName, eventName});
+
     } else {
       behaviourSubject = mEventMessageEmitter.get(eventName);
     }
 
     behaviourSubject.next(data);
-  }
-
-  /*
-  * Subscribe to a special channel which emits message when an ordinary channel is created.
-  * */
-  public onChannelInitialized(): Observable<{ channelName: string; eventName: string }> {
-
-    // Special channel hasn't been initialized.
-    if (!this._channelAddedEvent) {
-      this._channelAddedEvent = new BehaviorSubject(null);
-    }
-
-    return this._channelAddedEvent;
   }
 
   /*
@@ -245,7 +237,7 @@ export class RxMessageBusService implements IRxMessageBusService {
       mEventMessageEmitter.set(eventName, behaviourSubject);
 
       // Raise an event about newly created channel.
-      this._channelAddedEvent.next({channelName, eventName});
+      this.channelAddedEvent.next({channelName, eventName});
     }
 
     return of(behaviourSubject);
@@ -255,7 +247,7 @@ export class RxMessageBusService implements IRxMessageBusService {
   * Load message from options.
   * Default message bus option will be used if no option is defined.
   * */
-  protected loadMessageBusOptions(originalOptions?: IRxMessageBusOption): IRxMessageBusOption {
+  protected loadMessageBusOptions(originalOptions?: INgRxMessageBusOptions): INgRxMessageBusOptions {
 
     // Get options.
     let options = Object.assign({}, originalOptions || this._options);

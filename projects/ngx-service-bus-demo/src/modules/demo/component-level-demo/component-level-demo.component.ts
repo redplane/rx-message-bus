@@ -1,7 +1,7 @@
-import {Component, Inject} from "@angular/core";
+import {Component} from "@angular/core";
 
 @Component({
-  selector: 'singleton-service-demo',
+  selector: 'component-level-demo',
   templateUrl: './component-level-demo.component.html',
   styleUrls: ['./component-level-demo.component.scss']
 })
@@ -11,7 +11,7 @@ export class ComponentLevelDemoComponent {
 
   public get childTypescript(): string {
     return `
-      public constructor(@Inject('IRxMessageBusService') protected messageBusService: IRxMessageBusService) {
+      public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
   
         // Initialize subscription manager.
         this._subscription = new Subscription();
@@ -43,7 +43,7 @@ export class ComponentLevelDemoComponent {
 
   public get parentTypescript(): string {
     return `
-      public constructor(@Inject('IRxMessageBusService') protected messageBusService: IRxMessageBusService) {
+      public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
         super();
       }
     

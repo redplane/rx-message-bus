@@ -1,9 +1,9 @@
 import {Observable, Subject} from 'rxjs';
-import {IRxMessageBusOption} from "./rx-message-bus-option.interface";
+import {INgRxMessageBusOptions} from "./ngrx-message-bus-option.interface";
 
 // A small message queue channels - messages management.
 // This service which helps modules to send and receive messages asynchronously.
-export interface IRxMessageBusService {
+export interface INgRxMessageBusService {
 
   //#region Methods
 
@@ -18,7 +18,7 @@ export interface IRxMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  hookMessageChannel<T>(channelName: string, eventName: string, autoCreateChannel?: boolean, messageBusOptions?: IRxMessageBusOption): Observable<T>;
+  hookMessageChannel<T>(channelName: string, eventName: string, autoCreateChannel?: boolean, messageBusOptions?: INgRxMessageBusOptions): Observable<T>;
 
   /*
   * Publish message to event stream.
@@ -29,7 +29,7 @@ export interface IRxMessageBusService {
   /*
   * Publish a message when a channel is created.
   * */
-  onChannelInitialized(): Observable<{channelName: string, eventName: string}>;
+  readonly channelAddedEvent: Observable<{channelName: string, eventName: string}>;
 
   //#endregion
 

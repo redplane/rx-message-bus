@@ -2,7 +2,7 @@ import {Component, Inject} from "@angular/core";
 import {ParentComponent} from "../../parent.component";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
-import {IRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/rx-message-bus-service.interface";
+import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus-service.interface";
 
 @Component({
   selector: 'module-level-parent',
@@ -16,7 +16,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: IRxMessageBusService) {
+  public constructor(@Inject('IRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
     super();
   }
 

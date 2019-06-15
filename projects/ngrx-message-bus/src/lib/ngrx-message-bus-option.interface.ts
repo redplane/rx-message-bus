@@ -1,4 +1,4 @@
-export interface IRxMessageBusOption {
+export interface INgRxMessageBusOptions {
 
   //#region Properties
 

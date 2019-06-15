@@ -1,5 +1,5 @@
 {
-  "name": "rx-message-bus",
+  "name": "ngrx-message-bus",
   "version": "1.0.0",
   "peerDependencies": {
     "rxjs": "^6.3.0"

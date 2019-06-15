@@ -1,6 +1,6 @@
 import {Component, Inject} from "@angular/core";
 import {ChildComponent} from "../../child.component";
-import {IRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/rx-message-bus-service.interface";
+import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus-service.interface";
 
 @Component({
   selector: 'component-level-child',
@@ -14,7 +14,7 @@ export class ComponentLevelChildComponent extends ChildComponent {
 
   //#region Constructor
 
-  public constructor(@Inject('IRxMessageBusService') public messageBusService: IRxMessageBusService) {
+  public constructor(@Inject('IRxMessageBusService') public messageBusService: INgRxMessageBusService) {
     super(messageBusService);
   }
 
