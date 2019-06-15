@@ -1,10 +1,10 @@
 ## Description
 
-- **ngx-message-bus** is just a small angular library which provides a singleton shared service in [Angular application](https://angular.io/).
+- **ngrx-message-bus** is just a small angular library which provides a singleton shared service in [Angular application](https://angular.io/).
 
-- **ngx-message-bus** is just an improved shared service. Instead of providing just one instance for **publishing** | **subscribing** messages, it provides `channels` and `events` to which components can _subscribe_ and _unsubscribe_. 
+- **ngrx-message-bus** is just an improved shared service. Instead of providing just one instance for **publishing** | **subscribing** messages, it provides `channels` and `events` to which components can _subscribe_ and _unsubscribe_. 
 
-- Long story short, **ngx-message-bus** provides `back-end` mindset about pub/sub mechanism.
+- Long story short, **ngrx-message-bus** provides `back-end` mindset about pub/sub mechanism.
 
 
 
@@ -13,7 +13,7 @@
 - ### Module lifetime
 
 ```
-import {RxMessageBusModule} from 'message-bus.module';
+import {NgRxMessageBusModule} from 'ngrx-message-bus.module';
 
 @NgModule({
   declarations: [],
@@ -26,7 +26,7 @@ import {RxMessageBusModule} from 'message-bus.module';
     // Application modules.
     SharedModule,
     AppRouteModule,
-    RxMessageBusModule
+    NgRxMessageBusModule
   ],
   providers: [
     AppSettings
@@ -47,7 +47,7 @@ export class AppModule {
 })
 export class ParentComponent implements OnInit {
 
-  public constructor(@Inject('IMessageBusService') public messageBusService: IMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') public messageBusService: INgRxMessageBusService) {
   
    }
 }
@@ -62,7 +62,7 @@ export class ParentComponent implements OnInit {
   templateUrl: 'parent.component.html',
   providers: [
     {
-      provide: 'IMessageBusService',
+      provide: 'INgRxMessageBusService',
       useFactory: () => new NgrxMessageBusService()
     }
   ]
@@ -86,7 +86,7 @@ export class ParentComponent implements OnInit {
 export class ChildComponent implements OnDestroy {
 
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: IRxMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
     // Initialize subscription manager.
     this._subscription = new Subscription();
   }
@@ -125,7 +125,7 @@ export class ChildComponent implements OnDestroy {
 
 export class ComponentLevelParentComponent extends ParentComponent {
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: IRxMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
     super();
   }
   
@@ -160,7 +160,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
       - *Use this parameter at your own risk because it can cause concurrent issue when 2 components try to create event and channel at the same time*.
 
 
-  - `messageBusOptions: IRxMessageBusOption`: Override the subscription mode. Due to there is no guarantee about channel & event existence as long as `hookMessageChannel` is called, `rx-message-bus` provides some subscription retry mechanisms to ensure the subscriber can get the subscription in return.  
+  - `messageBusOptions: IRxMessageBusOption`: Override the subscription mode. Due to there is no guarantee about channel & event existence as long as `hookMessageChannel` is called, `ngrx-message-bus` provides some subscription retry mechanisms to ensure the subscriber can get the subscription in return.  
   
     - `channelSubscriptionAttemptTimes (number)`: How many time should the `hookMessageChannel` method tries to connect to the targeted channel & event. (*default: 5*).
     
@@ -178,14 +178,13 @@ export class ComponentLevelParentComponent extends ParentComponent {
   
   - `data (any)`: Message data. (*optional*).
 
-- `onChannelInitialized(): Observable<{channelName: string, eventName: string}>`: Raised when a channel is created successfully. This event can be used for initializing connection from subscriber to message bus to ensure the specific channel & event is available to be consumed.
+- `channelAddedEvent: Observable<{channelName: string, eventName: string}>`: Raised when a channel is created successfully. This event can be used for initializing connection from subscriber to message bus to ensure the specific channel & event is available to be consumed.
 
 ### Module options
 
-- `rx-message-bus` provide an `Angular module` whose name is `RxMessageBusModule`. It provide a `forRoot` method which allows user to setup default message bus subscription option. The option can be overridden in `hookChannelMessage` method.
+- `ngrx-message-bus` provide an `Angular module` whose name is `NgRxMessageBusModule`. It provide a `forRoot` method which allows user to setup default message bus subscription option. The option can be overridden in `hookChannelMessage` method.
 
 - About parameters, please refer to `hookChannelMessage` subscription option section.
-
 
 
 ## Different between between **Module lifetime** and **Component lifetime**.
