@@ -1,3 +1,9 @@
+## Build status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/375d6117-d4fe-42a7-8fd2-ed03618d04c2/deploy-status)](https://app.netlify.com/sites/ngrx-message-bus-demo/deploys)
+
+---
+
 ## Description
 
 - **ngrx-message-bus** is just a small angular library which provides a singleton shared service in [Angular application](https://angular.io/).
@@ -6,7 +12,9 @@
 
 - Long story short, **ngrx-message-bus** provides `back-end` mindset about pub/sub mechanism.
 
+- Online DEMO can be found **[HERE](https://ngrx-message-bus-demo.netlify.com)**
 
+----
 
 ## Installation:
 
@@ -53,6 +61,8 @@ export class ParentComponent implements OnInit {
 }
 ```
 
+----
+
 - ### Component lifetime
 
 ```
@@ -71,7 +81,11 @@ export class ParentComponent implements OnInit {
 }
 ```
 
+----
+
 ## Usage
+
+
 
 ### Message subscription:
 
@@ -116,6 +130,8 @@ export class ChildComponent implements OnDestroy {
         
 ```
 
+
+
 ### Message publish:
 
 - To publish a message through message bus to a specific event in a channel, please use `addMessage`.
@@ -141,6 +157,8 @@ export class ComponentLevelParentComponent extends ParentComponent {
 }
 
 ```
+
+----
 
 ## APIs | Options
 
@@ -180,12 +198,15 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
 - `channelAddedEvent: Observable<{channelName: string, eventName: string}>`: Raised when a channel is created successfully. This event can be used for initializing connection from subscriber to message bus to ensure the specific channel & event is available to be consumed.
 
+----
+
 ### Module options
 
 - `ngrx-message-bus` provide an `Angular module` whose name is `NgRxMessageBusModule`. It provide a `forRoot` method which allows user to setup default message bus subscription option. The option can be overridden in `hookChannelMessage` method.
 
 - About parameters, please refer to `hookChannelMessage` subscription option section.
 
+----
 
 ## Different between between **Module lifetime** and **Component lifetime**.
 

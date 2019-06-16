@@ -131,33 +131,36 @@
         }
       }
     },
-    "ngx-message-bus": {
-      "root": "projects/ngx-message-bus",
-      "sourceRoot": "projects/ngx-message-bus/src",
+    "ngrx-message-bus": {
+      "root": "projects/ngrx-message-bus",
+      "sourceRoot": "projects/ngrx-message-bus/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ngx-message-bus/tsconfig.lib.json",
-            "project": "projects/ngx-message-bus/ng-package.json"
-          }
+            "tsConfig": "projects/ngrx-message-bus/tsconfig.lib.json",
+            "project": "projects/ngrx-message-bus/ng-package.json"
+          },
+          "assets": [
+            "README.md"
+          ]
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-message-bus/src/test.ts",
-            "tsConfig": "projects/ngx-message-bus/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-message-bus/karma.conf.js"
+            "main": "projects/ngrx-message-bus/src/test.ts",
+            "tsConfig": "projects/ngrx-message-bus/tsconfig.spec.json",
+            "karmaConfig": "projects/ngrx-message-bus/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-message-bus/tsconfig.lib.json",
-              "projects/ngx-message-bus/tsconfig.spec.json"
+              "projects/ngrx-message-bus/tsconfig.lib.json",
+              "projects/ngrx-message-bus/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
