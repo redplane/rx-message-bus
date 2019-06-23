@@ -18,7 +18,7 @@
 
 ## Installation:
 
-- ### Module lifetime
+**1. Module lifetime**
 
 ```
 import {NgRxMessageBusModule} from 'ngrx-message-bus.module';
@@ -63,7 +63,7 @@ export class ParentComponent implements OnInit {
 
 ----
 
-- ### Component lifetime
+**2. Component lifetime**
 
 ```
 @Component({
@@ -216,6 +216,19 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
 - `message bus` lifetime can be **overridden**  by the inner `message bus`. That means, if there are 2 instances, one is registered in **module**, the other is in **component**, the component's one will be the active and runnable one. Please refer [Hierarchical Dependency Injectors](https://angular.io/guide/hierarchical-dependency-injection) for more information.
 
+
+## Releases
+
+- **1.0.0**: Initial release.
+
+- **1.0.1**: Added README.MD.
+
+- **1.0.2**: Minor bug fixes.
+
+- **1.0.3**: Minor bug fixes.
+
+- **1.0.4**: 
+  - Changed `BehaviourSubject` to `ReplaySubject` to prevent unexpected value from being emitted.
 
 
 

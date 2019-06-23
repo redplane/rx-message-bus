@@ -171,7 +171,8 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
     let behaviourSubject: Subject<any>;
 
     if (!mEventMessageEmitter || !mEventMessageEmitter.get(eventName)) {
-      behaviourSubject = new BehaviorSubject(data);
+      behaviourSubject = new ReplaySubject(1);
+      behaviourSubject.next(data);
       mEventMessageEmitter = new Map<string, Subject<any>>();
       mEventMessageEmitter.set(eventName, behaviourSubject);
       mChannel.set(channelName, mEventMessageEmitter);
@@ -233,7 +234,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
       if (!autoCreate) {
         return of(null);
       }
-      behaviourSubject = new BehaviorSubject<any>(null);
+      behaviourSubject = new ReplaySubject(1);
       mEventMessageEmitter.set(eventName, behaviourSubject);
 
       // Raise an event about newly created channel.
