@@ -1,0 +1,47 @@
+<div class="mb-20" fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-header class="mat-card-header">
+      <div class="mat-card-header-text">
+        <mat-card-title class="mat-card-title">Hook channel create event</mat-card-title>
+        <mat-card-subtitle>Description</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <ul>
+        <li>Hook to channel create event and subscribe to it</li>
+        <li>This will be used for ensuring the channel exists. We don't have to try subscribing to it too many times</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<div class="mb-20"
+     fxFlex
+     fxLayout="row"
+     fxLayout.lt-md="column"
+     fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group [color]="'primary'">
+
+        <!--Preview-->
+        <mat-tab label="{{'Preview' | translate}}">
+          <ul *ngIf="shouldComponentAvailable">
+            <li>
+              <message-listener></message-listener>
+            </li>
+          </ul>
+
+          <button mat-button color="primary" (click)="clickToggleComponent()">
+            <ng-container *ngIf=shouldComponentAvailable>{{'Hide component' | translate}}</ng-container>
+            <ng-container *ngIf=!shouldComponentAvailable>{{'Show component' | translate}}</ng-container>
+          </button>
+          <button mat-button (click)="clickSendMessage()">Send message</button>
+          <button mat-button color="accent" (click)="clickDeleteMessage()">Delete message</button>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+

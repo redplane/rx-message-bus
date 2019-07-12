@@ -4,6 +4,8 @@ export class MessageChannelNameConstant {
 
   public static parent = 'parent';
 
+  public static ui = 'ui-channel';
+
   //#endregion
 
 }

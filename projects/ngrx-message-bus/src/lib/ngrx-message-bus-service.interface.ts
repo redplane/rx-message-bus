@@ -10,7 +10,7 @@ export interface INgRxMessageBusService {
   /*
   * Add a message channel to message bus.
   * */
-  addMessageChannel<T>(channelName: string, eventName: string): Subject<T>;
+  addMessageChannel<T>(channelName: string, eventName: string): void;
 
   /*
   * Hook message event.
@@ -25,6 +25,16 @@ export interface INgRxMessageBusService {
   * Channel will be created automatically if it isn't available.
   * */
   addMessage<T>(channelName: string, eventName: string, data?: T): void;
+
+  /*
+  * Clear recent message that has been sent.
+  * */
+  deleteChannelMessage(channelName: string, eventName: string): void;
+
+  /*
+  * Delete every channel message.
+  * */
+  deleteMessages(): void;
 
   /*
   * Publish a message when a channel is created.

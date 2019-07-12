@@ -4,6 +4,8 @@ export class MessageEventNameConstant {
 
   public static sendParentMessage = 'message';
 
+  public static deleteMessage = 'delete-message-demo-event';
+
   //#endregion
 
 }

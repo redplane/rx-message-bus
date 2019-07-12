@@ -25,5 +25,13 @@
       {{ 'Hook channel event' | translate }}
     </a>
 
+    <!--Delete message-->
+    <a mat-list-item
+       [routerLinkActive]="'active'"
+       [routerLink]="['/demo/delete-message']">
+      <mat-icon class="sidenav-icon">bar_chart</mat-icon>
+      {{ 'Delete message' | translate }}
+    </a>
+
   </mat-nav-list>
 </div>

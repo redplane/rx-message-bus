@@ -1,0 +1,27 @@
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
+import {DeleteMessageDemoComponent} from "./delete-message-demo.component";
+
+//#region Routes
+
+const routes: Routes = [
+  {
+    path: '',
+    component: DeleteMessageDemoComponent
+  }
+];
+
+//#endregion
+
+//#region Module declaration
+
+@NgModule({
+  imports: [
+    RouterModule.forChild(routes)
+  ]
+})
+export class DeleteMessageDemoRouteModule {
+
+}
+
+//#endregion

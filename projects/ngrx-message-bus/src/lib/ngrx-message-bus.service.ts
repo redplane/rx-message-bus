@@ -1,9 +1,10 @@
 import {Inject, Injectable, Optional} from '@angular/core';
-import {AsyncSubject, BehaviorSubject, Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
-import {delay, flatMap, retryWhen, switchMap} from 'rxjs/operators';
+import {Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
+import {delay, filter, flatMap, map, retryWhen, switchMap} from 'rxjs/operators';
 import {INgRxMessageBusService} from "./ngrx-message-bus-service.interface";
 import {INgRxMessageBusOptions} from "./ngrx-message-bus-option.interface";
-import {Replacement} from "tslint";
+import {MessageContainer} from "./message-container";
+import {IChannelAddedEvent} from "./channel-added-event.interface";
 
 @Injectable()
 export class NgRxMessageBusService implements INgRxMessageBusService {
@@ -38,7 +39,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   /*
   * Special channel which raises a message when an ordinary channel is created.
   * */
-  public readonly channelAddedEvent: Subject<{ channelName: string, eventName: string }>;
+  public readonly channelAddedEvent: Subject<IChannelAddedEvent>;
 
   //#endregion
 
@@ -66,32 +67,8 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   /*
   * Add message channel event emitter.
   * */
-  public addMessageChannel<T>(channelName: string, eventName: string): Subject<T> {
-
-    // Find channel mapping.
-    const mChannel = this._mChannel;
-
-    let mEventMessageEmitter: Map<string, Subject<any>>;
-
-    // Channel is available.
-    if (mChannel.has(channelName)) {
-      mEventMessageEmitter = mChannel.get(channelName);
-    } else {
-      mEventMessageEmitter = new Map<string, BehaviorSubject<any>>();
-      mChannel.set(channelName, mEventMessageEmitter);
-    }
-
-    if (mEventMessageEmitter.has(eventName)) {
-      return mEventMessageEmitter.get(eventName);
-    }
-
-    const behaviorSubject = new BehaviorSubject(null);
-    mEventMessageEmitter.set(eventName, behaviorSubject);
-
-    // Raise an event about newly created channel.
-    this.channelAddedEvent.next({channelName, eventName});
-
-    return <BehaviorSubject<T>>behaviorSubject;
+  public addMessageChannel<T>(channelName: string, eventName: string): void {
+    this.loadMessageChannel<T>(channelName, eventName, true);
   }
 
   /*
@@ -113,14 +90,26 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
 
     return of(null)
       .pipe(
-        switchMap(() => this.loadMessageChannel(channelName, eventName, autoCreate)),
+        // Cancel previous subscription and change to load available message channel.
+        map(() => this.loadMessageChannel(channelName, eventName, autoCreate)),
 
-        flatMap((behaviourSubject: Observable<T>) => {
-          if (!behaviourSubject) {
+        switchMap((messageEmitter: Subject<MessageContainer<T>>) => {
+
+          // No recipient has been found.
+          if (!messageEmitter) {
             return throwError('Channel is not found');
           }
 
-          return behaviourSubject;
+          return messageEmitter
+            .pipe(
+              // Only pass data back to listener when message is available.
+              filter(messageContainer => {
+                return messageContainer && messageContainer.available;
+              }),
+
+              // Pass the data inside the message container to listeners.
+              map((messageContainer: MessageContainer<T>) => messageContainer.data)
+            )
         }),
 
         retryWhen(exceptionObservable => {
@@ -159,32 +148,65 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * Channel will be created automatically if it isn't available.
   * */
   public addMessage<T>(channelName: string, eventName: string, data: T): void {
+    const emitter = this.loadMessageChannel(channelName, eventName, true);
 
-    // Find the existing channel.
-    const mChannel = this._mChannel;
-    if (!mChannel) {
+    // Build message container.
+    const messageContainer = new MessageContainer<T>();
+    messageContainer.data = data;
+    messageContainer.createdTime = new Date().getTime();
+    messageContainer.available = true;
+    emitter.next(messageContainer);
+  }
+
+  /*
+  * Delete messages that have been sent.
+  * */
+  public deleteChannelMessage(channelName: string, eventName: string): void {
+
+    const messageEmitter = this.loadMessageChannel(channelName, eventName, false);
+    if (messageEmitter == null) {
       return;
     }
 
-    // Get message emitter and its buses.
-    let mEventMessageEmitter = mChannel.get(channelName);
-    let behaviourSubject: Subject<any>;
+    const messageContainer = new MessageContainer<any>();
+    messageContainer.data = null;
+    messageContainer.available = false;
 
-    if (!mEventMessageEmitter || !mEventMessageEmitter.get(eventName)) {
-      behaviourSubject = new ReplaySubject(1);
-      behaviourSubject.next(data);
-      mEventMessageEmitter = new Map<string, Subject<any>>();
-      mEventMessageEmitter.set(eventName, behaviourSubject);
-      mChannel.set(channelName, mEventMessageEmitter);
+    // Emit the blank message to channel.
+    messageEmitter.next(messageContainer);
+  }
 
-      // Raise an event about newly created channel.
-      this.channelAddedEvent.next({channelName, eventName});
+  /*
+  * Delete message from every channel.
+  * */
+  public deleteMessages(): void {
 
-    } else {
-      behaviourSubject = mEventMessageEmitter.get(eventName);
+    if (this._mChannel == null) {
+      return;
     }
 
-    behaviourSubject.next(data);
+    // Go through every channel.
+    const channelNames = this._mChannel.keys();
+    for (const channelName of channelNames) {
+      const channelNameEventNameMap = this._mChannel.get(channelName);
+      if (!channelNameEventNameMap) {
+        continue;
+      }
+
+      // Get event names.
+      const eventNames = channelNameEventNameMap.keys();
+      for (const eventName of eventNames) {
+        // Get message emitter.
+        const emitter = channelNameEventNameMap.get(eventName);
+
+        // Initialize blank message.
+        const messageContainer = new MessageContainer<any>();
+        messageContainer.data = null;
+        messageContainer.available = true;
+
+        emitter.next(messageContainer);
+      }
+    }
   }
 
   /*
@@ -193,14 +215,14 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  protected loadMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean): Observable<Observable<T>> {
+  protected loadMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean): Subject<MessageContainer<T>> {
     let mChannel = this._mChannel;
 
     if (mChannel == null) {
 
       // Cannot create channel automatically.
       if (!autoCreate) {
-        return of(null);
+        return null;
       }
 
       mChannel = new Map<string, Map<string, Subject<any>>>();
@@ -211,37 +233,46 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
 
       // Cannot create channel automatically.
       if (!autoCreate) {
-        return of(null);
+        return null;
       }
       mChannel.set(channelName, null);
     }
 
     // Channel is not found.
-    let mEventMessageEmitter = mChannel.get(channelName);
-    if (mEventMessageEmitter == null) {
+    let channelNameMessageEmitterMap = mChannel.get(channelName);
+    if (channelNameMessageEmitterMap == null) {
 
       if (!autoCreate) {
-        return of(null);
+        return null;
       }
 
-      mEventMessageEmitter = new Map<string, Subject<any>>();
-      mChannel.set(channelName, mEventMessageEmitter);
+      channelNameMessageEmitterMap = new Map<string, Subject<any>>();
+      mChannel.set(channelName, channelNameMessageEmitterMap);
     }
 
-    let behaviourSubject = mEventMessageEmitter.get(eventName);
-    if (behaviourSubject == null) {
+    let messageEmitter = channelNameMessageEmitterMap.get(eventName);
+    let hasMessageEmitterAdded = false;
+
+    if (messageEmitter == null) {
 
       if (!autoCreate) {
-        return of(null);
+        return null;
       }
-      behaviourSubject = new ReplaySubject(1);
-      mEventMessageEmitter.set(eventName, behaviourSubject);
 
+      // Mark the channel to be added.
+      hasMessageEmitterAdded = true;
+
+      messageEmitter = new ReplaySubject<MessageContainer<T>>(1);
+      channelNameMessageEmitterMap.set(eventName, messageEmitter);
+    }
+
+    // Raise an event about message channel creation if it has been newly added.
+    if (hasMessageEmitterAdded) {
       // Raise an event about newly created channel.
       this.channelAddedEvent.next({channelName, eventName});
     }
 
-    return of(behaviourSubject);
+    return messageEmitter;
   }
 
   /*
