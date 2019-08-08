@@ -9,7 +9,7 @@ import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib
   selector: 'component-level-parent',
   templateUrl: 'component-level-parent.component.html',
   providers: [
-    {provide: 'IRxMessageBusService', useFactory: () => new NgRxMessageBusService()}
+    {provide: 'INgRxMessageBusService', useFactory: () => new NgRxMessageBusService()}
   ]
 })
 export class ComponentLevelParentComponent extends ParentComponent {
@@ -20,7 +20,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
     super();
   }
 

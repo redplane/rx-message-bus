@@ -168,41 +168,33 @@ export class ComponentLevelParentComponent extends ParentComponent {
   
   - `eventName (string)`: Name of event in the channel above which message will go through. (**required**).
   
-- `hookMessageChannel<T>(channelName: string, eventName: string, autoCreateChannel?: boolean, messageBusOptions?: IRxMessageBusOption): Observable<T>`: Subscribe to a specific channel and its event to listen to the incoming message. Every component which registers to the same channel and event can catch the message.
+- `hookMessageChannel<T>(channelName: string, eventName: string): Observable<T>`: Subscribe to a specific channel and its event to listen to the incoming message. Every component which registers to the same channel and event can catch the message.
 
   - `channelName (string)`: Name of channel to subscribe to. (**required**).
 
   - `eventName (string)`: Name of event to subscribe to. (**required**).
-  
-  - `autoCreateChannel (boolean)`: Whether channel or event should be created when a client subscribe to it or not. If this flag is set to true, the channel and event will be created automatically. (*optional*)
-      - *Use this parameter at your own risk because it can cause concurrent issue when 2 components try to create event and channel at the same time*.
 
-
-  - `messageBusOptions: IRxMessageBusOption`: Override the subscription mode. Due to there is no guarantee about channel & event existence as long as `hookMessageChannel` is called, `ngrx-message-bus` provides some subscription retry mechanisms to ensure the subscriber can get the subscription in return.  
-  
-    - `channelSubscriptionAttemptTimes (number)`: How many time should the `hookMessageChannel` method tries to connect to the targeted channel & event. (*default: 5*).
-    
-    - `channelSubscriptionAttemptDuration (number)`: Duration of time (in milliseconds) the `hookMessageChannel` should keep trying to subscribe to the targeted channel & event. (*default: 5000*).
-    
-    - `subscriptionAttemptMode ('duration' | 'times' | 'infinite')` : Whether `hookMessageChannel` should try subscribing in amount of time or times or keep trying to connect until the subscription is made successfully. (*default: 'infinite'*).
-    
-    - `channelConnectionAttemptDelay (number)`: Amount of time (in milliseconds) between 2 subscription retries. (*default: 1000*).
-    
-- `addMessage<T>(channelName: string, eventName: string, data?: T): void`: Publish a message to a specific **event** in a specific **channel**. Event component registers to the published **channel** and **event** can receive the sent message.
+- `addMessage<T>(channelName: string, eventName: string, data?: T, lifeTimeInSeconds?: number): void`: Publish a message to a specific **event** in a specific **channel**. Event component registers to the published **channel** and **event** can receive the sent message.
 
   - `channelName (string)`: Name of channel that message will be published to. (**required**).
   
   - `eventName (string)`: Name of event that message will go through. (**required**).
   
-  - `data (any)`: Message data. (*optional*).
+  - `data (any)`: Message data.
+  
+  - `lifeTimeInSeconds (options)`: The number of seconds message remains. If this parameter isn't set, message will have infinitive lifetime.
 
 - `channelAddedEvent: Observable<{channelName: string, eventName: string}>`: Raised when a channel is created successfully. This event can be used for initializing connection from subscriber to message bus to ensure the specific channel & event is available to be consumed.
+
+- `hookChannelInitialization(channelName: string, eventName: string): Observable<ChannelInitializationEvent>`: Provide hook to outer component to know when a `message channel - event` is initialized successfully.
+    - `channelName (string)`: Name of channel.
+    - `eventName (string)`: Name of event.
 
 ----
 
 ### Module options
 
-- `ngrx-message-bus` provide an `Angular module` whose name is `NgRxMessageBusModule`. It provide a `forRoot` method which allows user to setup default message bus subscription option. The option can be overridden in `hookChannelMessage` method.
+- `ngrx-message-bus` provide an `Angular module` whose name is `NgRxMessageBusModule`.
 
 - About parameters, please refer to `hookChannelMessage` subscription option section.
 
@@ -229,8 +221,28 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
 - **1.0.4**: 
   - Changed `BehaviourSubject` to `ReplaySubject` to prevent unexpected value from being emitted.
-
-
+  
+- **2.0.0**:
+    - Removed `channelAddedEvent`. When `hookChannelMessage`, it will ensure channel is created before publishing messages.
+    
+    - Added `lifetimeInSeconds?: number` into `addMessage<T>(channelName: string, eventName: string, data: T, lifetimeInSeconds?: number): void`, message will be expired after lifetime exceeds.
+    
+    - Removed `messageBusOptions` and `forRoot` from module declaration. From now, module will be imported as default:
+    
+    ```
+       @NgModule({
+         imports: [
+           NgRxMessageBusModule,
+           //...
+         ]
+       })
+       export class ModuleLevelDemoModule {
+       
+       } 
+    ```
+  
+  - Removed ```autoCreateChannel``` from ```hookChannelMessage```.
+    
 
 
 

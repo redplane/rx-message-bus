@@ -1,5 +1,5 @@
 import {Observable, Subject} from 'rxjs';
-import {INgRxMessageBusOptions} from "./ngrx-message-bus-option.interface";
+import {ChannelInitializationEvent} from "./models/channel-initialization-event";
 
 // A small message queue channels - messages management.
 // This service which helps modules to send and receive messages asynchronously.
@@ -18,13 +18,19 @@ export interface INgRxMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  hookMessageChannel<T>(channelName: string, eventName: string, autoCreateChannel?: boolean, messageBusOptions?: INgRxMessageBusOptions): Observable<T>;
+  hookMessageChannel<T>(channelName: string, eventName: string): Observable<T>;
+
+  /*
+  * Hook to channel initialization.
+  * Event will be raised when a pair of channel - event name is created.
+  * */
+  hookChannelInitialization(channelName: string, eventName: string): Observable<ChannelInitializationEvent>;
 
   /*
   * Publish message to event stream.
   * Channel will be created automatically if it isn't available.
   * */
-  addMessage<T>(channelName: string, eventName: string, data?: T): void;
+  addMessage<T>(channelName: string, eventName: string, data?: T, lifetime?: number): void;
 
   /*
   * Clear recent message that has been sent.
@@ -35,11 +41,6 @@ export interface INgRxMessageBusService {
   * Delete every channel message.
   * */
   deleteMessages(): void;
-
-  /*
-  * Publish a message when a channel is created.
-  * */
-  readonly channelAddedEvent: Observable<{channelName: string, eventName: string}>;
 
   //#endregion
 

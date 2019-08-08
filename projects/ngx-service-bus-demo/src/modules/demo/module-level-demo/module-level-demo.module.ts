@@ -10,10 +10,7 @@ import {NgRxMessageBusModule} from "../../../../../ngrx-message-bus/src/lib/ngrx
 
 @NgModule({
   imports: [
-    NgRxMessageBusModule.forRoot({
-      channelConnectionAttemptDelay: 250,
-      subscriptionAttemptMode: 'infinite'
-    }),
+    NgRxMessageBusModule,
 
     MatCardModule,
     MatTabsModule,

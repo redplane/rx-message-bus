@@ -16,7 +16,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
     super();
   }
 

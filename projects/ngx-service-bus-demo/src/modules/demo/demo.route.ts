@@ -23,10 +23,6 @@ const routes: Routes = [
         loadChildren: './component-level-demo/component-level-demo.module#ComponentLevelDemoModule'
       },
       {
-        path: 'hook-channel-event',
-        loadChildren: './hook-channel-event-demo/hook-channel-event-demo.module#HookChannelEventDemoModule'
-      },
-      {
         path: 'delete-message',
         loadChildren: './delete-message-demo/delete-message-demo.module#DeleteMessageDemoModule'
       }

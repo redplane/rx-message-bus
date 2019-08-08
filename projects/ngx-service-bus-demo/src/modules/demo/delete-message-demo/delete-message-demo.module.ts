@@ -11,7 +11,6 @@ import {CommonModule} from "@angular/common";
 
 @NgModule({
   imports: [
-    NgRxMessageBusModule,
     CommonModule,
 
     MatCardModule,
@@ -19,12 +18,8 @@ import {CommonModule} from "@angular/common";
     TranslateModule.forChild(),
     MatButtonModule,
     MomentModule.forRoot(),
-    NgRxMessageBusModule.forRoot({
-      subscriptionAttemptMode: 'infinite'
-    }),
 
     DeleteMessageDemoRouteModule
-
   ],
   declarations: [
     MessageListenerComponent,

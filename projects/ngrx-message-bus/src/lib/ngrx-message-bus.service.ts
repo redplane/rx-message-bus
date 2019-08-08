@@ -2,9 +2,8 @@ import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
 import {delay, filter, flatMap, map, retryWhen, switchMap} from 'rxjs/operators';
 import {INgRxMessageBusService} from "./ngrx-message-bus-service.interface";
-import {INgRxMessageBusOptions} from "./ngrx-message-bus-option.interface";
-import {MessageContainer} from "./message-container";
-import {IChannelAddedEvent} from "./channel-added-event.interface";
+import {MessageContainer} from "./models/message-container";
+import {ChannelInitializationEvent} from "./models/channel-initialization-event";
 
 @Injectable()
 export class NgRxMessageBusService implements INgRxMessageBusService {
@@ -12,34 +11,14 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   //#region Properties
 
   /*
-  * Times that hookChannelMessage should retry before subscription failure.
-  * */
-  private _defaultChannelSubscriptionAttemptTimes = 5;
-
-  /*
-  * Default seconds that hookChannelMessage should retry before subscription failure.
-  * */
-  private _defaultChannelSubscriptionDuration = 5000;
-
-  /*
-  * Retry connecting to channel after 1000ms.
-  * */
-  private _defaultSubscriptionAttemptDelayTime = 1000;
-
-  /*
   * Map of channels & event emitter
   * */
-  private _mChannel: Map<string, Map<string, Subject<any>>>;
+  private _mChannelEventManager: Map<string, Map<string, Subject<any>>>;
 
   /*
-  * Message bus service options.
+  * Channel event initialization manager.
   * */
-  private _options: INgRxMessageBusOptions;
-
-  /*
-  * Special channel which raises a message when an ordinary channel is created.
-  * */
-  public readonly channelAddedEvent: Subject<IChannelAddedEvent>;
+  private _mChannelEventInitializationManager: Map<string, Map<string, Subject<any>>>;
 
   //#endregion
 
@@ -48,16 +27,10 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   /*
   * Initialize service with injectors.
   * */
-  public constructor(@Inject('IMessageBusOption') @Optional() options?: INgRxMessageBusOptions) {
-
-    // Setup initial option.
-    this._options = options;
-
-    // Initialize special channel.
-    this.channelAddedEvent = new ReplaySubject(1);
-
+  public constructor() {
     // Initialize list of channel mappings.
-    this._mChannel = new Map<string, Map<string, Subject<any>>>();
+    this._mChannelEventManager = new Map<string, Map<string, Subject<any>>>();
+    this._mChannelEventInitializationManager = new Map<string, Map<string, Subject<any>>>();
   }
 
   //#endregion
@@ -77,22 +50,15 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  public hookMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean, messageBusOptions?: INgRxMessageBusOptions): Observable<T> {
+  public hookMessageChannel<T>(channelName: string, eventName: string): Observable<T> {
 
-    // Number of subscription retry.
-    let subscriptionRetryTimes = 0;
-
-    // Time when the first retry was made.
-    const firstRetryTime = new Date().getTime();
-
-    // Base on mode, we have different attempt strategy.
-    const options = this.loadMessageBusOptions(messageBusOptions);
-
-    return of(null)
+    return this
+      .loadChannelInitializationEventEmitter(channelName, eventName)
       .pipe(
         // Cancel previous subscription and change to load available message channel.
-        map(() => this.loadMessageChannel(channelName, eventName, autoCreate)),
+        map(() => this.loadMessageChannel(channelName, eventName, true)),
 
+        // Jump to event emitter.
         switchMap((messageEmitter: Subject<MessageContainer<T>>) => {
 
           // No recipient has been found.
@@ -100,46 +66,16 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
             return throwError('Channel is not found');
           }
 
-          return messageEmitter
-            .pipe(
-              // Only pass data back to listener when message is available.
-              filter(messageContainer => {
-                return messageContainer && messageContainer.available;
-              }),
-
-              // Pass the data inside the message container to listeners.
-              map((messageContainer: MessageContainer<T>) => messageContainer.data)
-            )
+          return messageEmitter;
         }),
 
-        retryWhen(exceptionObservable => {
-          switch (options.subscriptionAttemptMode) {
+        // Only pass data back to listener when message is available.
+        filter(messageContainer => {
+          return messageContainer && messageContainer.available;
+        }),
 
-            case 'times':
-
-              // Maximum retry times exceeded.
-              if (subscriptionRetryTimes > options.channelSubscriptionAttemptTimes) {
-                return throwError(`Maximum subscription retries exceeded. Allowed value is : ${options.channelSubscriptionAttemptTimes}`);
-              }
-
-              subscriptionRetryTimes++;
-              break;
-
-            case 'duration':
-
-              // Retry duration exceeded.
-              const currentUnixTime = new Date().getTime();
-              if (currentUnixTime - firstRetryTime > options.channelSubscriptionAttemptDuration) {
-                return throwError(`Subscription attempt duration is over.
-                Allowed value is: ${options.channelSubscriptionAttemptDuration} ms`);
-              }
-          }
-
-          return exceptionObservable
-            .pipe(
-              delay(options.channelConnectionAttemptDelay)
-            );
-        })
+        // Pass the data inside the message container to listeners.
+        map((messageContainer: MessageContainer<T>) => messageContainer.data)
       );
   }
 
@@ -147,14 +83,11 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * Publish message to event stream.
   * Channel will be created automatically if it isn't available.
   * */
-  public addMessage<T>(channelName: string, eventName: string, data: T): void {
+  public addMessage<T>(channelName: string, eventName: string, data: T, lifetimeInSeconds?: number): void {
     const emitter = this.loadMessageChannel(channelName, eventName, true);
 
     // Build message container.
-    const messageContainer = new MessageContainer<T>();
-    messageContainer.data = data;
-    messageContainer.createdTime = new Date().getTime();
-    messageContainer.available = true;
+    const messageContainer = new MessageContainer<T>(data, true, lifetimeInSeconds);
     emitter.next(messageContainer);
   }
 
@@ -163,17 +96,16 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * */
   public deleteChannelMessage(channelName: string, eventName: string): void {
 
-    const messageEmitter = this.loadMessageChannel(channelName, eventName, false);
-    if (messageEmitter == null) {
+    const channelMessageEmitter = this.loadMessageChannel(channelName, eventName, false);
+    if (channelMessageEmitter == null) {
       return;
     }
 
-    const messageContainer = new MessageContainer<any>();
-    messageContainer.data = null;
-    messageContainer.available = false;
+    // Initialize unavailable message container.
+    const messageContainer = new MessageContainer<any>(null, false, null);
 
     // Emit the blank message to channel.
-    messageEmitter.next(messageContainer);
+    channelMessageEmitter.next(messageContainer);
   }
 
   /*
@@ -181,14 +113,14 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * */
   public deleteMessages(): void {
 
-    if (this._mChannel == null) {
+    if (this._mChannelEventManager == null) {
       return;
     }
 
     // Go through every channel.
-    const channelNames = this._mChannel.keys();
+    const channelNames = this._mChannelEventManager.keys();
     for (const channelName of channelNames) {
-      const channelNameEventNameMap = this._mChannel.get(channelName);
+      const channelNameEventNameMap = this._mChannelEventManager.get(channelName);
       if (!channelNameEventNameMap) {
         continue;
       }
@@ -200,13 +132,17 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
         const emitter = channelNameEventNameMap.get(eventName);
 
         // Initialize blank message.
-        const messageContainer = new MessageContainer<any>();
-        messageContainer.data = null;
-        messageContainer.available = true;
-
+        const messageContainer = new MessageContainer<any>(null, false, null);
         emitter.next(messageContainer);
       }
     }
+  }
+
+  /*
+  * Hook to channel channel - event initialization.
+  * */
+  public hookChannelInitialization(channelName: string, eventName: string): Observable<ChannelInitializationEvent> {
+    return this.loadChannelInitializationEventEmitter(channelName, eventName);
   }
 
   /*
@@ -216,30 +152,30 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * Therefore, it should be used wisely.
   * */
   protected loadMessageChannel<T>(channelName: string, eventName: string, autoCreate?: boolean): Subject<MessageContainer<T>> {
-    let mChannel = this._mChannel;
+    let mChannelEventManager = this._mChannelEventManager;
 
-    if (mChannel == null) {
+    if (mChannelEventManager == null) {
 
       // Cannot create channel automatically.
       if (!autoCreate) {
         return null;
       }
 
-      mChannel = new Map<string, Map<string, Subject<any>>>();
-      this._mChannel = mChannel;
+      mChannelEventManager = new Map<string, Map<string, Subject<any>>>();
+      this._mChannelEventManager = mChannelEventManager;
     }
 
-    if (!mChannel.has(channelName)) {
+    if (!mChannelEventManager.has(channelName)) {
 
       // Cannot create channel automatically.
       if (!autoCreate) {
         return null;
       }
-      mChannel.set(channelName, null);
+      mChannelEventManager.set(channelName, null);
     }
 
     // Channel is not found.
-    let channelNameMessageEmitterMap = mChannel.get(channelName);
+    let channelNameMessageEmitterMap = mChannelEventManager.get(channelName);
     if (channelNameMessageEmitterMap == null) {
 
       if (!autoCreate) {
@@ -247,7 +183,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
       }
 
       channelNameMessageEmitterMap = new Map<string, Subject<any>>();
-      mChannel.set(channelName, channelNameMessageEmitterMap);
+      mChannelEventManager.set(channelName, channelNameMessageEmitterMap);
     }
 
     let messageEmitter = channelNameMessageEmitterMap.get(eventName);
@@ -269,57 +205,37 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
     // Raise an event about message channel creation if it has been newly added.
     if (hasMessageEmitterAdded) {
       // Raise an event about newly created channel.
-      this.channelAddedEvent.next({channelName, eventName});
+      const channelInitializationEmitter = this.loadChannelInitializationEventEmitter(channelName, eventName);
+      channelInitializationEmitter.next(new ChannelInitializationEvent(channelName, eventName));
     }
 
     return messageEmitter;
   }
 
   /*
-  * Load message from options.
-  * Default message bus option will be used if no option is defined.
+  * Load channel initialization event emitter.
   * */
-  protected loadMessageBusOptions(originalOptions?: INgRxMessageBusOptions): INgRxMessageBusOptions {
+  protected loadChannelInitializationEventEmitter(channelName: string, eventName: string): Subject<ChannelInitializationEvent> {
 
-    // Get options.
-    let options = Object.assign({}, originalOptions || this._options);
-
-    // Option is not specified.
-    if (!options) {
-
-      // Get predefined options.
-      options = {
-        subscriptionAttemptMode: 'times',
-        channelSubscriptionAttemptDuration: this._defaultChannelSubscriptionDuration,
-        channelSubscriptionAttemptTimes: this._defaultChannelSubscriptionAttemptTimes,
-        channelConnectionAttemptDelay: this._defaultSubscriptionAttemptDelayTime
-      };
-
-      this._options = options;
+    if (!this._mChannelEventInitializationManager.has(channelName)) {
+      this._mChannelEventInitializationManager.set(channelName, new Map<string, Subject<any>>());
     }
 
-    // Attempt time is not valid.
-    if (!options.channelSubscriptionAttemptTimes || options.channelSubscriptionAttemptTimes < 0) {
-      options.channelSubscriptionAttemptTimes = this._defaultChannelSubscriptionAttemptTimes;
+    let eventInitializationManager = this._mChannelEventInitializationManager.get(channelName);
+    if (eventInitializationManager == null) {
+      eventInitializationManager = new Map<string, Subject<any>>();
+      this._mChannelEventInitializationManager.set(channelName, eventInitializationManager);
     }
 
-    // Attempt duration is not valid.
-    if (!options.channelSubscriptionAttemptDuration || options.channelSubscriptionAttemptDuration < 0) {
-      options.channelSubscriptionAttemptDuration = this._defaultChannelSubscriptionDuration;
+    // Get the event emitter.
+    let eventEmitter = eventInitializationManager.get(eventName);
+    if (!eventEmitter) {
+      eventEmitter = new Subject<ChannelInitializationEvent>();
+      eventInitializationManager.set(eventName, eventEmitter);
+      this._mChannelEventInitializationManager.set(channelName, eventInitializationManager);
     }
 
-    // Subscription attempt delay is not valid.
-    if (!options.channelConnectionAttemptDelay || options.channelConnectionAttemptDelay < 500) {
-      options.channelConnectionAttemptDelay = this._defaultSubscriptionAttemptDelayTime;
-    }
-
-    // No mode is specify for message bus.
-    const availableAttemptModes = ['duration', 'times', 'infinite'];
-    if (!options.subscriptionAttemptMode || availableAttemptModes.indexOf(options.subscriptionAttemptMode) === -1) {
-      options.subscriptionAttemptMode = 'duration';
-    }
-
-    return options;
+    return eventEmitter;
   }
 
   //#endregion

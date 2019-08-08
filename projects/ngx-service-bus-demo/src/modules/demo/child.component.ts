@@ -28,18 +28,14 @@ export class ChildComponent implements OnDestroy {
 
   //#region Constructor
 
-  public constructor(@Inject('IRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
 
     // Initialize subscription manager.
     this._subscription = new Subscription();
 
     const hookParentMessageSubscription = this.messageBusService
       .hookMessageChannel(MessageChannelNameConstant.parent,
-        MessageEventNameConstant.sendParentMessage,
-        false, {
-          subscriptionAttemptMode: 'infinite',
-          channelConnectionAttemptDelay: 100
-        })
+        MessageEventNameConstant.sendParentMessage)
       .subscribe((message: string) => {
         this._message = message;
       });

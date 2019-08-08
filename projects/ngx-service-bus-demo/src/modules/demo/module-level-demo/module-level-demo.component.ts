@@ -67,11 +67,7 @@ export class ModuleLevelDemoComponent {
     return `
       @NgModule({
         imports: [
-          RxMessageBusModule.forRoot({
-            channelConnectionAttemptDelay: 250,
-            subscriptionAttemptMode: 'infinite'
-          }),
-          
+          RxMessageBusModule,
           // ...
         ]
       })

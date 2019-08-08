@@ -1,7 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from "@angular/core";
 import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus-service.interface";
-import {filter, flatMap, switchMap} from "rxjs/operators";
-import {IChannelAddedEvent} from "../../../../../../ngrx-message-bus/src/lib/channel-added-event.interface";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
 import {Subscription} from "rxjs";
@@ -32,16 +30,7 @@ export class MessageListenerComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this._hookMessageSubscription = this.messageBusService
-      .channelAddedEvent
-      .pipe(
-        filter((model: IChannelAddedEvent) => {
-          return model.channelName === MessageChannelNameConstant.ui && model.eventName === MessageEventNameConstant.deleteMessage;
-        }),
-        switchMap((model: IChannelAddedEvent) => {
-          return this.messageBusService
-            .hookMessageChannel(model.channelName, model.eventName, false);
-        })
-      )
+      .hookMessageChannel(MessageChannelNameConstant.ui, MessageEventNameConstant.deleteMessage)
       .subscribe((message: string) => {
         this.message = message;
       })
