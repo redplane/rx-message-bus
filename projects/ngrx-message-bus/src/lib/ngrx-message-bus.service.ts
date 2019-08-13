@@ -230,7 +230,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
     // Get the event emitter.
     let eventEmitter = eventInitializationManager.get(eventName);
     if (!eventEmitter) {
-      eventEmitter = new Subject<ChannelInitializationEvent>();
+      eventEmitter = new ReplaySubject<ChannelInitializationEvent>(1);
       eventInitializationManager.set(eventName, eventEmitter);
       this._mChannelEventInitializationManager.set(channelName, eventInitializationManager);
     }
