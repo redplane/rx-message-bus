@@ -1,0 +1,58 @@
+version: 1.0.{build}
+
+only_commits:
+  files:
+    - projects/ngrx-message-bus/
+
+environment:
+
+  # Node version which will be used for compiling application.
+  nodejs_version: "10.13.0"
+
+  # Name of library package
+  LIBRARY_NAME: "ngrx-message-bus"
+
+  # API Key used for deploying to MyGet npm.
+  API_KEY_MY_GET:
+    secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
+
+  API_KEY_NPM:
+    secure: YruqDi9AIxK+CJqOADn2XRpe3RerQXwFSNrhwM65sICQzctqimRTKYVBnHeLXKEb
+
+install:
+  # Get the latest stable version of Node.js.
+  - ps: Install-Product node $env:nodejs_version
+
+  # Install npm package.
+  - npm install --loglevel=error
+
+  # Install angular-cli as global package.
+  - npm install @angular/cli -g
+
+  # Install Typescript 3.4.2.
+  - npm install typescript@3.4.2 --save-dev
+
+build_script:
+  # Build application in production mode.
+  - ng build %LIBRARY_NAME%
+
+after_build:
+  # Copy README.md to distributed folder.
+  - copy README.md dist/%LIBRARY_NAME% /Y
+
+before_deploy:
+  - SET SHOULD_DEPLOYMENT_DONE=false
+  - SET NPM_API_KEY=""
+
+  - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET SHOULD_DEPLOYMENT_DONE=true
+  - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET NPM_API_KEY=%API_KEY_NPM%
+
+  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET SHOULD_DEPLOYMENT_DONE=true
+  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET NPM_API_KEY=%API_KEY_MY_GET%
+
+deploy_script:
+  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" cd /d "dist/%LIBRARY_NAME%"
+  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" echo registry=https://www.myget.org/F/%LIBRARY_NAME%/npm/ >> .npmrc
+  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" echo always-auth=true >> .npmrc
+  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" echo //www.myget.org/F/%LIBRARY_NAME%/npm/:_authToken=%NPM_API_KEY% >> .npmrc
+  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" npm publish
