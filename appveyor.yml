@@ -38,7 +38,7 @@ build_script:
 
 after_build:
   # Copy README.md to distributed folder.
-  - copy README.md dist/%LIBRARY_NAME% /Y
+  - copy README.md "dist/%LIBRARY_NAME%/" /Y
 
 before_deploy:
   - SET SHOULD_DEPLOYMENT_DONE=false
