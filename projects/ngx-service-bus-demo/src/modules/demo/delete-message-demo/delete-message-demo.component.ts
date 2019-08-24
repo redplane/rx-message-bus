@@ -1,9 +1,10 @@
 import {Component, Inject, OnInit} from "@angular/core";
-import {INgRxMessageBusService} from "../../../../../ngrx-message-bus/src/lib/ngrx-message-bus-service.interface";
+import {INgRxMessageBusService} from "../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface";
 import {MessageChannelNameConstant} from "../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../constants/message-event-name.constant";
 import {Moment} from "moment";
 import { LocalTimePipe} from "ngx-moment";
+import {MESSAGE_BUS_SERVICE_INJECTOR} from "../../../../../ngrx-message-bus/src/constants/injection-tokens.constant";
 
 @Component({
   selector: 'delete-message-demo',
@@ -20,7 +21,7 @@ export class DeleteMessageDemoComponent implements OnInit {
 
   //#region Constructor
 
-  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService,
+  public constructor(@Inject(MESSAGE_BUS_SERVICE_INJECTOR) protected messageBusService: INgRxMessageBusService,
                      protected localTimePipe: LocalTimePipe) {
     this.shouldComponentAvailable = false;
   }

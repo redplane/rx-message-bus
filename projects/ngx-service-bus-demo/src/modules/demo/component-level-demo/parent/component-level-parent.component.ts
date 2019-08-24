@@ -2,14 +2,15 @@ import {Component, Inject} from "@angular/core";
 import {ParentComponent} from "../../parent.component";
 import {MessageChannelNameConstant} from "../../../../constants/message-channel-name.constant";
 import {MessageEventNameConstant} from "../../../../constants/message-event-name.constant";
-import {NgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus.service";
-import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/lib/ngrx-message-bus-service.interface";
+import {NgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/services/implementations/ngrx-message-bus.service";
+import {INgRxMessageBusService} from "../../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface";
+import {MESSAGE_BUS_SERVICE_INJECTOR} from "../../../../../../ngrx-message-bus/src/constants/injection-tokens.constant";
 
 @Component({
   selector: 'component-level-parent',
   templateUrl: 'component-level-parent.component.html',
   providers: [
-    {provide: 'INgRxMessageBusService', useFactory: () => new NgRxMessageBusService()}
+    {provide: MESSAGE_BUS_SERVICE_INJECTOR, useFactory: () => new NgRxMessageBusService()}
   ]
 })
 export class ComponentLevelParentComponent extends ParentComponent {
@@ -20,7 +21,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject('INgRxMessageBusService') protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE_INJECTOR) protected messageBusService: INgRxMessageBusService) {
     super();
   }
 

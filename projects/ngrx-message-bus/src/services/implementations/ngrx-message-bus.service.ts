@@ -1,9 +1,9 @@
 import {Inject, Injectable, Optional} from '@angular/core';
 import {Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
 import {delay, filter, flatMap, map, retryWhen, switchMap} from 'rxjs/operators';
-import {INgRxMessageBusService} from "./ngrx-message-bus-service.interface";
-import {MessageContainer} from "./models/message-container";
-import {ChannelInitializationEvent} from "./models/channel-initialization-event";
+import {INgRxMessageBusService} from "../interfaces/ngrx-message-bus-service.interface";
+import {MessageContainer} from "../../models/message-container";
+import {ChannelInitializationEvent} from "../../models/channel-initialization-event";
 
 @Injectable()
 export class NgRxMessageBusService implements INgRxMessageBusService {
