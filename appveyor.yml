@@ -38,21 +38,29 @@ build_script:
 
 after_build:
   # Copy README.md to distributed folder.
-  - copy README.md dist/%LIBRARY_NAME% /Y
+  - copy README.md "dist/%LIBRARY_NAME%/" /Y
 
 before_deploy:
   - SET SHOULD_DEPLOYMENT_DONE=false
   - SET NPM_API_KEY=""
+  - SET NPM_ENDPOINT=""
 
   - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET SHOULD_DEPLOYMENT_DONE=true
   - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET NPM_API_KEY=%API_KEY_NPM%
+  - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET NPM_ENDPOINT="www.npmjs.org"
 
   - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET SHOULD_DEPLOYMENT_DONE=true
   - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET NPM_API_KEY=%API_KEY_MY_GET%
+  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET NPM_ENDPOINT="www.myget.org"
 
 deploy_script:
   - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" cd /d "dist/%LIBRARY_NAME%"
-  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" echo registry=https://www.myget.org/F/%LIBRARY_NAME%/npm/ >> .npmrc
-  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" echo always-auth=true >> .npmrc
-  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" echo //www.myget.org/F/%LIBRARY_NAME%/npm/:_authToken=%NPM_API_KEY% >> .npmrc
+
+  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" echo registry=https://www.myget.org/F/%LIBRARY_NAME%/npm/ >> .npmrc
+  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" echo always-auth=true >> .npmrc
+  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" echo //www.myget.org/F/%LIBRARY_NAME%/npm/:_authToken=%NPM_API_KEY% >> .npmrc
+
+  - IF "%APPVEYOR_REPO_BRANCH%" == "release" echo //registry.npmjs.org/:_authToken=%API_KEY_NPM% >> .npmrc
+
+  # Publish package to npm server.
   - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" npm publish

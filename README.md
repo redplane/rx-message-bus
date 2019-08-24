@@ -222,7 +222,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
 - **1.0.4**: 
   - Changed `BehaviourSubject` to `ReplaySubject` to prevent unexpected value from being emitted.
   
-- **2.0.0**:
+- **2.2.0**:
     - Removed `channelAddedEvent`. When `hookChannelMessage`, it will ensure channel is created before publishing messages.
     
     - Added `lifetimeInSeconds?: number` into `addMessage<T>(channelName: string, eventName: string, data: T, lifetimeInSeconds?: number): void`, message will be expired after lifetime exceeds.
@@ -242,6 +242,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
     ```
   
   - Removed ```autoCreateChannel``` from ```hookChannelMessage```.
+  - Changed `INgRxMessageBusService` string injector to `MESSAGE_BUS_SERVICE_INJECTOR` object injector.
     
 
 

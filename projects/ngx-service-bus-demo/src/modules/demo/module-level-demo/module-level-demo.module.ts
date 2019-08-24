@@ -6,7 +6,7 @@ import {MatButtonModule, MatCardModule, MatTabsModule} from "@angular/material";
 import {TranslateModule} from "@ngx-translate/core";
 import {ModuleLevelParentComponent} from "./parent/module-level-parent.component";
 import {ModuleLevelChildComponent} from "./child/module-level-child.component";
-import {NgRxMessageBusModule} from "../../../../../ngrx-message-bus/src/lib/ngrx-message-bus.module";
+import {NgRxMessageBusModule} from "../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module";
 
 @NgModule({
   imports: [

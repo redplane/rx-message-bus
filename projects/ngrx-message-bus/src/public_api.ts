@@ -1,6 +1,9 @@
 /*
  * Public API Surface of ngrx-message-bus
  */
-export * from './lib/ngrx-message-bus.service';
-export * from './lib/ngrx-message-bus-service.interface';
-export * from './lib/ngrx-message-bus.module';
+
+export * from './services/implementations/ngrx-message-bus.service';
+export * from './services/interfaces/ngrx-message-bus-service.interface';
+export * from './modules/ngrx-message-bus.module';
+
+export {MESSAGE_BUS_SERVICE_INJECTOR} from './constants/injection-tokens.constant';

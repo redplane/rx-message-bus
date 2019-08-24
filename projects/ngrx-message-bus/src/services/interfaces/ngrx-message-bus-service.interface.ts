@@ -1,5 +1,5 @@
 import {Observable, Subject} from 'rxjs';
-import {ChannelInitializationEvent} from "./models/channel-initialization-event";
+import {ChannelInitializationEvent} from "../../models/channel-initialization-event";
 
 // A small message queue channels - messages management.
 // This service which helps modules to send and receive messages asynchronously.

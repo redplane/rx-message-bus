@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {DeleteMessageDemoComponent} from "./delete-message-demo.component";
-import {NgRxMessageBusModule} from "../../../../../ngrx-message-bus/src/lib/ngrx-message-bus.module";
+import {NgRxMessageBusModule} from "../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module";
 
 //#region Routes
 
