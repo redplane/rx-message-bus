@@ -1,5 +1,6 @@
 import {Observable, Subject} from 'rxjs';
-import {ChannelInitializationEvent} from "../../models/channel-initialization-event";
+import {ChannelInitializationEvent} from '../../models/channel-initialization-event';
+import {TypedChannelEvent} from '../../models/typed-channel-event';
 
 // A small message queue channels - messages management.
 // This service which helps modules to send and receive messages asynchronously.
@@ -7,9 +8,7 @@ export interface INgRxMessageBusService {
 
   //#region Methods
 
-  /*
-  * Add a message channel to message bus.
-  * */
+  // Add a message channel to message bus.
   addMessageChannel<T>(channelName: string, eventName: string): void;
 
   /*
@@ -19,6 +18,9 @@ export interface INgRxMessageBusService {
   * Therefore, it should be used wisely.
   * */
   hookMessageChannel<T>(channelName: string, eventName: string): Observable<T>;
+
+  // Hook to message channel.
+  hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>): Observable<T>;
 
   /*
   * Hook to channel initialization.
@@ -32,14 +34,13 @@ export interface INgRxMessageBusService {
   * */
   addMessage<T>(channelName: string, eventName: string, data?: T, lifetime?: number): void;
 
-  /*
-  * Clear recent message that has been sent.
-  * */
+  // Add typed message channel.
+  addTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, message: T): void;
+
+  // Clear recent message that has been sent.
   deleteChannelMessage(channelName: string, eventName: string): void;
 
-  /*
-  * Delete every channel message.
-  * */
+  // Delete every channel message.
   deleteMessages(): void;
 
   //#endregion

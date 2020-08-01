@@ -1,9 +1,9 @@
-import {Inject, OnDestroy} from "@angular/core";
-import {Subscription} from "rxjs";
-import {MessageChannelNameConstant} from "../../constants/message-channel-name.constant";
-import {MessageEventNameConstant} from "../../constants/message-event-name.constant";
-import {INgRxMessageBusService} from "../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface";
-import {MESSAGE_BUS_SERVICE_INJECTOR} from "../../../../ngrx-message-bus/src/constants/injection-tokens.constant";
+import {Inject, OnDestroy} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {MessageChannelNameConstant} from '../../constants/message-channel-name.constant';
+import {MessageEventNameConstant} from '../../constants/message-event-name.constant';
+import {INgRxMessageBusService} from '../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
+import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
 
 export class ChildComponent implements OnDestroy {
 
@@ -29,7 +29,7 @@ export class ChildComponent implements OnDestroy {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_INJECTOR) protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
 
     // Initialize subscription manager.
     this._subscription = new Subscription();

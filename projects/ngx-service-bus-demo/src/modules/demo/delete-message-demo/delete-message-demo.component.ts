@@ -1,12 +1,13 @@
-import {Component, Inject, OnInit} from "@angular/core";
-import {INgRxMessageBusService} from "../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface";
-import {MessageChannelNameConstant} from "../../../constants/message-channel-name.constant";
-import {MessageEventNameConstant} from "../../../constants/message-event-name.constant";
-import {Moment} from "moment";
-import { LocalTimePipe} from "ngx-moment";
-import {MESSAGE_BUS_SERVICE_INJECTOR} from "../../../../../ngrx-message-bus/src/constants/injection-tokens.constant";
+import {Component, Inject, OnInit} from '@angular/core';
+import {INgRxMessageBusService} from '../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
+import {MessageChannelNameConstant} from '../../../constants/message-channel-name.constant';
+import {MessageEventNameConstant} from '../../../constants/message-event-name.constant';
+import {LocalTimePipe} from 'ngx-moment';
+import {ProfileUpdateMessageEvent} from '../../../models/profile-update.message-event';
+import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'delete-message-demo',
   templateUrl: 'delete-message-demo.component.html',
   styleUrls: ['./delete-message-demo.component.scss']
@@ -21,7 +22,7 @@ export class DeleteMessageDemoComponent implements OnInit {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_INJECTOR) protected messageBusService: INgRxMessageBusService,
+  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService,
                      protected localTimePipe: LocalTimePipe) {
     this.shouldComponentAvailable = false;
   }
