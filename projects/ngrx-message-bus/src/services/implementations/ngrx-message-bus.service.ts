@@ -1,6 +1,6 @@
-import {Inject, Injectable, Optional} from '@angular/core';
-import {Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
-import {delay, filter, flatMap, map, retryWhen, switchMap} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {Observable, ReplaySubject, Subject, throwError} from 'rxjs';
+import {filter, map, switchMap} from 'rxjs/operators';
 import {INgRxMessageBusService} from '../interfaces/ngrx-message-bus-service.interface';
 import {MessageContainer} from '../../models/message-container';
 import {ChannelInitializationEvent} from '../../models/channel-initialization-event';
@@ -35,6 +35,11 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   // Add message channel event emitter.
   public addMessageChannel<T>(channelName: string, eventName: string): void {
     this.loadMessageChannel<T>(channelName, eventName, true);
+  }
+
+  // Add message channel.
+  public addTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>): void {
+    this.addMessageChannel(channelEvent.channelName, channelEvent.eventName);
   }
 
   /*
@@ -90,7 +95,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   }
 
   // Add typed message channel.
-  public addTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, message: T, lifeTimeInSeconds?: number): void {
+  public addTypedMessage<T>(channelEvent: TypedChannelEvent<T>, message: T, lifeTimeInSeconds?: number): void {
     this.addMessage(channelEvent.channelName, channelEvent.eventName, message, lifeTimeInSeconds);
   }
 
@@ -107,6 +112,11 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
 
     // Emit the blank message to channel.
     channelMessageEmitter.next(messageContainer);
+  }
+
+  // Delete messages that have been sent through a specific channel & event.
+  public deleteTypedChannelMessage<T>(channelEvent: TypedChannelEvent<T>): void {
+    this.deleteChannelMessage(channelEvent.channelName, channelEvent.eventName);
   }
 
   // Delete message from every channel.
@@ -140,6 +150,11 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   // Hook to channel channel - event initialization.
   public hookChannelInitialization(channelName: string, eventName: string): Observable<ChannelInitializationEvent> {
     return this.loadChannelInitializationEventEmitter(channelName, eventName);
+  }
+
+  // Hook channel initialization by using typed declaration.
+  public hookTypedChannelInitialization<T>(channelEvent: TypedChannelEvent<T>): Observable<ChannelInitializationEvent> {
+    return this.hookChannelInitialization(channelEvent.channelName, channelEvent.eventName);
   }
 
   /*

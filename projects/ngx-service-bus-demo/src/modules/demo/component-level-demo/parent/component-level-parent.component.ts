@@ -5,6 +5,7 @@ import {MessageEventNameConstant} from '../../../../constants/message-event-name
 import {NgRxMessageBusService} from '../../../../../../ngrx-message-bus/src/services/implementations/ngrx-message-bus.service';
 import {INgRxMessageBusService} from '../../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
 import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
+import {ModuleLevelMessageEvent} from '../../../../models/module-level.message-event';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -34,10 +35,20 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
     // Get current date.
     const date = new Date();
+    const message = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
 
     this.messageBusService
-      .addMessage(MessageChannelNameConstant.parent, MessageEventNameConstant.sendParentMessage,
-        `${date.toLocaleTimeString()} [${this.name}] says: Hello`);
+      .addMessage(MessageChannelNameConstant.parent, MessageEventNameConstant.sendParentMessage, message);
+  }
+
+  public clickSendTypedMessage(): void {
+
+    const channelEvent = new ModuleLevelMessageEvent();
+    const date = new Date();
+    const message = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
+
+    this.messageBusService
+      .addTypedMessage(channelEvent, message);
   }
 
   //#endregion

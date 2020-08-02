@@ -27,7 +27,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
 
   //#region Methods
 
-  public clickSendMessage(): void {
+  public clickSendTypedMessage(): void {
 
     // Get current date.
     const date = new Date();
@@ -35,7 +35,16 @@ export class ModuleLevelParentComponent extends ParentComponent {
     const channelEvent = new ModuleLevelMessageEvent();
     const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
 
-    this.messageBusService.addTypedMessageChannel(channelEvent, data);
+    this.messageBusService.addTypedMessage(channelEvent, data);
+  }
+
+  public clickSendMessage(): void {
+    // Get current date.
+    const date = new Date();
+    const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
+
+    this.messageBusService.addMessage(MessageChannelNameConstant.parent,
+      MessageEventNameConstant.sendParentMessage, data);
   }
 
   //#endregion
