@@ -38,7 +38,7 @@ build_script:
 
 test_script:
   # Run unit test for ngrx-message-bus project.
-  - protractor projects/ngrx-message-bus/e2e/protractor.conf.js
+  - ./node_modules/protractor/bin/protractor projects/ngrx-message-bus/e2e/protractor.conf.js
 
 after_build:
   # Copy README.md to distributed folder.
