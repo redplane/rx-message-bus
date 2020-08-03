@@ -29,6 +29,9 @@ install:
   # Install angular-cli as global package.
   - npm install @angular/cli -g
 
+  # Install protractor
+  - npm install protractor -g
+
   # Install Typescript 3.6.5.
   - npm install typescript@3.6.5 --save-dev
 
@@ -38,7 +41,7 @@ build_script:
 
 test_script:
   # Run unit test for ngrx-message-bus project.
-  - ./node_modules/protractor/bin/protractor projects/ngrx-message-bus/e2e/protractor.conf.js
+  - protractor projects/ngrx-message-bus/e2e/protractor.conf.js
 
 after_build:
   # Copy README.md to distributed folder.
