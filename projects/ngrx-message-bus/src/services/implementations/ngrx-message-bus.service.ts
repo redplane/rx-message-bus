@@ -5,6 +5,7 @@ import {INgRxMessageBusService} from '../interfaces/ngrx-message-bus-service.int
 import {MessageContainer} from '../../models/message-container';
 import {ChannelInitializationEvent} from '../../models/channel-initialization-event';
 import {TypedChannelEvent} from '../../models/typed-channel-event';
+import {ExceptionCodesConstant} from '../../constants/exception-codes.constant';
 
 @Injectable()
 export class NgRxMessageBusService implements INgRxMessageBusService {
@@ -61,7 +62,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
 
           // No recipient has been found.
           if (!messageEmitter) {
-            return throwError('Channel is not found');
+            return throwError(ExceptionCodesConstant.channelNotFound);
           }
 
           return messageEmitter;
@@ -95,8 +96,8 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   }
 
   // Add typed message channel.
-  public addTypedMessage<T>(channelEvent: TypedChannelEvent<T>, message: T, lifeTimeInSeconds?: number): void {
-    this.addMessage(channelEvent.channelName, channelEvent.eventName, message, lifeTimeInSeconds);
+  public addTypedMessage<T>(channelEvent: TypedChannelEvent<T>, message: T, lifeTime?: number): void {
+    this.addMessage(channelEvent.channelName, channelEvent.eventName, message, lifeTime);
   }
 
   // Delete messages that have been sent.

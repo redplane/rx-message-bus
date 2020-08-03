@@ -267,7 +267,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
         - `hookChannelInitialization`.
 
 - **2.2.0**:
-    - Removed `channelAddedEvent`. When `hookChannelMessage`, it will ensure channel is created before publishing messages.
+    - Removed `channelAddedEvent`. When `hookChannelMessage`, it will ensure a channel is created before publishing messages.
     
     - Added `lifetimeInSeconds?: number` into `addMessage<T>(channelName: string, eventName: string, data: T, lifetimeInSeconds?: number): void`, message will be expired after lifetime exceeds.
     

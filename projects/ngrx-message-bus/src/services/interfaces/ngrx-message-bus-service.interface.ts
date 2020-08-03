@@ -46,7 +46,7 @@ export interface INgRxMessageBusService {
   addMessage<T>(channelName: string, eventName: string, data?: T, lifetime?: number): void;
 
   // Add typed message channel.
-  addTypedMessage<T>(channelEvent: TypedChannelEvent<T>, message: T): void;
+  addTypedMessage<T>(channelEvent: TypedChannelEvent<T>, message: T, lifeTime?: number): void;
 
   // Clear recent message that has been sent.
   /** @deprecated use deleteTypedChannelMessage instead */
