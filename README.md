@@ -253,6 +253,9 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
 ## Releases
 
+- **3.0.1**:
+    - Minor bug fix about injection token.
+    
 - **3.0.0**:
     - Add typed channel event apis, such as:
         - `addTypedMessageChannel`.
