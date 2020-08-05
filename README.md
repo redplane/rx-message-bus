@@ -216,7 +216,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
   - ~~**data (any)**: Message data.~~
   - ~~**lifeTimeInSeconds (options)**: The number of seconds message remains. If this parameter isn't set, message will have infinitive lifetime.~~
 
-- ~~**channelAddedEvent: Observable<{channelName: string, eventName: string}>`: Raised when a channel is created successfully. This event can be used for initializing connection from subscriber to message bus to ensure the specific channel & event is available to be consumed.~~
+- ~~**channelAddedEvent: Observable<{channelName: string, eventName: string}>**: Raised when a channel is created successfully. This event can be used for initializing connection from subscriber to message bus to ensure the specific channel & event is available to be consumed.~~
 
 - ~~**hookChannelInitialization(channelName: string, eventName: string): Observable<ChannelInitializationEvent>**: Provide hook to outer component to know when a `message channel - event` is initialized successfully.~~
     - ~~**channelName (string)**: Name of channel.~~
