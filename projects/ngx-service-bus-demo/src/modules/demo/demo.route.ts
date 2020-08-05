@@ -16,15 +16,15 @@ const routes: Routes = [
       },
       {
         path: 'module-level',
-        loadChildren: './module-level-demo/module-level-demo.module#ModuleLevelDemoModule'
+        loadChildren: () => import('./module-level-demo/module-level-demo.module').then(m => m.ModuleLevelDemoModule)
       },
       {
         path: 'component-level',
-        loadChildren: './component-level-demo/component-level-demo.module#ComponentLevelDemoModule'
+        loadChildren: () => import('./component-level-demo/component-level-demo.module').then(m => m.ComponentLevelDemoModule)
       },
       {
         path: 'delete-message',
-        loadChildren: './delete-message-demo/delete-message-demo.module#DeleteMessageDemoModule'
+        loadChildren: () => import('./delete-message-demo/delete-message-demo.module').then(m => m.DeleteMessageDemoModule)
       }
     ]
   }

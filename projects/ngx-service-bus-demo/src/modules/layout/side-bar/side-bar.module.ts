@@ -1,8 +1,9 @@
-import {NgModule} from "@angular/core";
-import {TranslateModule} from "@ngx-translate/core";
-import {SideBarComponent} from "./side-bar.component";
-import {MatIconModule, MatListModule} from "@angular/material";
-import {RouterModule} from "@angular/router";
+import {NgModule} from '@angular/core';
+import {TranslateModule} from '@ngx-translate/core';
+import {SideBarComponent} from './side-bar.component';
+import {RouterModule} from '@angular/router';
+import {MatIconModule} from '@angular/material/icon';
+import {MatListModule} from '@angular/material/list';
 
 //#region Module
 

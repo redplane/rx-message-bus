@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/ngx-service-bus-demo",
             "index": "projects/ngx-service-bus-demo/src/index.html",
             "main": "projects/ngx-service-bus-demo/src/main.ts",
@@ -50,6 +51,10 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -103,34 +108,6 @@
         }
       }
     },
-    "ngx-service-bus-demo-e2e": {
-      "root": "projects/ngx-service-bus-demo-e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/ngx-service-bus-demo-e2e/protractor.conf.js",
-            "devServerTarget": "ngx-service-bus-demo:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ngx-service-bus-demo:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "projects/ngx-service-bus-demo-e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
     "ngrx-message-bus": {
       "root": "projects/ngrx-message-bus",
       "sourceRoot": "projects/ngrx-message-bus/src",
@@ -145,7 +122,12 @@
           },
           "assets": [
             "README.md"
-          ]
+          ],
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngrx-message-bus/tsconfig.lib.prod.json"
+            }
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

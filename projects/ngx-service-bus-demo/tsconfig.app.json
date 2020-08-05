@@ -5,8 +5,11 @@
     "baseUrl": "./",
     "types": []
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "projects/ngx-service-bus-demo/src/**/*.d.ts"
   ]
 }

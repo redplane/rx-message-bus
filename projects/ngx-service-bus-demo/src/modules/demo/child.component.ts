@@ -1,15 +1,19 @@
-import {Inject, OnDestroy} from "@angular/core";
-import {Subscription} from "rxjs";
-import {MessageChannelNameConstant} from "../../constants/message-channel-name.constant";
-import {MessageEventNameConstant} from "../../constants/message-event-name.constant";
-import {INgRxMessageBusService} from "../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface";
-import {MESSAGE_BUS_SERVICE_INJECTOR} from "../../../../ngrx-message-bus/src/constants/injection-tokens.constant";
+import {Inject, OnDestroy} from '@angular/core';
+import {Subscription} from 'rxjs';
+import {MessageChannelNameConstant} from '../../constants/message-channel-name.constant';
+import {MessageEventNameConstant} from '../../constants/message-event-name.constant';
+import {INgRxMessageBusService} from '../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
+import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
+import {TypedChannelEvent} from '../../../../ngrx-message-bus/src/models/typed-channel-event';
+import {ModuleLevelMessageEvent} from '../../models/module-level.message-event';
 
 export class ChildComponent implements OnDestroy {
 
   //#region Properties
 
   private _message: string;
+
+  private _typedMessage: string;
 
   private _subscription: Subscription;
 
@@ -25,11 +29,15 @@ export class ChildComponent implements OnDestroy {
     this._message = value;
   }
 
+  public get typedMessage(): string {
+    return this._typedMessage;
+  }
+
   //#endregion
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_INJECTOR) protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
 
     // Initialize subscription manager.
     this._subscription = new Subscription();
@@ -41,7 +49,15 @@ export class ChildComponent implements OnDestroy {
         this._message = message;
       });
 
+    const channelEvent = new ModuleLevelMessageEvent();
+    const hookParentTypedMessageSubscription = this.messageBusService
+      .hookTypedMessageChannel(channelEvent)
+      .subscribe((value: string) => {
+        this._typedMessage = value;
+      });
+
     this._subscription.add(hookParentMessageSubscription);
+    this._subscription.add(hookParentTypedMessageSubscription);
   }
 
   //#endregion

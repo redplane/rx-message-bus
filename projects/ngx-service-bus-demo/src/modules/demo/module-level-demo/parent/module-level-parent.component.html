@@ -1,6 +1,11 @@
 <!--Emit message trigger-->
 <button mat-button [color]="'primary'" (click)="clickSendMessage()">
-  <span>Emit message from {{name}}</span>
+  <span>(Deprecated) Emit message from {{name}}</span>
+</button>
+
+<button mat-button [color]="'primary'"
+        (click)="clickSendTypedMessage()">
+  <span>(Typed message) Emit message from {{name}}</span>
 </button>
 
 <!--Allow child content to be projected in this component-->
