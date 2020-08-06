@@ -6,4 +6,8 @@ export * from './services/interfaces/ngrx-message-bus-service.interface';
 export * from './modules/ngrx-message-bus.module';
 
 // Constant export.
-export * from './constants/injection-tokens.constant';
+export {MESSAGE_BUS_SERVICE_PROVIDER} from './constants/injection-tokens.constant';
+export * from './constants/exception-codes.constant';
+
+// Model export.
+export {TypedChannelEvent} from './models/typed-channel-event';
