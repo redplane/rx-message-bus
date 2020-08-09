@@ -1,5 +1,5 @@
-import {InjectionToken} from "@angular/core";
-import {INgRxMessageBusService} from "../services/interfaces/ngrx-message-bus-service.interface";
+import {InjectionToken} from '@angular/core';
+import {INgRxMessageBusService} from '../services/interfaces/ngrx-message-bus-service.interface';
 
-// Message bus service injection token.
-export const MESSAGE_BUS_SERVICE_INJECTOR = new InjectionToken<INgRxMessageBusService>('MESSAGE_BUS_SERVICE_INJECTOR');
+// Service provider for message bus.
+export const MESSAGE_BUS_SERVICE_PROVIDER = new InjectionToken<INgRxMessageBusService>('Service provider for message bus');

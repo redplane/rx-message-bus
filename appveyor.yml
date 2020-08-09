@@ -17,7 +17,7 @@ environment:
     secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
 
   API_KEY_NPM:
-    secure: YruqDi9AIxK+CJqOADn2XRpe3RerQXwFSNrhwM65sICQzctqimRTKYVBnHeLXKEb
+    secure: nIeG09zqUgJaPWS4YclqB4s/BDnoy0DrNiwvLl+p9eQZknDycbInyKs4uEF6JBbk
 
 install:
   # Get the latest stable version of Node.js.
@@ -29,12 +29,22 @@ install:
   # Install angular-cli as global package.
   - npm install @angular/cli -g
 
-  # Install Typescript 3.4.2.
-  - npm install typescript@3.4.2 --save-dev
+  # Install Typescript 3.6.5.
+  - npm install typescript@3.6.5 --save-dev
+
+  # Install protractor
+  # - npm install protractor -g
+
+  # Install web driver.
+  # - webdriver-manager update
 
 build_script:
   # Build application in production mode.
-  - ng build %LIBRARY_NAME%
+  - ng build %LIBRARY_NAME% --prod
+
+#test_script:
+  # Run unit test for ngrx-message-bus project.
+#  - protractor projects/ngrx-message-bus/e2e/protractor.conf.js
 
 after_build:
   # Copy README.md to distributed folder.
