@@ -5,25 +5,18 @@ import {INgRxMessageBusService} from '../services/interfaces/ngrx-message-bus-se
 
 //#region Module declaration
 
-@NgModule({
-  providers: [
-    {
-      provide: MESSAGE_BUS_SERVICE_PROVIDER,
-      useClass: NgRxMessageBusService
-    }
-  ]
-})
+@NgModule()
 export class NgRxMessageBusModule {
 
   //#region Methods
 
-  public static forRoot(messageBusServiceImplementation: Type<INgRxMessageBusService>): ModuleWithProviders<NgRxMessageBusModule> {
+  public static forRoot(implementation?: Type<INgRxMessageBusService>): ModuleWithProviders<NgRxMessageBusModule> {
     return {
       ngModule: NgRxMessageBusModule,
       providers: [
         {
           provide: MESSAGE_BUS_SERVICE_PROVIDER,
-          useClass: messageBusServiceImplementation
+          useClass: implementation || NgRxMessageBusService
         }
       ]
     };

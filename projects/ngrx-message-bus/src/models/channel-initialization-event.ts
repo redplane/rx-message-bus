@@ -2,9 +2,9 @@ export class ChannelInitializationEvent {
 
   //#region Properties
 
-  private _channelName: string;
+  private readonly _channelName: string;
 
-  private _eventName: string;
+  private readonly _eventName: string;
 
   //#endregion
 
