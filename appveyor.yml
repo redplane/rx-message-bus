@@ -17,7 +17,7 @@ environment:
     secure: 0HqMlO4KT03m1Obda0ta46zbO1EgtiSouotet2O7J7QU5SMEJfrv+GgM0cuNPL9l
 
   API_KEY_NPM:
-    secure: YruqDi9AIxK+CJqOADn2XRpe3RerQXwFSNrhwM65sICQzctqimRTKYVBnHeLXKEb
+    secure: nIeG09zqUgJaPWS4YclqB4s/BDnoy0DrNiwvLl+p9eQZknDycbInyKs4uEF6JBbk
 
 install:
   # Get the latest stable version of Node.js.
