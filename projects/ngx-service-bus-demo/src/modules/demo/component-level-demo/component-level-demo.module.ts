@@ -8,6 +8,7 @@ import {ComponentLevelDemoRouteModule} from './component-level-demo.route';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import {NgRxMessageBusModule} from '../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import {MatCardModule} from '@angular/material/card';
     MatTabsModule,
     TranslateModule.forChild(),
     MatButtonModule,
+    NgRxMessageBusModule.forRoot(),
 
     ComponentLevelDemoRouteModule
   ],

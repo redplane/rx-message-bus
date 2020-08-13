@@ -1,0 +1,61 @@
+<div class="mb-20" fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-header class="mat-card-header">
+      <div class="mat-card-header-text">
+        <mat-card-title class="mat-card-title">Hook channel create event</mat-card-title>
+        <mat-card-subtitle>Description</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <ul>
+        <li>Hook to channel create event and subscribe to it</li>
+        <li>This will be used for ensuring the channel exists. We don't have to try subscribing to it too many times
+        </li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="mb-20"
+     fxFlex
+     fxLayout="row"
+     fxLayout.lt-md="column"
+     fxLayoutGap="20px">
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group [color]="'primary'">
+
+        <!--Preview-->
+        <mat-tab label="{{'Preview' | translate}}">
+
+          <!--Start listening-->
+          <div style="margin-bottom: 10px; margin-top: 10px"
+               [ngSwitch]="sendingCommand">
+            <ng-container *ngSwitchCase="true">Sending command....</ng-container>
+            <ng-container *ngSwitchDefault>
+              <ng-container *ngIf="loadedTime">
+                {{loadedTime}}
+              </ng-container>
+              <ng-container *ngIf="!loadedTime">
+                Click <b>Load Messages</b> to trigger RPC
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <button mat-flat-button color="primary"
+                  [disabled]="sendingCommand"
+                  [ngSwitch]="sendingCommand"
+                  (click)="clickSendCommand()">
+            <span *ngSwitchCase="true">
+              Sending command....
+            </span>
+            <span *ngSwitchDefault>
+              Load time
+            </span>
+          </button>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+
