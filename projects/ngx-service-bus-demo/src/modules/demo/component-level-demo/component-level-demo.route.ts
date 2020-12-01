@@ -1,6 +1,6 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {ComponentLevelDemoComponent} from "./component-level-demo.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ComponentLevelDemoComponent} from './component-level-demo.component';
 
 //#region Routes
 

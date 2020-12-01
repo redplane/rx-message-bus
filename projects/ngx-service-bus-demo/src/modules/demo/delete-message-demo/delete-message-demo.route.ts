@@ -1,7 +1,7 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {DeleteMessageDemoComponent} from "./delete-message-demo.component";
-import {NgRxMessageBusModule} from "../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {DeleteMessageDemoComponent} from './delete-message-demo.component';
+import {NgRxMessageBusModule} from '@message-bus';
 
 //#region Routes
 
@@ -18,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    NgRxMessageBusModule,
+    NgRxMessageBusModule.forRoot(),
     RouterModule.forChild(routes)
   ]
 })
