@@ -58,7 +58,7 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
     const hookTimeQuerySubscription = this.messageBusService
       .hookTypedMessageChannel(new TimeQueryMessageEvent())
       .pipe(
-        // delay(3 * 1000)
+        delay(5 * 1000)
       )
       .subscribe((value: GetTimeCommandRequest) => {
         const commandResponse = new GetTimeCommandResponse(value.id);
