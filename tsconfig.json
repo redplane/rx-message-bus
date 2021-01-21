@@ -19,11 +19,17 @@
       "dom"
     ],
     "paths": {
-      "ngx-message-bus": [
-        "dist/ngx-message-bus"
+      "@message-bus": [
+        "./projects/ngrx-message-bus/src/public_api.ts"
       ],
-      "ngx-message-bus/*": [
-        "dist/ngx-message-bus/*"
+      "@message-bus/*": [
+        "./projects/ngrx-message-bus/src/public_api.ts"
+      ],
+      "@demo-app": [
+        "./projects/ngx-service-bus-demo/src"
+      ],
+      "@demo-app/*": [
+        "./projects/ngx-service-bus-demo/src/*"
       ]
     }
   }

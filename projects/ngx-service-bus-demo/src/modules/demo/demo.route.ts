@@ -1,6 +1,6 @@
-import {NgModule} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {DemoComponent} from "./demo.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {DemoComponent} from './demo.component';
 
 //#region Properties
 
@@ -25,6 +25,10 @@ const routes: Routes = [
       {
         path: 'delete-message',
         loadChildren: () => import('./delete-message-demo/delete-message-demo.module').then(m => m.DeleteMessageDemoModule)
+      },
+      {
+        path: 'rpc-demo',
+        loadChildren: () => import('./rpc-demo/rpc-demo.module').then(m => m.RpcDemoModule)
       }
     ]
   }

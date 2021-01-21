@@ -40,9 +40,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -108,7 +106,7 @@
         }
       }
     },
-    "ngrx-message-bus": {
+    "ngx-message-bus": {
       "root": "projects/ngrx-message-bus",
       "sourceRoot": "projects/ngrx-message-bus/src",
       "projectType": "library",
