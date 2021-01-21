@@ -12,6 +12,7 @@ import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   imports: [
+    NgRxMessageBusModule.forRoot(),
 
     // Module import.
     NgRxMessageBusModule.forRoot(),

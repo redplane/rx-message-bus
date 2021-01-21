@@ -25,6 +25,10 @@ const routes: Routes = [
       {
         path: 'delete-message',
         loadChildren: () => import('./delete-message-demo/delete-message-demo.module').then(m => m.DeleteMessageDemoModule)
+      },
+      {
+        path: 'rpc-demo',
+        loadChildren: () => import('./rpc-demo/rpc-demo.module').then(m => m.RpcDemoModule)
       }
     ]
   }

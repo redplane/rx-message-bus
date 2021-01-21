@@ -20,6 +20,7 @@ import {MatCardModule} from '@angular/material/card';
     TranslateModule.forChild(),
     MatButtonModule,
     MomentModule.forRoot(),
+    NgRxMessageBusModule.forRoot(),
 
     DeleteMessageDemoRouteModule
   ],

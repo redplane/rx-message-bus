@@ -25,5 +25,13 @@
       {{ 'Delete message' | translate }}
     </a>
 
+    <!--Delete message-->
+    <a mat-list-item
+       [routerLinkActive]="'active'"
+       [routerLink]="['/demo/rpc-demo']">
+      <mat-icon class="sidenav-icon">question_answer</mat-icon>
+      {{ 'RPC demo' | translate }}
+    </a>
+
   </mat-nav-list>
 </div>
