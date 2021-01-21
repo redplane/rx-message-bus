@@ -1,15 +1,26 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/app",
     "baseUrl": "./",
-    "types": []
+    "outDir": "../../out-tsc/app",
+    "types": [],
+    "paths": {
+      "@message-bus": [
+        "../ngrx-message-bus/src/public_api.ts"
+      ],
+      "@message-bus/*": [
+        "../ngrx-message-bus/src/public_api.ts"
+      ],
+      "@demo-app": [
+        "./src"
+      ],
+      "@demo-app/*": [
+        "./src/*"
+      ]
+    },
   },
   "files": [
     "src/main.ts",
     "src/polyfills.ts"
-  ],
-  "include": [
-    "projects/ngx-service-bus-demo/src/**/*.d.ts"
   ]
 }

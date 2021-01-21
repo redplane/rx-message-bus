@@ -1,4 +1,4 @@
-import {Inject, OnDestroy} from '@angular/core';
+import {Component, Inject, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {MessageChannelNameConstant} from '../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../constants/message-event-name.constant';
@@ -7,6 +7,11 @@ import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../ngrx-message-bus/src/con
 import {TypedChannelEvent} from '../../../../ngrx-message-bus/src/models/typed-channel-event';
 import {ModuleLevelMessageEvent} from '../../models/module-level.message-event';
 
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'child-component',
+  template: ''
+})
 export class ChildComponent implements OnDestroy {
 
   //#region Properties

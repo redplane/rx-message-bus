@@ -1,9 +1,9 @@
 {
   "name": "ngrx-message-bus",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "peerDependencies": {
-    "rxjs": "^6.3.0",
-    "@angular/core": "^9.1.0"
+    "rxjs": "^6.6.3",
+    "@angular/core": "^11.0.2"
   },
   "author": {
     "name": "Nguyen Duy Linh",
