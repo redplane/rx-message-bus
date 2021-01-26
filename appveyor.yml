@@ -29,9 +29,6 @@ install:
   # Install angular-cli as global package.
   - npm install @angular/cli -g
 
-  # Install Typescript 3.6.5.
-  - npm install typescript@3.6.5 --save-dev
-
   # Install protractor
   # - npm install protractor -g
 

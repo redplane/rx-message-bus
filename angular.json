@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-service-bus-demo": {
+    "ngrx-service-bus-demo": {
       "root": "projects/ngx-service-bus-demo/",
       "sourceRoot": "projects/ngx-service-bus-demo/src",
       "projectType": "application",
@@ -106,7 +106,7 @@
         }
       }
     },
-    "ngx-message-bus": {
+    "ngrx-message-bus": {
       "root": "projects/ngrx-message-bus",
       "sourceRoot": "projects/ngrx-message-bus/src",
       "projectType": "library",
@@ -150,5 +150,5 @@
       }
     }
   },
-  "defaultProject": "ngx-service-bus-demo"
+  "defaultProject": "ngrx-service-bus-demo"
 }
