@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-service-bus-demo": {
+    "ngrx-service-bus-demo": {
       "root": "projects/ngx-service-bus-demo/",
       "sourceRoot": "projects/ngx-service-bus-demo/src",
       "projectType": "application",
@@ -40,9 +40,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -152,5 +150,5 @@
       }
     }
   },
-  "defaultProject": "ngx-service-bus-demo"
+  "defaultProject": "ngrx-service-bus-demo"
 }

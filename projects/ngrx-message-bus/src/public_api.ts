@@ -1,8 +1,7 @@
-/*
- * Public API Surface of ngrx-message-bus
- */
 export * from './services/implementations/ngrx-message-bus.service';
 export * from './services/interfaces/ngrx-message-bus-service.interface';
+
+// Module exports.
 export * from './modules/ngrx-message-bus.module';
 
 // Constant export.

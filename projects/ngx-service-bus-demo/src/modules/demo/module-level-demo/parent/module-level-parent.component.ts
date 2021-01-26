@@ -1,10 +1,9 @@
 import {Component, Inject} from '@angular/core';
 import {ParentComponent} from '../../parent.component';
-import {MessageChannelNameConstant} from '../../../../constants/message-channel-name.constant';
-import {MessageEventNameConstant} from '../../../../constants/message-event-name.constant';
-import {INgRxMessageBusService} from '../../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
-import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
-import {ModuleLevelMessageEvent} from '../../../../models/module-level.message-event';
+import {INgRxMessageBusService} from '@message-bus';
+import {MESSAGE_BUS_SERVICE_PROVIDER} from '@message-bus';
+import {ModuleLevelMessageEvent} from '@demo-app/models';
+import {MessageChannelNameConstant, MessageEventNameConstant} from '@demo-app/constants';
 
 @Component({
   // tslint:disable-next-line:component-selector

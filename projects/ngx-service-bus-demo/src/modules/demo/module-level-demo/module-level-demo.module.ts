@@ -5,14 +5,17 @@ import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {ModuleLevelParentComponent} from './parent/module-level-parent.component';
 import {ModuleLevelChildComponent} from './child/module-level-child.component';
-import {NgRxMessageBusModule} from '../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module';
+import {NgRxMessageBusModule} from '@message-bus';
 import {MatCardModule} from '@angular/material/card';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   imports: [
-    NgRxMessageBusModule,
+    NgRxMessageBusModule.forRoot(),
+
+    // Module import.
+    NgRxMessageBusModule.forRoot(),
 
     MatCardModule,
     MatTabsModule,
