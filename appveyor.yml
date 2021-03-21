@@ -7,7 +7,7 @@ only_commits:
 environment:
 
   # Node version which will be used for compiling application.
-  nodejs_version: "10.13.0"
+  nodejs_version: "13.7.0"
 
   # Name of library package
   LIBRARY_NAME: "ngrx-message-bus"
