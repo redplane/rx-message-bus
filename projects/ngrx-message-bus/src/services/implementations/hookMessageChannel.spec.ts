@@ -1,7 +1,7 @@
-import {GreetingChannelEvent} from './models/greeting.channel-event';
-import {Greeting} from './models/greeting';
+import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
+import {Greeting} from '../../../e2e/src/models/greeting';
 import {Subscription} from 'rxjs';
-import {NgRxMessageBusService} from '../../src/services/implementations/ngrx-message-bus.service';
+import {NgRxMessageBusService} from './ngrx-message-bus.service';
 import 'zone.js/dist/zone';
 import 'zone.js/dist/zone-testing'; // AFTER zone, BEFORE everything else
 
