@@ -7,12 +7,7 @@ import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../ngrx-message-bus/src/con
 import {TypedChannelEvent} from '../../../../ngrx-message-bus/src/models/typed-channel-event';
 import {ModuleLevelMessageEvent} from '../../models/module-level.message-event';
 
-@Component({
-  // tslint:disable-next-line:component-selector
-  selector: 'child-component',
-  template: ''
-})
-export class ChildComponent implements OnDestroy {
+export abstract class ChildComponent implements OnDestroy {
 
   //#region Properties
 

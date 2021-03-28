@@ -3,6 +3,7 @@ import {Router, NavigationEnd} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'navigation-bar',
   templateUrl: './navigation-bar.component.html',
   styleUrls: ['./navigation-bar.component.scss']

@@ -5,7 +5,7 @@ export class ParentComponent {
 
   //#region Properties
 
-  private _name: string;
+  private _name = '';
 
   //#endregion
 

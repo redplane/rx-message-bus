@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "../../out-tsc/lib",
     "target": "es2015",
     "module": "es2015",
@@ -18,6 +19,7 @@
     ]
   },
   "angularCompilerOptions": {
+    "enableIvy": false,
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true,
