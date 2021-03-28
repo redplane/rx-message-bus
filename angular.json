@@ -3,12 +3,16 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngrx-service-bus-demo": {
-      "root": "projects/ngx-service-bus-demo/",
+    "ngx-service-bus-demo": {
+      "root": "projects/ngx-service-bus-demo",
       "sourceRoot": "projects/ngx-service-bus-demo/src",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -52,7 +56,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
                 }
               ]
             }
@@ -150,5 +155,5 @@
       }
     }
   },
-  "defaultProject": "ngrx-service-bus-demo"
+  "defaultProject": "ngx-service-bus-demo"
 }

@@ -5,7 +5,7 @@ import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {ModuleLevelParentComponent} from './parent/module-level-parent.component';
 import {ModuleLevelChildComponent} from './child/module-level-child.component';
-import {NgRxMessageBusModule} from '@message-bus';
+import {NgRxMessageBusModule} from 'ngrx-message-bus';
 import {MatCardModule} from '@angular/material/card';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';

@@ -6,6 +6,7 @@ import {MessageContainer} from '../../models/message-container';
 import {ChannelInitializationEvent} from '../../models/channel-initialization-event';
 import {TypedChannelEvent} from '../../models/typed-channel-event';
 import {ExceptionCodesConstant} from '../../constants/exception-codes.constant';
+import {IHookChannelOptions} from '../../interfaces/hook-channel-options.interface';
 
 @Injectable()
 export class NgRxMessageBusService implements INgRxMessageBusService {
@@ -49,7 +50,9 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
   * Auto create option can cause concurrent issue, such as parent channel can be replaced by child component.
   * Therefore, it should be used wisely.
   * */
-  public hookMessageChannel<T>(channelName: string, eventName: string): Observable<T> {
+  public hookMessageChannel<T>(channelName: string, eventName: string, options?: IHookChannelOptions): Observable<T> {
+
+    const hookedTime = new Date().getTime();
 
     return this
       .loadChannelInitializationEventEmitter(channelName, eventName)
@@ -73,14 +76,25 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
           return messageContainer && messageContainer.available;
         }),
 
+        // Skip historical messages (if the option is set)
+        filter(messageContainer => {
+
+          // Option is not defined.
+          if (!options || !options.skipHistoricalMessages) {
+            return true;
+          }
+
+          return (options.skipHistoricalMessages && messageContainer.createdTime > hookedTime);
+        }),
+
         // Pass the data inside the message container to listeners.
         map((messageContainer: MessageContainer<T>) => messageContainer.data)
       );
   }
 
   // Hook typed message channel.
-  public hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>): Observable<T> {
-    return this.hookMessageChannel<T>(channelEvent.channelName, channelEvent.eventName);
+  public hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, options?: IHookChannelOptions): Observable<T> {
+    return this.hookMessageChannel<T>(channelEvent.channelName, channelEvent.eventName, options);
   }
 
   /*

@@ -5,10 +5,10 @@
     "outDir": "../../out-tsc/app",
     "types": [],
     "paths": {
-      "@message-bus": [
+      "ngrx-message-bus": [
         "../ngrx-message-bus/src/public_api.ts"
       ],
-      "@message-bus/*": [
+      "ngrx-message-bus/*": [
         "../ngrx-message-bus/src/public_api.ts"
       ],
       "@demo-app": [
@@ -22,5 +22,8 @@
   "files": [
     "src/main.ts",
     "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
   ]
 }
