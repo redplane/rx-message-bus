@@ -1,5 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {INgRxMessageBusService, MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../../ngrx-message-bus/src/public_api';
+import {INgRxMessageBusService, MESSAGE_BUS_SERVICE_PROVIDER} from 'ngrx-message-bus';
 import {Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
 import {TimeQueryMessageEvent} from '../../../models/time-query.message-event';
 import {GetTimeCommandRequest} from '../../../models/get-time-command-request';

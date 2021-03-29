@@ -4,7 +4,7 @@ export class MessageContainer<T> {
 
   private _data: T;
 
-  private _createdTime: number;
+  private readonly _createdTime: number;
 
   private _available: boolean;
 
