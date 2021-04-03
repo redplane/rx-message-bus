@@ -1,6 +1,6 @@
 {
   "name": "ngrx-message-bus",
-  "version": "4.0.0",
+  "version": "4.1.0-preview-001",
   "peerDependencies": {
     "rxjs": "^6.6.3",
     "@angular/core": "^11.0.2"
