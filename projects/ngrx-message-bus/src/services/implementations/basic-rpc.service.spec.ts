@@ -76,7 +76,8 @@ describe('BasicRpcService', () => {
 
     let actualRepliedText = null;
     let hasTimeoutError = false;
-    const sendRpcRequestSubscription = basicRpcService.sendRequestAsync(new RemoteMessage(), greetingText)
+    const sendRpcRequestSubscription = basicRpcService
+      .sendRequestAsync(new RemoteMessage(), greetingText)
       .pipe(
         catchError(error => {
           if (error instanceof TimeoutError) {
@@ -92,6 +93,33 @@ describe('BasicRpcService', () => {
     _subscription.add(sendRpcRequestSubscription);
 
     tick(500);
+    expect(actualRepliedText).toBeNull();
+    expect(hasTimeoutError).toBeFalse();
+  }));
+
+  it('Rpc call is timeout when remote message is not responded', fakeAsync(() => {
+    const basicRpcService: IRpcService = new BasicRpcService();
+    const greetingText = 'Hello';
+
+    let actualRepliedText = null;
+    let hasTimeoutError = false;
+    const sendRpcRequestSubscription = basicRpcService
+      .sendRequestAsync(new RemoteMessage(), greetingText, 500)
+      .pipe(
+        catchError(error => {
+          if (error instanceof TimeoutError) {
+            hasTimeoutError = true;
+          }
+
+          return of(null);
+        })
+      )
+      .subscribe(szText => {
+        actualRepliedText = szText;
+      });
+    _subscription.add(sendRpcRequestSubscription);
+
+    tick(900);
     expect(actualRepliedText).toBeNull();
     expect(hasTimeoutError).toBeTrue();
   }));

@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {INgRxMessageBusService} from '../../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
+import {INgRxMessageBusService} from 'ngrx-message-bus';
 import {MessageChannelNameConstant} from '../../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../../constants/message-event-name.constant';
 import {LocalTimePipe} from 'ngx-moment';
 import {ProfileUpdateMessageEvent} from '../../../models/profile-update.message-event';
-import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
+import {MESSAGE_BUS_SERVICE_PROVIDER} from 'ngrx-message-bus';
 
 @Component({
   // tslint:disable-next-line:component-selector

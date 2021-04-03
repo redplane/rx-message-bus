@@ -1,10 +1,16 @@
 import {IRpcService} from '../interfaces/rpc-service.interface';
-import {Observable, ReplaySubject} from 'rxjs';
-import {filter, map, take, timeout} from 'rxjs/operators';
+import {Observable, of, OperatorFunction, ReplaySubject} from 'rxjs';
+import {catchError, filter, map, take, timeout} from 'rxjs/operators';
 import {NgRxMessageBusService} from './ngrx-message-bus.service';
 import {RpcMessage} from '../../models/rpc-message';
 import {ITypedRpcRequest} from '../../interfaces/typed-rpc-request.interface';
 import {IHookMethodRequestOptions} from '../../interfaces/hook-method-request-options';
+
+function timeoutWhen<T>(cond: boolean, value: number): OperatorFunction<T, T> {
+  return function (source: Observable<T>): Observable<T> {
+    return cond ? source.pipe(timeout(value)) : source;
+  };
+}
 
 export class BasicRpcService extends NgRxMessageBusService implements IRpcService {
 
@@ -19,17 +25,27 @@ export class BasicRpcService extends NgRxMessageBusService implements IRpcServic
       sentRequest.method,
       data);
 
+    // Whether exception has happened or not.
+    let hasException = false;
+
     const resolver = new ReplaySubject<TResponse>(1);
     this.hookMessageChannel<RpcMessage<TResponse>>(
       `${sentRequest.namespace}-reply`, sentRequest.method)
       .pipe(
-        timeout(timeoutInMilliseconds),
+        timeoutWhen(timeoutInMilliseconds > 0, timeoutInMilliseconds),
         filter(incomingMessage => incomingMessage.id === sentMessage.id),
         take(1),
-        map(incomingMessage => incomingMessage.data)
+        map(incomingMessage => incomingMessage.data),
+        catchError(exception => {
+          resolver.error(exception);
+          hasException = true;
+          return of(void (0));
+        })
       )
       .subscribe((value: TResponse) => {
-        resolver.next(value);
+        if (!hasException) {
+          resolver.next(value);
+        }
       });
 
     // Send the request message.
@@ -43,7 +59,7 @@ export class BasicRpcService extends NgRxMessageBusService implements IRpcServic
   }
 
   public hookMethodRequestAsync<TRequest, TResponse>(request: ITypedRpcRequest<TRequest, TResponse>,
-                                          options?: IHookMethodRequestOptions): Observable<RpcMessage<TResponse>> {
+                                                     options?: IHookMethodRequestOptions): Observable<RpcMessage<TResponse>> {
     return this.hookMessageChannel<RpcMessage<TResponse>>(`${request.namespace}-request`, request.method, options);
   }
 
