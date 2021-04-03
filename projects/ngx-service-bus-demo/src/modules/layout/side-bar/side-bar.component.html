@@ -25,6 +25,14 @@
       {{ 'Delete message' | translate }}
     </a>
 
+    <!--Rpc message-->
+    <a mat-list-item
+       [routerLinkActive]="'active'"
+       [routerLink]="['/demo/rpc-demo']">
+      <mat-icon class="sidenav-icon">leak_add</mat-icon>
+      {{ 'Historical message' | translate }}
+    </a>
+
     <!--Historical message-->
     <a mat-list-item
        [routerLinkActive]="'active'"

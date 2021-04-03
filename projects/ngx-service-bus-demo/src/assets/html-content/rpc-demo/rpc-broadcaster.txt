@@ -1,0 +1,15 @@
+public clickSendCommand(): void {
+
+  this._sendingCommand = true;
+
+  const loadTimeSubscription = this.loadTimeAsync()
+    .pipe(
+      finalize(() => this._sendingCommand = false)
+    )
+    .subscribe(value => {
+      this._sendingCommand = false;
+      this._loadedTime = value;
+    });
+
+  this._subscription.add(loadTimeSubscription);
+}
