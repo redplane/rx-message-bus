@@ -19,7 +19,7 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   private _sendingCommand: boolean;
 
-  private _loadedTime: string;
+  private _loadedTime: string = '';
 
   // Subscription watch list.
   private _subscription: Subscription;
@@ -42,6 +42,7 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
     this._sendingCommand = false;
+    this._subscription = new Subscription();
   }
 
   //#endregion

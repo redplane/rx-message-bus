@@ -1,9 +1,9 @@
 import {Subscription} from 'rxjs';
-import {NgRxMessageBusService} from '../../src/services/implementations/ngrx-message-bus.service';
-import {GreetingChannelEvent} from './models/greeting.channel-event';
-import {Greeting} from './models/greeting';
-import {browser} from 'protractor';
+import {NgRxMessageBusService} from './ngrx-message-bus.service';
+import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
+import {Greeting} from '../../../e2e/src/models/greeting';
 import {timeout} from 'rxjs/operators';
+import {fakeAsync, tick} from '@angular/core/testing';
 
 describe('addTypedMessage test cases', () => {
 
@@ -90,23 +90,27 @@ describe('addTypedMessage test cases', () => {
   // - Subscribe to message channel after message life time exceeded.
   // Expects:
   // - No message is subscribed.
-  it('addTypedMessage with timeout, after timeout message cannot be retrieved.', (done) => {
+  it('addTypedMessage with timeout, after timeout message cannot be retrieved.', fakeAsync(() => {
     const channelEvent = new GreetingChannelEvent();
     const messageBusService = new NgRxMessageBusService();
     const greetingMessage = new Greeting('Sender  01', 'Recipient 01', 'Message 001');
     const timeoutMillisecond = 3000;
 
+    let hasError = false;
+
     messageBusService.addTypedMessage(channelEvent, greetingMessage, timeoutMillisecond);
-    browser.sleep(timeoutMillisecond * 1.5);
+    tick(timeoutMillisecond * 1.5);
     const hookTypedMessageSubscription = messageBusService.hookTypedMessageChannel(channelEvent)
       .pipe(timeout(200))
       .subscribe(() => {
       }, error => {
-        done();
+        hasError = true;
       });
 
     subscription.add(hookTypedMessageSubscription);
-  });
+    tick(500);
+    expect(hasError).toBeTrue();
+  }));
 
   //#endregion
 });

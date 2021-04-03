@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {ParentComponent} from '../../parent.component';
-import {INgRxMessageBusService} from '@message-bus';
-import {MESSAGE_BUS_SERVICE_PROVIDER} from '@message-bus';
+import {INgRxMessageBusService} from 'ngrx-message-bus';
+import {MESSAGE_BUS_SERVICE_PROVIDER} from 'ngrx-message-bus';
 import {ModuleLevelMessageEvent} from '@demo-app/models';
 import {MessageChannelNameConstant, MessageEventNameConstant} from '@demo-app/constants';
 

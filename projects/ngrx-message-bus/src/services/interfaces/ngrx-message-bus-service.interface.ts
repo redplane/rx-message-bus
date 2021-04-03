@@ -1,6 +1,7 @@
 import {Observable, Subject} from 'rxjs';
 import {ChannelInitializationEvent} from '../../models/channel-initialization-event';
 import {TypedChannelEvent} from '../../models/typed-channel-event';
+import {IHookChannelOptions} from '../../interfaces/hook-channel-options.interface';
 
 // A small message queue channels - messages management.
 // This service which helps modules to send and receive messages asynchronously.
@@ -22,10 +23,10 @@ export interface INgRxMessageBusService {
   * Therefore, it should be used wisely.
   * */
   /** @deprecated use hookTypedMessageChannel instead */
-  hookMessageChannel<T>(channelName: string, eventName: string): Observable<T>;
+  hookMessageChannel<T>(channelName: string, eventName: string, options?: IHookChannelOptions): Observable<T>;
 
   // Hook to message channel.
-  hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>): Observable<T>;
+  hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, options?: IHookChannelOptions): Observable<T>;
 
   /*
   * Hook to channel initialization.

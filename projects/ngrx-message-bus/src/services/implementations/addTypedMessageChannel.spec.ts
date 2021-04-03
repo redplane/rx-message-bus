@@ -1,6 +1,6 @@
 import {Subscription} from 'rxjs';
-import {NgRxMessageBusService} from '../../src/services/implementations/ngrx-message-bus.service';
-import {GreetingChannelEvent} from './models/greeting.channel-event';
+import {NgRxMessageBusService} from './ngrx-message-bus.service';
+import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
 
 describe('addTypedMessageChannel test cases', () => {
 
