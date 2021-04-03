@@ -1,0 +1,11 @@
+public clickSendMessageInRpcMessage(): void {
+
+  this._sendingMessageInRpcService = true;
+
+  const typedRequest: ITypedRpcRequest<string, string> = {namespace: this._namespace, method: this._method};
+  this.rpcService.sendRequestAsync(typedRequest, 'Hello world')
+    .subscribe(x => {
+      this._sendingMessageInRpcService = false;
+      this._repliedRpcMessage = x;
+    });
+}
