@@ -10,20 +10,22 @@ import {CommonModule} from '@angular/common';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
+import {FlexModule} from '@angular/flex-layout';
 
 @NgModule({
-  imports: [
-    CommonModule,
+    imports: [
+        CommonModule,
 
-    MatCardModule,
-    MatTabsModule,
-    TranslateModule.forChild(),
-    MatButtonModule,
-    MomentModule.forRoot(),
-    NgRxMessageBusModule.forRoot(),
+        MatCardModule,
+        MatTabsModule,
+        TranslateModule.forChild(),
+        MatButtonModule,
+        MomentModule.forRoot(),
+        NgRxMessageBusModule.forRoot(),
 
-    DeleteMessageDemoRouteModule
-  ],
+        DeleteMessageDemoRouteModule,
+        FlexModule
+    ],
   declarations: [
     MessageListenerComponent,
     DeleteMessageDemoComponent

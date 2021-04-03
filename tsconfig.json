@@ -19,10 +19,10 @@
       "dom"
     ],
     "paths": {
-      "@message-bus": [
+      "ngrx-message-bus": [
         "./projects/ngrx-message-bus/src/public_api.ts"
       ],
-      "@message-bus/*": [
+      "ngrx-message-bus/*": [
         "./projects/ngrx-message-bus/src/public_api.ts"
       ],
       "@demo-app": [
@@ -32,5 +32,8 @@
         "./projects/ngx-service-bus-demo/src/*"
       ]
     }
+  },
+  "angularCompilerOptions": {
+    "enableIvy": false
   }
 }

@@ -1,7 +1,8 @@
 import {ModuleWithProviders, NgModule, Type} from '@angular/core';
 import {NgRxMessageBusService} from '../services/implementations/ngrx-message-bus.service';
-import {MESSAGE_BUS_SERVICE_PROVIDER} from '../constants/injection-tokens.constant';
+import {MESSAGE_BUS_SERVICE_PROVIDER, RPC_SERVICE_PROVIDER} from '../constants/injection-tokens.constant';
 import {INgRxMessageBusService} from '../services/interfaces/ngrx-message-bus-service.interface';
+import {BasicRpcService} from '../services';
 
 //#region Module declaration
 
@@ -17,6 +18,10 @@ export class NgRxMessageBusModule {
         {
           provide: MESSAGE_BUS_SERVICE_PROVIDER,
           useClass: implementation || NgRxMessageBusService
+        },
+        {
+          provide: RPC_SERVICE_PROVIDER,
+          useClass: BasicRpcService
         }
       ]
     };

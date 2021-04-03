@@ -1,0 +1,13 @@
+// Fake listener to listen to time query command.
+// Wait for 10 seconds and reply to requested command.
+const hookTimeQuerySubscription = this.messageBusService
+  .hookTypedMessageChannel(new TimeQueryMessageEvent())
+  .pipe(
+    delay(this._messageRespondTime * 1000)
+  )
+  .subscribe((value: GetTimeCommandRequest) => {
+    const commandResponse = new GetTimeCommandResponse(value.id);
+    this.messageBusService.addTypedMessage(new TimeUpdateMessageEvent(), commandResponse);
+  });
+
+this._subscription.add(hookTimeQuerySubscription);

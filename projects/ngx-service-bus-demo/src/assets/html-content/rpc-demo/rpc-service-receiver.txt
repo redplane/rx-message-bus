@@ -1,0 +1,15 @@
+public ngOnInit(): void {
+  const typedRequest: ITypedRpcRequest<string, string> = {namespace: this._namespace, method: this._method};
+  const hookRpcMessageSubscription = this.rpcService
+    .hookMethodRequestAsync(typedRequest, {
+      skipHistoricalMessages: true
+    })
+    .pipe(
+      delay(5000)
+    )
+    .subscribe(message => {
+      this.rpcService.sendResponse(typedRequest, message.id, 'Message has been resolved.');
+    });
+
+  this._subscription.add(hookRpcMessageSubscription);
+}

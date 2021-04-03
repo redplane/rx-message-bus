@@ -6,7 +6,9 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {TranslateModule} from '@ngx-translate/core';
 import {RpcDemoRouteModule} from './rpc-demo.route';
 import {MatButtonModule} from '@angular/material/button';
-import {NgRxMessageBusModule} from '../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module';
+import {NgRxMessageBusModule} from 'ngrx-message-bus';
+import {FlexModule} from '@angular/flex-layout';
+import {ToStaticFileContentPipeModule} from '@demo-app/modules/shared/to-static-file-content/to-static-file-content-pipe.module';
 
 @NgModule({
   imports: [
@@ -16,7 +18,9 @@ import {NgRxMessageBusModule} from '../../../../../ngrx-message-bus/src/modules/
     TranslateModule,
     RpcDemoRouteModule,
     MatButtonModule,
-    NgRxMessageBusModule.forRoot()
+    NgRxMessageBusModule.forRoot(),
+    FlexModule,
+    ToStaticFileContentPipeModule
   ],
   declarations: [
     RpcDemoComponent
