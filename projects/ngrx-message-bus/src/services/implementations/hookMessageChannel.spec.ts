@@ -2,8 +2,8 @@ import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-eve
 import {Greeting} from '../../../e2e/src/models/greeting';
 import {Subscription} from 'rxjs';
 import {NgRxMessageBusService} from './ngrx-message-bus.service';
-import 'zone.js/dist/zone';
-import 'zone.js/dist/zone-testing'; // AFTER zone, BEFORE everything else
+import 'zone.js';
+import 'zone.js/testing'; // AFTER zone, BEFORE everything else
 
 import {fakeAsync, tick} from '@angular/core/testing';
 
