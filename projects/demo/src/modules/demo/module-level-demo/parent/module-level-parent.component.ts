@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {ParentComponent} from '../../parent.component';
-import {INgRxMessageBusService, MESSAGE_BUS_SERVICE_PROVIDER} from '@message-bus/core';
+import {IMessageBusService, MESSAGE_BUS_SERVICE} from '@message-bus/core';
 import {ModuleLevelMessageEvent} from '../../../../models';
 import {MessageChannelNameConstant, MessageEventNameConstant} from '../../../../constants';
 
@@ -17,7 +17,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService) {
     super();
   }
 
@@ -33,7 +33,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
     const channelEvent = new ModuleLevelMessageEvent();
     const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
 
-    this.messageBusService.addTypedMessage(channelEvent, data);
+    this._messageBusService.addTypedMessage(channelEvent, data);
   }
 
   public clickSendMessage(): void {
@@ -41,7 +41,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
     const date = new Date();
     const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
 
-    this.messageBusService.addMessage(MessageChannelNameConstant.parent,
+    this._messageBusService.addMessage(MessageChannelNameConstant.parent,
       MessageEventNameConstant.sendParentMessage, data);
   }
 

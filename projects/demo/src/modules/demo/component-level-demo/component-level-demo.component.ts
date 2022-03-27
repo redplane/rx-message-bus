@@ -12,7 +12,7 @@ export class ComponentLevelDemoComponent {
 
   public get childTypescript(): string {
     return `
-      public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+      public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService) {
 
         // Initialize subscription manager.
         this._subscription = new Subscription();
@@ -44,7 +44,7 @@ export class ComponentLevelDemoComponent {
 
   public get parentTypescript(): string {
     return `
-      public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+      public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService) {
         super();
       }
 

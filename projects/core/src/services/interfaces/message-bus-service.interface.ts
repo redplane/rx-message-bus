@@ -5,7 +5,7 @@ import {IHookChannelOptions} from '../../interfaces/hook-channel-options.interfa
 
 // A small message queue channels - messages management.
 // This service which helps modules to send and receive messages asynchronously.
-export interface INgRxMessageBusService {
+export interface IMessageBusService {
 
   //#region Methods
 

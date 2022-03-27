@@ -1,1 +1,1 @@
-export * from './ngrx-message-bus.module';
+export * from './message-bus.module';

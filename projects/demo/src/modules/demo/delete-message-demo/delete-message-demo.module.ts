@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
-import {NgRxMessageBusModule} from '@message-bus/core';
+import {MessageBusModule} from '@message-bus/core';
 import {DeleteMessageDemoComponent} from './delete-message-demo.component';
 import {DeleteMessageDemoRouteModule} from './delete-message-demo.route';
 import {MessageListenerComponent} from './message-listener/message-listener.component';
@@ -12,18 +12,18 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
-    imports: [
-        CommonModule,
+  imports: [
+    CommonModule,
 
-        MatCardModule,
-        MatTabsModule,
-        TranslateModule.forChild(),
-        MatButtonModule,
-        MomentModule.forRoot(),
-        NgRxMessageBusModule.forRoot(),
+    MatCardModule,
+    MatTabsModule,
+    TranslateModule.forChild(),
+    MatButtonModule,
+    MomentModule.forRoot(),
+    MessageBusModule.forRoot(),
 
-        DeleteMessageDemoRouteModule
-    ],
+    DeleteMessageDemoRouteModule
+  ],
   declarations: [
     MessageListenerComponent,
     DeleteMessageDemoComponent

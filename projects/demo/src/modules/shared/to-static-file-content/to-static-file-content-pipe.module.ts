@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {ToStaticFileContentPipe} from '@demo-app/modules/shared/to-static-file-content/to-static-file-content.pipe';
+import {ToStaticFileContentPipe} from './to-static-file-content.pipe';
 
 @NgModule({
   declarations: [

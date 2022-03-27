@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@an
 import {MessageChannelNameConstant} from '../../../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../../../constants/message-event-name.constant';
 import {Subscription} from 'rxjs';
-import {MESSAGE_BUS_SERVICE_PROVIDER, INgRxMessageBusService} from '@message-bus/core';
+import {MESSAGE_BUS_SERVICE, IMessageBusService} from '@message-bus/core';
 
 @Component({
   selector: 'message-listener',
@@ -21,7 +21,7 @@ export class MessageListenerComponent implements OnInit, OnDestroy {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService) {
   }
 
 

@@ -21,7 +21,7 @@
 **1. Module lifetime**
 
 ```
-import {NgRxMessageBusModule} from 'ngrx-message-bus.module';
+import {MessageBusModule} from 'ngrx-message-bus.module';
 
 @NgModule({
   declarations: [],
@@ -34,7 +34,7 @@ import {NgRxMessageBusModule} from 'ngrx-message-bus.module';
     // Application modules.
     SharedModule,
     AppRouteModule,
-    NgRxMessageBusModule
+    MessageBusModule
   ],
   providers: [
     AppSettings
@@ -55,7 +55,7 @@ export class AppModule {
 })
 export class ParentComponent implements OnInit {
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) public messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) public messageBusService: IMessageBusService) {
   
    }
 }
@@ -72,7 +72,7 @@ export class ParentComponent implements OnInit {
   templateUrl: 'parent.component.html',
   providers: [
     {
-      provide: MESSAGE_BUS_SERVICE_PROVIDER,
+      provide: MESSAGE_BUS_SERVICE,
       useFactory: () => new NgrxMessageBusService()
     }
   ]
@@ -126,7 +126,7 @@ export class ModuleLevelMessageEvent extends TypedChannelEvent<string> {
   // ... Above implementation
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService) {
 
     // Initialize subscription manager.
     this._subscription = new Subscription();
@@ -173,7 +173,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService) {
     super();
   }
 
@@ -279,7 +279,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
     ```
        @NgModule({
          imports: [
-           NgRxMessageBusModule,
+           MessageBusModule,
            //...
          ]
        })
@@ -289,7 +289,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
     ```
   
   - Removed ```autoCreateChannel``` from ```hookChannelMessage```.
-  - Changed `INgRxMessageBusService` string injector to `MESSAGE_BUS_SERVICE_PROVIDER` object injector.
+  - Changed `IMessageBusService` string injector to `MESSAGE_BUS_SERVICE` object injector.
 
 - **1.0.4**: 
   - Changed `BehaviourSubject` to `ReplaySubject` to prevent unexpected value from being emitted.

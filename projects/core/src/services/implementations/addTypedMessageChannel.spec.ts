@@ -1,5 +1,5 @@
 import {Subscription} from 'rxjs';
-import {NgRxMessageBusService} from './ngrx-message-bus.service';
+import {MessageBusService} from './message-bus.service';
 import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
 
 describe('addTypedMessageChannel test cases', () => {
@@ -35,7 +35,7 @@ describe('addTypedMessageChannel test cases', () => {
   it('addTypedMessageChannel create a channel & event successfully.', (done) => {
 
     const channelEvent = new GreetingChannelEvent();
-    const messageBusService = new NgRxMessageBusService();
+    const messageBusService = new MessageBusService();
 
     // Hook channel initialization.
     const hookTypedChannelInitializationSubscription = messageBusService
@@ -59,7 +59,7 @@ describe('addTypedMessageChannel test cases', () => {
   // - hookChannelInitialization can catch the event about channel name & event name.
   it('addTypedMessageChannel can be hooked by hookChannelInitialization', (done) => {
     const channelEvent = new GreetingChannelEvent();
-    const messageBusService = new NgRxMessageBusService();
+    const messageBusService = new MessageBusService();
 
     // Hook channel initialization.
     const hookTypedChannelInitializationSubscription = messageBusService

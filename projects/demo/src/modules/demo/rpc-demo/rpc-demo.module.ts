@@ -6,7 +6,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {TranslateModule} from '@ngx-translate/core';
 import {RpcDemoRouteModule} from './rpc-demo.route';
 import {MatButtonModule} from '@angular/material/button';
-import {NgRxMessageBusModule} from '@message-bus/core';
+import {MessageBusModule} from '@message-bus/core';
 import {ToStaticFileContentPipeModule} from '../../shared/to-static-file-content/to-static-file-content-pipe.module';
 
 @NgModule({
@@ -17,7 +17,7 @@ import {ToStaticFileContentPipeModule} from '../../shared/to-static-file-content
     TranslateModule,
     RpcDemoRouteModule,
     MatButtonModule,
-    NgRxMessageBusModule.forRoot(),
+    MessageBusModule.forRoot(),
     ToStaticFileContentPipeModule
   ],
   declarations: [

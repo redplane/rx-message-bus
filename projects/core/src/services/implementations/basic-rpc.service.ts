@@ -1,7 +1,7 @@
 import {IRpcService} from '../interfaces/rpc-service.interface';
 import {Observable, of, OperatorFunction, ReplaySubject} from 'rxjs';
 import {catchError, filter, map, take, timeout} from 'rxjs/operators';
-import {NgRxMessageBusService} from './ngrx-message-bus.service';
+import {MessageBusService} from './message-bus.service';
 import {RpcMessage} from '../../models/rpc-message';
 import {ITypedRpcRequest} from '../../interfaces/typed-rpc-request.interface';
 import {IHookMethodRequestOptions} from '../../interfaces/hook-method-request-options';
@@ -12,7 +12,7 @@ function timeoutWhen<T>(cond: boolean, value: number): OperatorFunction<T, T> {
   };
 }
 
-export class BasicRpcService extends NgRxMessageBusService implements IRpcService {
+export class BasicRpcService extends MessageBusService implements IRpcService {
 
   //#region Methods
 

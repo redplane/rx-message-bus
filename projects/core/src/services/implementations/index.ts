@@ -1,2 +1,2 @@
-export * from './ngrx-message-bus.service';
+export * from './message-bus.service';
 export * from './basic-rpc.service';

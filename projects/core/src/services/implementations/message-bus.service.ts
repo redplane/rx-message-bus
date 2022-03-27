@@ -1,15 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject, Subject, throwError} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
-import {INgRxMessageBusService} from '../interfaces/ngrx-message-bus-service.interface';
+import {IMessageBusService} from '../interfaces/message-bus-service.interface';
 import {MessageContainer} from '../../models/message-container';
 import {ChannelInitializationEvent} from '../../models/channel-initialization-event';
 import {TypedChannelEvent} from '../../models/typed-channel-event';
-import {ExceptionCodesConstant} from '../../constants/exception-codes.constant';
+import {ExceptionCodes} from '../../constants/exception-codes';
 import {IHookChannelOptions} from '../../interfaces/hook-channel-options.interface';
 
 @Injectable()
-export class NgRxMessageBusService implements INgRxMessageBusService {
+export class MessageBusService implements IMessageBusService {
 
   //#region Properties
 
@@ -65,7 +65,7 @@ export class NgRxMessageBusService implements INgRxMessageBusService {
 
           // No recipient has been found.
           if (!messageEmitter) {
-            return throwError(ExceptionCodesConstant.channelNotFound);
+            return throwError(ExceptionCodes.channelNotFound);
           }
 
           return messageEmitter;

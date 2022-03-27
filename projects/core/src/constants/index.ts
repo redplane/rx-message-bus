@@ -1,2 +1,2 @@
-export * from './exception-codes.constant';
-export * from './injection-tokens.constant';
+export * from './exception-codes';
+export * from './injection-tokens';

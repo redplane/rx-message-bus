@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {MessageChannelNameConstant} from '../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../constants/message-event-name.constant';
-import {MESSAGE_BUS_SERVICE_PROVIDER, INgRxMessageBusService} from '@message-bus/core';
+import {MESSAGE_BUS_SERVICE, IMessageBusService} from '@message-bus/core';
 import {ModuleLevelMessageEvent} from '../../models/module-level.message-event';
 
 @Component({
@@ -40,12 +40,12 @@ export abstract class ChildComponent implements OnDestroy {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService) {
+  protected constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService) {
 
     // Initialize subscription manager.
     this._subscription = new Subscription();
 
-    const hookParentMessageSubscription = this.messageBusService
+    const hookParentMessageSubscription = this._messageBusService
       .hookMessageChannel(MessageChannelNameConstant.parent,
         MessageEventNameConstant.sendParentMessage)
       .subscribe((message: string) => {
@@ -53,7 +53,7 @@ export abstract class ChildComponent implements OnDestroy {
       });
 
     const channelEvent = new ModuleLevelMessageEvent();
-    const hookParentTypedMessageSubscription = this.messageBusService
+    const hookParentTypedMessageSubscription = this._messageBusService
       .hookTypedMessageChannel(channelEvent)
       .subscribe((value: string) => {
         this._typedMessage = value;

@@ -1,7 +1,7 @@
 import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
 import {Greeting} from '../../../e2e/src/models/greeting';
 import {Subscription} from 'rxjs';
-import {NgRxMessageBusService} from './ngrx-message-bus.service';
+import {MessageBusService} from './message-bus.service';
 import 'zone.js';
 import 'zone.js/testing'; // AFTER zone, BEFORE everything else
 
@@ -33,7 +33,7 @@ describe('hookMessageChannel test cases', () => {
     done => {
 
       const channelEvent = new GreetingChannelEvent();
-      const messageBusService = new NgRxMessageBusService();
+      const messageBusService = new MessageBusService();
       const greetingMessage = new Greeting('Sender 01', 'Recipient 01', 'Message 001');
 
       // Hook channel initialization.
@@ -58,7 +58,7 @@ describe('hookMessageChannel test cases', () => {
     <any>fakeAsync((): void => {
 
       const channelEvent = new GreetingChannelEvent();
-      const messageBusService = new NgRxMessageBusService();
+      const messageBusService = new MessageBusService();
       const greetingMessage = new Greeting('Sender 01', 'Recipient 01', 'Message 001');
 
       messageBusService.addTypedMessage(channelEvent, greetingMessage);
@@ -85,7 +85,7 @@ describe('hookMessageChannel test cases', () => {
     <any>fakeAsync((): void => {
 
       const channelEvent = new GreetingChannelEvent();
-      const messageBusService = new NgRxMessageBusService();
+      const messageBusService = new MessageBusService();
       const oldGreetingMessage = new Greeting('Sender 01', 'Recipient 01', 'Message 001');
       const newGreetingMessage = new Greeting('Sendor 02', 'Recipient 02', 'Message 002');
       messageBusService.addTypedMessage(channelEvent, oldGreetingMessage);

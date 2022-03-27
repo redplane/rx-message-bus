@@ -1,5 +1,5 @@
 import {Subscription} from 'rxjs';
-import {NgRxMessageBusService} from './ngrx-message-bus.service';
+import {MessageBusService} from './message-bus.service';
 import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
 import {Greeting} from '../../../e2e/src/models/greeting';
 import {timeout} from 'rxjs/operators';
@@ -41,7 +41,7 @@ describe('addTypedMessage test cases', () => {
   it('addTypedMessage broadcast message successfully', (done) => {
 
     const channelEvent = new GreetingChannelEvent();
-    const messageBusService = new NgRxMessageBusService();
+    const messageBusService = new MessageBusService();
     const greetingMessage = new Greeting('Sender 01', 'Recipient 01', 'Message 001');
 
     // Hook channel initialization.
@@ -66,7 +66,7 @@ describe('addTypedMessage test cases', () => {
   // - hookChannelInitialization can catch the event about channel name & event name.
   it('addTypedMessage message can be hooked by hookMessageChannel', (done) => {
     const channelEvent = new GreetingChannelEvent();
-    const messageBusService = new NgRxMessageBusService();
+    const messageBusService = new MessageBusService();
     const greetingMessage = new Greeting('Sender 01', 'Recipient 01', 'Message 001');
 
     // Hook channel initialization.
@@ -92,7 +92,7 @@ describe('addTypedMessage test cases', () => {
   // - No message is subscribed.
   it('addTypedMessage with timeout, after timeout message cannot be retrieved.', fakeAsync(() => {
     const channelEvent = new GreetingChannelEvent();
-    const messageBusService = new NgRxMessageBusService();
+    const messageBusService = new MessageBusService();
     const greetingMessage = new Greeting('Sender  01', 'Recipient 01', 'Message 001');
     const timeoutMillisecond = 3000;
 

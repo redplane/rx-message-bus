@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {INgRxMessageBusService, IRpcService, ITypedRpcRequest, MESSAGE_BUS_SERVICE_PROVIDER, RPC_SERVICE_PROVIDER} from '@message-bus/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {IMessageBusService, IRpcService, ITypedRpcRequest, MESSAGE_BUS_SERVICE, RPC_SERVICE} from '@message-bus/core';
 import {Observable, ReplaySubject, Subscription} from 'rxjs';
 import {TimeQueryMessageEvent} from '../../../models/time-query.message-event';
 import {GetTimeCommandRequest} from '../../../models/get-time-command-request';
@@ -64,8 +64,9 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService,
-                     @Inject(RPC_SERVICE_PROVIDER) protected rpcService: IRpcService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService,
+                     @Inject(RPC_SERVICE) protected readonly _rpcService: IRpcService,
+                     protected readonly _changeDetectorRef: ChangeDetectorRef) {
     this._sendingCommand = false;
     this._subscription = new Subscription();
   }
@@ -81,18 +82,18 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
     // Fake listener to listen to time query command.
     // Wait for 10 seconds and reply to requested command.
-    const hookTimeQuerySubscription = this.messageBusService
+    const hookTimeQuerySubscription = this._messageBusService
       .hookTypedMessageChannel(new TimeQueryMessageEvent())
       .pipe(
         delay(this._messageRespondTime * 1000)
       )
       .subscribe((value: GetTimeCommandRequest) => {
         const commandResponse = new GetTimeCommandResponse(value.id);
-        this.messageBusService.addTypedMessage(new TimeUpdateMessageEvent(), commandResponse);
+        this._messageBusService.addTypedMessage(new TimeUpdateMessageEvent(), commandResponse);
       });
 
     const typedRequest: ITypedRpcRequest<string, string> = {namespace: this._namespace, method: this._method};
-    const hookRpcMessageSubscription = this.rpcService
+    const hookRpcMessageSubscription = this._rpcService
       .hookMethodRequestAsync(typedRequest, {
         skipHistoricalMessages: true
       })
@@ -100,7 +101,8 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
         delay(5000)
       )
       .subscribe(message => {
-        this.rpcService.sendResponse(typedRequest, message.id, 'Message has been resolved.');
+        this._rpcService.sendResponse(typedRequest, message.id, 'Message has been resolved.');
+        this._changeDetectorRef.markForCheck();
       });
 
     this._subscription.add(hookTimeQuerySubscription);
@@ -124,6 +126,7 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
       .subscribe(value => {
         this._sendingCommand = false;
         this._loadedTime = value;
+        this._changeDetectorRef.markForCheck();
       });
 
     this._subscription.add(loadTimeSubscription);
@@ -134,16 +137,17 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
     this._sendingMessageInRpcService = true;
 
     const typedRequest: ITypedRpcRequest<string, string> = {namespace: this._namespace, method: this._method};
-    this.rpcService.sendRequestAsync(typedRequest, 'Hello world')
+    this._rpcService.sendRequestAsync(typedRequest, 'Hello world')
       .subscribe(x => {
         this._sendingMessageInRpcService = false;
         this._repliedRpcMessage = x;
+        this._changeDetectorRef.markForCheck();
       });
   }
 
   protected loadTimeAsync(): Observable<string> {
     const resolver = new ReplaySubject<string>(1);
-    this.messageBusService.hookTypedMessageChannel(new TimeUpdateMessageEvent())
+    this._messageBusService.hookTypedMessageChannel(new TimeUpdateMessageEvent())
       .pipe(
         take(1)
       )
@@ -151,7 +155,7 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
         resolver.next(moment(value.value).format('YYYY-MM-DD HH:mm:ss'));
       });
 
-    this.messageBusService.addTypedMessage(new TimeQueryMessageEvent(), new GetTimeCommandRequest());
+    this._messageBusService.addTypedMessage(new TimeQueryMessageEvent(), new GetTimeCommandRequest());
     return resolver.pipe(take(1));
   }
 

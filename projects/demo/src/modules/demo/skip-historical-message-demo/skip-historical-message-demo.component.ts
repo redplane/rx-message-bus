@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {INgRxMessageBusService, MESSAGE_BUS_SERVICE_PROVIDER} from '@message-bus/core';
+import {IMessageBusService, MESSAGE_BUS_SERVICE} from '@message-bus/core';
 import {GreetingChannelEvent} from '../../../../../core/e2e/src/models/greeting.channel-event';
 
 @Component({
@@ -55,7 +55,7 @@ export class SkipHistoricalMessageDemoComponent implements OnInit, OnDestroy {
 
   //#region Services
 
-  protected readonly _messageBusService: INgRxMessageBusService;
+  protected readonly _messageBusService: IMessageBusService;
 
   //#endregion
 
@@ -65,7 +65,7 @@ export class SkipHistoricalMessageDemoComponent implements OnInit, OnDestroy {
     this._historicalMessageSubscription = new Subscription();
 
     // Service reflection.
-    this._messageBusService = injector.get(MESSAGE_BUS_SERVICE_PROVIDER);
+    this._messageBusService = injector.get(MESSAGE_BUS_SERVICE);
   }
 
   //#endregion

@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
 import {ChildComponent} from '../../child.component';
-import {INgRxMessageBusService, MESSAGE_BUS_SERVICE_PROVIDER} from '@message-bus/core';
+import {IMessageBusService, MESSAGE_BUS_SERVICE} from '@message-bus/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -16,8 +16,8 @@ export class ComponentLevelChildComponent extends ChildComponent {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) public messageBusService: INgRxMessageBusService) {
-    super(messageBusService);
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) public readonly _messageBusService: IMessageBusService) {
+    super(_messageBusService);
   }
 
   //#endregion

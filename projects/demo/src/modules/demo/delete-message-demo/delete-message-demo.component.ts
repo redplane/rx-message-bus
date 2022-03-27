@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
-import {INgRxMessageBusService, MESSAGE_BUS_SERVICE_PROVIDER} from '@message-bus/core';
+import {IMessageBusService, MESSAGE_BUS_SERVICE} from '@message-bus/core';
 import {MessageChannelNameConstant} from '../../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../../constants/message-event-name.constant';
 import {LocalTimePipe} from 'ngx-moment';
@@ -20,8 +20,8 @@ export class DeleteMessageDemoComponent implements OnInit {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE_PROVIDER) protected messageBusService: INgRxMessageBusService,
-                     protected localTimePipe: LocalTimePipe) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService,
+                     protected readonly _localTimePipe: LocalTimePipe) {
     this.shouldComponentAvailable = false;
   }
 
@@ -40,13 +40,13 @@ export class DeleteMessageDemoComponent implements OnInit {
 
   public clickSendMessage(): void {
     const date = new Date();
-    const localTime = this.localTimePipe.transform(date);
-    this.messageBusService
+    const localTime = this._localTimePipe.transform(date);
+    this._messageBusService
       .addMessage<string>(MessageChannelNameConstant.ui, MessageEventNameConstant.deleteMessage, localTime.format('YYYY-MM-DD HH:mm'));
   }
 
   public clickDeleteMessage(): void {
-    this.messageBusService
+    this._messageBusService
       .deleteChannelMessage(MessageChannelNameConstant.ui, MessageEventNameConstant.deleteMessage);
 
     this.shouldComponentAvailable = false;

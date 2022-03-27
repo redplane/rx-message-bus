@@ -3,21 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "../../out-tsc/app",
-    "types": [],
-    "paths": {
-      "ngrx-message-bus": [
-        "../ngrx-message-bus/src/public_api.ts"
-      ],
-      "ngrx-message-bus/*": [
-        "../ngrx-message-bus/src/public_api.ts"
-      ],
-      "@demo-app": [
-        "./src"
-      ],
-      "@demo-app/*": [
-        "./src/*"
-      ]
-    },
+    "types": []
   },
   "files": [
     "src/main.ts",
@@ -25,5 +11,8 @@
   ],
   "include": [
     "src/**/*.d.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "enableIvy": true
+  }
 }

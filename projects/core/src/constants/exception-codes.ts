@@ -1,4 +1,4 @@
-export class ExceptionCodesConstant {
+export class ExceptionCodes {
 
   //#region Properties
 
