@@ -3,9 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-service-bus-demo": {
-      "root": "projects/ngx-service-bus-demo",
-      "sourceRoot": "projects/ngx-service-bus-demo/src",
+    "demo": {
+      "root": "projects/demo",
+      "sourceRoot": "projects/demo/src",
       "projectType": "application",
       "prefix": "app",
       "schematics": {
@@ -17,19 +17,19 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngx-service-bus-demo",
-            "index": "projects/ngx-service-bus-demo/src/index.html",
-            "main": "projects/ngx-service-bus-demo/src/main.ts",
-            "polyfills": "projects/ngx-service-bus-demo/src/polyfills.ts",
-            "tsConfig": "projects/ngx-service-bus-demo/tsconfig.app.json",
+            "outputPath": "dist/demo",
+            "index": "projects/demo/src/index.html",
+            "main": "projects/demo/src/main.ts",
+            "polyfills": "projects/demo/src/polyfills.ts",
+            "tsConfig": "projects/demo/tsconfig.app.json",
             "assets": [
-              "projects/ngx-service-bus-demo/src/favicon.ico",
-              "projects/ngx-service-bus-demo/src/assets",
-              "projects/ngx-service-bus-demo/src/netlify.toml"
+              "projects/demo/src/favicon.ico",
+              "projects/demo/src/assets",
+              "projects/demo/src/netlify.toml"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "projects/ngx-service-bus-demo/src/styles/styles.scss"
+              "projects/demo/src/styles/styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -43,8 +43,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/ngx-service-bus-demo/src/environments/environment.ts",
-                  "with": "projects/ngx-service-bus-demo/src/environments/environment.prod.ts"
+                  "replace": "projects/demo/src/environments/environment.ts",
+                  "with": "projects/demo/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -73,71 +73,68 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-service-bus-demo:build"
+            "browserTarget": "demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-service-bus-demo:build:production"
+              "browserTarget": "demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-service-bus-demo:build"
+            "browserTarget": "demo:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-service-bus-demo/src/test.ts",
-            "polyfills": "projects/ngx-service-bus-demo/src/polyfills.ts",
-            "tsConfig": "projects/ngx-service-bus-demo/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-service-bus-demo/karma.conf.js",
+            "main": "projects/demo/src/test.ts",
+            "polyfills": "projects/demo/src/polyfills.ts",
+            "tsConfig": "projects/demo/tsconfig.spec.json",
+            "karmaConfig": "projects/demo/karma.conf.js",
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "projects/ngx-service-bus-demo/src/styles/styles.scss"
+              "projects/demo/src/styles/styles.scss"
             ],
             "scripts": [],
             "assets": [
-              "projects/ngx-service-bus-demo/src/favicon.ico",
-              "projects/ngx-service-bus-demo/src/assets"
+              "projects/demo/src/favicon.ico",
+              "projects/demo/src/assets"
             ]
           }
         }
       }
     },
-    "ngrx-message-bus": {
-      "root": "projects/ngrx-message-bus",
-      "sourceRoot": "projects/ngrx-message-bus/src",
+    "core": {
+      "root": "projects/core",
+      "sourceRoot": "projects/core/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/ngrx-message-bus/tsconfig.lib.json",
-            "project": "projects/ngrx-message-bus/ng-package.json"
+            "tsConfig": "projects/core/tsconfig.lib.json",
+            "project": "projects/core/ng-package.json"
           },
-          "assets": [
-            "README.md"
-          ],
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngrx-message-bus/tsconfig.lib.prod.json"
+              "tsConfig": "projects/core/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngrx-message-bus/src/test.ts",
-            "tsConfig": "projects/ngrx-message-bus/tsconfig.spec.json",
-            "karmaConfig": "projects/ngrx-message-bus/karma.conf.js"
+            "main": "projects/core/src/test.ts",
+            "tsConfig": "projects/core/tsconfig.spec.json",
+            "karmaConfig": "projects/core/karma.conf.js"
           }
         }
       }
     }
   },
-  "defaultProject": "ngx-service-bus-demo"
+  "defaultProject": "demo"
 }
