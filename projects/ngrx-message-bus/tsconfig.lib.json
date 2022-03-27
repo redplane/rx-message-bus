@@ -2,16 +2,12 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "preserveSymlinks": true,
     "outDir": "../../out-tsc/lib",
     "target": "es2015",
-    "module": "es2015",
-    "moduleResolution": "node",
     "declaration": true,
-    "sourceMap": true,
+    "declarationMap": true,
     "inlineSources": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
     "types": [],
     "lib": [
       "dom",
@@ -19,11 +15,8 @@
     ]
   },
   "angularCompilerOptions": {
-    "enableIvy": false,
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
     "enableResourceInlining": true
   },
   "exclude": [

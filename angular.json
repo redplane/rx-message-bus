@@ -28,6 +28,7 @@
               "projects/ngx-service-bus-demo/src/netlify.toml"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "projects/ngx-service-bus-demo/src/styles/styles.scss"
             ],
             "scripts": [],
@@ -94,6 +95,7 @@
             "tsConfig": "projects/ngx-service-bus-demo/tsconfig.spec.json",
             "karmaConfig": "projects/ngx-service-bus-demo/karma.conf.js",
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/pink-bluegrey.css",
               "projects/ngx-service-bus-demo/src/styles/styles.scss"
             ],
             "scripts": [],

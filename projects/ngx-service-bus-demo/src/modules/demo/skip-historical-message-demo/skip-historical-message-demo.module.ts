@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {SkipHistoricalMessageDemoComponent} from '@demo-app/modules/demo/skip-historical-message-demo/skip-historical-message-demo.component';
 import {MatCardModule} from '@angular/material/card';
-import {FlexModule} from '@angular/flex-layout';
 import {MatTabsModule} from '@angular/material/tabs';
 import {SkipHistoricalMessageDemoRoutingModule} from '@demo-app/modules/demo/skip-historical-message-demo/skip-historical-message-demo-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
@@ -18,7 +17,6 @@ import {FormsModule} from '@angular/forms';
   imports: [
     CommonModule,
     MatCardModule,
-    FlexModule,
     MatTabsModule,
 
     SkipHistoricalMessageDemoRoutingModule,

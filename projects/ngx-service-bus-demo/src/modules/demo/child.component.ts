@@ -4,9 +4,13 @@ import {MessageChannelNameConstant} from '../../constants/message-channel-name.c
 import {MessageEventNameConstant} from '../../constants/message-event-name.constant';
 import {INgRxMessageBusService} from '../../../../ngrx-message-bus/src/services/interfaces/ngrx-message-bus-service.interface';
 import {MESSAGE_BUS_SERVICE_PROVIDER} from '../../../../ngrx-message-bus/src/constants/injection-tokens.constant';
-import {TypedChannelEvent} from '../../../../ngrx-message-bus/src/models/typed-channel-event';
 import {ModuleLevelMessageEvent} from '../../models/module-level.message-event';
 
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'child-component',
+  template: ''
+})
 export abstract class ChildComponent implements OnDestroy {
 
   //#region Properties

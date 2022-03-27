@@ -9,7 +9,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {NgRxMessageBusModule} from '../../../../../ngrx-message-bus/src/modules/ngrx-message-bus.module';
-import {FlexModule} from '@angular/flex-layout';
 
 @NgModule({
     imports: [
@@ -19,8 +18,7 @@ import {FlexModule} from '@angular/flex-layout';
         MatButtonModule,
         NgRxMessageBusModule.forRoot(),
 
-        ComponentLevelDemoRouteModule,
-        FlexModule
+        ComponentLevelDemoRouteModule
     ],
   declarations: [
     ComponentLevelParentComponent,
