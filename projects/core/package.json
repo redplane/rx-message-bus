@@ -1,0 +1,29 @@
+{
+  "name": "@message-bus/core",
+  "version": "13.0.0-beta.0001",
+  "peerDependencies": {
+    "@angular/common": "^13.*.*",
+    "rxjs": "^6.*.*",
+    "@angular/core": "^13.*.*"
+  },
+  "author": {
+    "name": "Nguyen Duy Linh",
+    "email": "redplane_dt@yahoo.com.vn",
+    "url": "https://nguyen-duy-linh.netlify.com"
+  },
+  "bugs": "https://github.com/redplane/rx-message-bus/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redplane/rx-message-bus.git"
+  },
+  "homepage": "https://github.com/redplane/rx-message-bus",
+  "license": "ISC",
+  "keywords": [
+    "ngrx-message-bus",
+    "rx-message-bus",
+    "ngrx",
+    "message-bus",
+    "shared-service",
+    "shared service"
+  ]
+}

@@ -2,15 +2,15 @@ version: 1.0.{build}
 
 only_commits:
   files:
-    - projects/ngrx-message-bus/
+    - projects/core/
 
 environment:
 
   # Node version which will be used for compiling application.
   nodejs_version: "13.7.0"
 
-  # Name of library package
-  LIBRARY_NAME: "ngrx-message-bus"
+  # Name of core package
+  LIBRARY_NAME: "core"
 
   # API Key used for deploying to MyGet npm.
   API_KEY_MY_GET:
@@ -40,8 +40,8 @@ build_script:
   - ng build %LIBRARY_NAME% --prod
 
 #test_script:
-  # Run unit test for ngrx-message-bus project.
-#  - protractor projects/ngrx-message-bus/e2e/protractor.conf.js
+  # Run unit test for core project.
+#  - protractor projects/core/e2e/protractor.conf.js
 
 after_build:
   # Copy README.md to distributed folder.
