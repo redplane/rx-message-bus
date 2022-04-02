@@ -1,140 +1,26 @@
-<div class="mb-20"
-     fxFlex
-     fxLayout="column"
-     fxLayoutGap="20px">
+<div class="mb-20">
   <mat-card>
     <mat-card-header class="mat-card-header">
       <div class="mat-card-header-text">
-        <mat-card-title class="mat-card-title">Hook channel create event</mat-card-title>
+        <mat-card-title class="mat-card-title">RPC Message</mat-card-title>
         <mat-card-subtitle>Description</mat-card-subtitle>
       </div>
     </mat-card-header>
     <mat-card-content>
-      <ul>
-        <li>Hook to channel create event and subscribe to it</li>
-        <li>This will be used for ensuring the channel exists. We don't have to try subscribing to it too many times</li>
-        <li>This example is done by using 2 message channel, 1 for request, 1 for response base on message id to achieve its goal</li>
-      </ul>
+      <b>rx-message-bus</b> supports rpc messages. RPC stands for <a href="https://www.techtarget.com/searchapparchitecture/definition/Remote-Procedure-Call-RPC#:~:text=Remote%20Procedure%20Call%20is%20a,systems%20like%20a%20local%20system."><b>R</b>emote <b>P</b>rocedure <b>C</b>all</a>. In short, RPC can help us to use 2 <b>asynchronous</b> operations into a <b>synchronous</b> operation.
+      <div>
+        At the below example. <b>RPC Client</b> communicates with <b>RPC Server</b> asynchronously, but the operation can be handled <b>synchronously</b> by using pipe.
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
 
-<div class="mb-20"
-     fxFlex
-     fxLayout="column"
-     fxLayoutGap="20px">
-  <mat-card>
-    <mat-card-content>
-      <mat-tab-group [color]="'primary'">
-
-        <!--Preview-->
-        <mat-tab label="{{'Basic RPC (preview)' | translate}}">
-
-          <!--Start listening-->
-          <div style="margin-bottom: 10px; margin-top: 10px"
-               [ngSwitch]="sendingCommand">
-            <ng-container *ngSwitchCase="true">Sending command.... (message will arrived after {{messageRespondTime}}
-              second)
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <ng-container *ngIf="loadedTime">
-                {{loadedTime}}
-              </ng-container>
-              <ng-container *ngIf="!loadedTime">
-                Click <b>Load Messages</b> to trigger RPC
-              </ng-container>
-            </ng-container>
-          </div>
-
-          <button mat-flat-button color="primary"
-                  [disabled]="sendingCommand"
-                  [ngSwitch]="sendingCommand"
-                  (click)="clickSendCommand()">
-            <span *ngSwitchCase="true">
-              Sending command....
-            </span>
-            <span *ngSwitchDefault>
-              Load time
-            </span>
-          </button>
-        </mat-tab>
-
-        <!--Receiver-->
-        <mat-tab label="{{'Receiver' | translate}}">
-          <code [style.white-space]="'break-spaces'">
-            {{'/assets/html-content/rpc-demo/rpc-receiver.txt' | toStaticFileContentAsync | async}}
-          </code>
-        </mat-tab>
-
-        <!--Receiver-->
-        <mat-tab label="{{'Receiver' | translate}}">
-          <code [style.white-space]="'break-spaces'"
-                [innerHTML]="'/assets/html-content/rpc-demo/rpc-broadcaster.txt' | toStaticFileContentAsync | async">
-
-          </code>
-        </mat-tab>
-
-      </mat-tab-group>
-    </mat-card-content>
-  </mat-card>
+<div class="row">
+  <div class="col-md-6">
+    <rpc-broadcaster></rpc-broadcaster>
+  </div>
+  <div class="col-md-6">
+    <rpc-responder></rpc-responder>
+  </div>
 </div>
 
-<!--RPC service-->
-<div class="mb-20"
-     fxFlex
-     fxLayout="column"
-     fxLayoutGap="20px">
-  <mat-card>
-    <mat-card-content>
-      <mat-tab-group [color]="'primary'">
-
-        <!--Description-->
-        <mat-tab label="RPC service (description)">
-          <ul>
-            <li>This example is about using <code>RPC service</code>, this service is a shortcut of the above implementation</li>
-            <li>In this example, data can be returned manually to the caller.</li>
-            <li>RPC service life time is similar to IMessageBusService, can be applied to <b>Component</b>, <b>Module</b></li>
-          </ul>
-        </mat-tab>
-
-        <!--Preview-->
-        <mat-tab label="{{'RPC service (preview)' | translate}}">
-
-          <div style="margin-bottom: 10px; margin-top: 10px"
-               [ngSwitch]="sendingMessageInRpcService">
-            <b *ngSwitchCase="true">Listening to incoming message...</b>
-            <b *ngSwitchDefault>Responded message: {{repliedRpcMessage}}</b>
-          </div>
-
-          <button mat-flat-button color="primary"
-                  [ngSwitch]="sendingMessageInRpcService"
-                  [disabled]="sendingMessageInRpcService"
-                  (click)="clickSendMessageInRpcMessage()">
-            <ng-container *ngSwitchCase="true">
-              Receiving message which is responded
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              Send message
-            </ng-container>
-          </button>
-        </mat-tab>
-
-        <!--Receiver-->
-        <mat-tab label="{{'Broadcaster' | translate}}">
-          <code [style.white-space]="'break-spaces'">
-            {{'/assets/html-content/rpc-demo/rpc-service-broadcaster.txt' | toStaticFileContentAsync | async}}
-          </code>
-        </mat-tab>
-
-        <!--Receiver-->
-        <mat-tab label="{{'Receiver' | translate}}">
-          <code [style.white-space]="'break-spaces'"
-                [innerHTML]="'/assets/html-content/rpc-demo/rpc-service-receiver.txt' | toStaticFileContentAsync | async">
-
-          </code>
-        </mat-tab>
-
-      </mat-tab-group>
-    </mat-card-content>
-  </mat-card>
-</div>

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {ParentComponent} from '../../parent.component';
 import {MessageChannelNameConstant} from '../../../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../../../constants/message-event-name.constant';
@@ -21,7 +21,8 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService) {
+  public constructor(
+    @Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService) {
     super();
   }
 

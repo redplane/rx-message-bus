@@ -1,0 +1,36 @@
+.example-card mat-card-content {
+  height: 400px;
+  display: flex;
+
+  h3 {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right:0;
+  bottom: 0;
+
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.message-received {
+  img {
+    height: 100%;
+  }
+}

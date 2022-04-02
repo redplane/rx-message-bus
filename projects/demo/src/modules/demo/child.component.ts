@@ -1,14 +1,14 @@
-import {Component, Inject, OnDestroy} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {MessageChannelNameConstant} from '../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../constants/message-event-name.constant';
-import {MESSAGE_BUS_SERVICE, IMessageBusService} from '@message-bus/core';
+import {IMessageBusService, MESSAGE_BUS_SERVICE} from '@message-bus/core';
 import {ModuleLevelMessageEvent} from '../../models/module-level.message-event';
 
 @Component({
-  // tslint:disable-next-line:component-selector
   selector: 'child-component',
-  template: ''
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export abstract class ChildComponent implements OnDestroy {
 
@@ -18,7 +18,7 @@ export abstract class ChildComponent implements OnDestroy {
 
   private _typedMessage: string;
 
-  private _subscription: Subscription;
+  private  readonly __subscription: Subscription;
 
   //#endregion
 
@@ -40,16 +40,18 @@ export abstract class ChildComponent implements OnDestroy {
 
   //#region Constructor
 
-  protected constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService) {
+  protected constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService,
+                        protected readonly _changeDetectorRef: ChangeDetectorRef) {
 
     // Initialize subscription manager.
-    this._subscription = new Subscription();
+    this.__subscription = new Subscription();
 
     const hookParentMessageSubscription = this._messageBusService
       .hookMessageChannel(MessageChannelNameConstant.parent,
         MessageEventNameConstant.sendParentMessage)
       .subscribe((message: string) => {
         this._message = message;
+        this._changeDetectorRef.markForCheck();
       });
 
     const channelEvent = new ModuleLevelMessageEvent();
@@ -57,10 +59,11 @@ export abstract class ChildComponent implements OnDestroy {
       .hookTypedMessageChannel(channelEvent)
       .subscribe((value: string) => {
         this._typedMessage = value;
+        this._changeDetectorRef.markForCheck();
       });
 
-    this._subscription.add(hookParentMessageSubscription);
-    this._subscription.add(hookParentTypedMessageSubscription);
+    this.__subscription.add(hookParentMessageSubscription);
+    this.__subscription.add(hookParentTypedMessageSubscription);
   }
 
   //#endregion
@@ -70,8 +73,8 @@ export abstract class ChildComponent implements OnDestroy {
   public ngOnDestroy(): void {
 
     // Destroy the subscription to prevent memory leak.
-    if (this._subscription && !this._subscription.closed) {
-      this._subscription.unsubscribe();
+    if (this.__subscription && !this.__subscription.closed) {
+      this.__subscription.unsubscribe();
     }
   }
 

@@ -1,13 +1,20 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {ModuleLevelDemoComponent} from './module-level-demo.component';
+import {ModuleLevelChildComponent} from './child/module-level-child.component';
 
 //#region Routes
 
 const routes: Routes = [
   {
     path: '',
-    component: ModuleLevelDemoComponent
+    component: ModuleLevelDemoComponent,
+    children: [
+      {
+        path: '',
+        component: ModuleLevelChildComponent
+      }
+    ]
   }
 ];
 

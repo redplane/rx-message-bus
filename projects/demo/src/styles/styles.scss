@@ -3,5 +3,27 @@
 @import 'utils';
 @import 'responsive';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import '~bootstrap/scss/bootstrap-grid.scss';
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.demo-content {
+  display: flex;
+  flex-direction: column;
+
+  mat-card {
+    flex: 1 1 auto;
+  }
+}
+
+.w-100,
+.img-fluid {
+  width: 100%;
+}

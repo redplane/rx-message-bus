@@ -8,6 +8,8 @@ import {RpcDemoRouteModule} from './rpc-demo.route';
 import {MatButtonModule} from '@angular/material/button';
 import {MessageBusModule} from '@message-bus/core';
 import {ToStaticFileContentPipeModule} from '../../shared/to-static-file-content/to-static-file-content-pipe.module';
+import {RpcBroadcasterModule} from './rpc-broadcaster/rpc-broadcaster.module';
+import {RpcResponderModule} from './rpc-responder/rpc-responder.module';
 
 @NgModule({
   imports: [
@@ -18,7 +20,9 @@ import {ToStaticFileContentPipeModule} from '../../shared/to-static-file-content
     RpcDemoRouteModule,
     MatButtonModule,
     MessageBusModule.forRoot(),
-    ToStaticFileContentPipeModule
+    ToStaticFileContentPipeModule,
+    RpcBroadcasterModule,
+    RpcResponderModule
   ],
   declarations: [
     RpcDemoComponent
