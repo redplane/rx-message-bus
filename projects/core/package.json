@@ -1,6 +1,6 @@
 {
   "name": "@message-bus/core",
-  "version": "13.0.0-beta.0001",
+  "version": "13.0.0-beta.0002",
   "peerDependencies": {
     "@angular/common": "^13.*.*",
     "rxjs": "^6.*.*",

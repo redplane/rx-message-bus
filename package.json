@@ -1,6 +1,5 @@
 {
   "name": "@message-bus",
-  "version": "13.0.0-beta.0001",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
