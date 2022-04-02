@@ -6,13 +6,13 @@
 
 ## Description
 
-- **ngrx-message-bus** is just a small angular library which provides a singleton shared service in [Angular application](https://angular.io/).
+- **message-bus** is just a small angular library which provides a singleton shared service in [Angular application](https://angular.io/).
 
-- **ngrx-message-bus** is just an improved shared service. Instead of providing just one instance for **publishing** | **subscribing** messages, it provides `channels` and `events` to which components can _subscribe_ and _unsubscribe_. 
+- **message-bus** is just an improved shared service. Instead of providing just one instance for **publishing** | **subscribing** messages, it provides `channels` and `events` to which components can _subscribe_ and _unsubscribe_. 
 
-- Long story short, **ngrx-message-bus** provides `back-end` mindset about pub/sub mechanism.
+- Long story short, **message-bus** provides `back-end` mindset about pub/sub mechanism.
 
-- Online DEMO can be found **[HERE](https://ngrx-message-bus-demo.netlify.com)**
+- Online DEMO can be found **[HERE](https://message-bus.netlify.app)**
 
 ----
 
@@ -21,7 +21,7 @@
 **1. Module lifetime**
 
 ```
-import {MessageBusModule} from 'ngrx-message-bus.module';
+import {MessageBusModule} from 'message-bus.module';
 
 @NgModule({
   declarations: [],
@@ -73,7 +73,7 @@ export class ParentComponent implements OnInit {
   providers: [
     {
       provide: MESSAGE_BUS_SERVICE,
-      useFactory: () => new NgrxMessageBusService()
+      useFactory: () => new MessageBusService()
     }
   ]
 })
