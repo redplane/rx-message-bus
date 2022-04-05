@@ -253,6 +253,9 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
 ## Releases
 
+- **13.*.***:
+  - Add [Remote procedure call](https://www.techtarget.com/searchapparchitecture/definition/Remote-Procedure-Call-RPC#:~:text=Remote%20Procedure%20Call%20is%20a,systems%20like%20a%20local%20system.)
+
 - **3.0.1**:
     - Minor bug fix about injection token.
     
