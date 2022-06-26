@@ -6,11 +6,8 @@ only_commits:
 
 environment:
 
-  # Node version which will be used for compiling application.
-  nodejs_version: "13.7.0"
-
   # Name of library package
-  LIBRARY_NAME: "ngrx-message-bus"
+  LIBRARY_NAME: "@message-bus/core"
 
   # API Key used for deploying to MyGet npm.
   API_KEY_MY_GET:
@@ -19,21 +16,31 @@ environment:
   API_KEY_NPM:
     secure: nIeG09zqUgJaPWS4YclqB4s/BDnoy0DrNiwvLl+p9eQZknDycbInyKs4uEF6JBbk
 
+for:
+  -
+    branches:
+      only:
+        - angular-13/main
+        - angular-13/features/*
+        - angular-13/release
+    environment:
+      NODEJS_VERSION: "17.2.0"
+
+  -
+    branches:
+      only:
+        - angular-11/main
+        - angular-11/features/*
+        - angular-11/release
+      environment:
+        NODEJS_VERSION: "17.2.0"
+
 install:
   # Get the latest stable version of Node.js.
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:NODEJS_VERSION
 
   # Install npm package.
   - npm install --loglevel=error
-
-  # Install angular-cli as global package.
-  - npm install @angular/cli -g
-
-  # Install protractor
-  # - npm install protractor -g
-
-  # Install web driver.
-  # - webdriver-manager update
 
 build_script:
   # Build application in production mode.
