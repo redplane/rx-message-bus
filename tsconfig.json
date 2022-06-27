@@ -17,21 +17,7 @@
     "lib": [
       "es2018",
       "dom"
-    ],
-    "paths": {
-      "ngrx-message-bus": [
-        "./projects/ngrx-message-bus/src/public_api.ts"
-      ],
-      "ngrx-message-bus/*": [
-        "./projects/ngrx-message-bus/src/public_api.ts"
-      ],
-      "@demo-app": [
-        "./projects/ngx-service-bus-demo/src"
-      ],
-      "@demo-app/*": [
-        "./projects/ngx-service-bus-demo/src/*"
-      ]
-    }
+    ]
   },
   "angularCompilerOptions": {
     "enableIvy": false,

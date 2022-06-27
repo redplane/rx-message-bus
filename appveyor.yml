@@ -1,4 +1,3 @@
-image: Ubuntu2004
 version: 1.0.{build}
 
 only_commits:
@@ -18,21 +17,14 @@ environment:
 
 install:
 
-  - sh: |
-      IF [ "$APPVEYOR_REPO_BRANCH" =~ "^angular-13.*$" ]
-        THEN
-          NODEJS_VERSION="17.2.0"
-      ELIF [ "$APPVEYOR_REPO_BRANCH" =~ "^angular-11.*$" ]
-        THEN
-          NODEJS_VERSION="13.7.0"
-      FI
+  - ps: >-
+      if ($APPVEYOR_REPO_BRANCH -Match "^angular-13.*$") {
+        $env:NODEJS_VERSION="17.2.0"
+      } elseif ($APPVEYOR_REPO_BRANCH -Match "^angular-11.*$") {
+        $env:NODEJS_VERSION="13.7.0"
+      }
 
-  # Get the latest stable version of Node.js.
-  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-
-  - nvm install $NODEJS_VERSION
-
-  - nvm use $NODEJS_VERSION
+  - ps: Install-Product node $env:NODEJS_VERSION
 
   # Install npm package.
   - npm install --loglevel=error
@@ -47,11 +39,10 @@ build_script:
 
 deploy_script:
 
-  - sh: |
-      DEPLOYMENT_BRANCH_REGEX="^angular-\d+\/release$"
+  - ps: >-
+      $env:DEPLOYMENT_BRANCH_REGEX="^angular-\d+\/release$"
 
-      IF [ "$APPVEYOR_REPO_BRANCH" =~ "$DEPLOYMENT_BRANCH_REGEX" ]
-      THEN
-        echo //registry.npmjs.org/:_authToken=%API_KEY_NPM% >> ./dist/@message-bus/core/.npmrc
+      if ("$APPVEYOR_REPO_BRANCH" -Match "$DEPLOYMENT_BRANCH_REGEX") {
+        echo //registry.npmjs.org/:_authToken=$env:API_KEY_NPM >> ./dist/@message-bus/core/.npmrc
         npm publish dist/@message-bus/core --dry-run
-      FI
+      }

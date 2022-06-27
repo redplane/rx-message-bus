@@ -44,7 +44,7 @@
               "fileReplacements": [
                 {
                   "replace": "projects/demo/src/environments/environment.ts",
-                  "with": "projects/demo/src/environments/environment.prod.ts"
+                  "with": "projects/demo/src/environments/environment.production.ts"
                 }
               ],
               "optimization": true,

@@ -10,6 +10,7 @@
     "link:lib": "npm link dist/@message-bus/core",
     "postbuild:lib": "cpx \"./README.md\" \"dist/@message-bus/core\"",
     "build:lib": "ng-packagr -p projects/core/ng-package.json",
+    "demo": "ng serve demo",
     "build:demo": "ng build demo --configuration=production --source-map=true"
   },
   "private": true,
