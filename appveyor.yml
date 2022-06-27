@@ -38,8 +38,7 @@ for:
 install:
 
   # Get the latest stable version of Node.js.
-  - curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | sh
-    source ~/.nvm/nvm.sh
+  - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
   - nvm install $env:NODEJS_VERSION
 
