@@ -36,8 +36,14 @@ for:
       NODEJS_VERSION: "13.7.0"
 
 install:
+
   # Get the latest stable version of Node.js.
-  - ps: Install-Product node $env:NODEJS_VERSION
+  - curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | sh
+    source ~/.nvm/nvm.sh
+
+  - nvm install $env:NODEJS_VERSION
+
+  - nvm use $env:NODEJS_VERSION
 
   # Install npm package.
   - npm install --loglevel=error
