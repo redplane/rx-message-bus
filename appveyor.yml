@@ -40,9 +40,9 @@ install:
   # Get the latest stable version of Node.js.
   - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-  - nvm install $env:NODEJS_VERSION
+  - nvm install ${NODEJS_VERSION}
 
-  - nvm use $env:NODEJS_VERSION
+  - nvm use ${NODEJS_VERSION}
 
   # Install npm package.
   - npm install --loglevel=error
