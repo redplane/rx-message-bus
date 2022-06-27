@@ -1,13 +1,13 @@
+image: Ubuntu2004
 version: 1.0.{build}
 
 only_commits:
   files:
-    - projects/ngrx-message-bus/
+    - projects/core/
 
 environment:
 
-  # Name of library package
-  LIBRARY_NAME: "@message-bus/core"
+  OUTPUT_FOLDER: "dist/@message-bus/core"
 
   # API Key used for deploying to MyGet npm.
   API_KEY_MY_GET:
@@ -21,7 +21,7 @@ for:
     branches:
       only:
         - angular-13/main
-        - angular-13/features/*
+        - /angular-13\/features\/.+/
         - angular-13/release
     environment:
       NODEJS_VERSION: "17.2.0"
@@ -30,10 +30,10 @@ for:
     branches:
       only:
         - angular-11/main
-        - angular-11/features/*
+        - /angular-11\/features\/.+/
         - angular-11/release
-      environment:
-        NODEJS_VERSION: "17.2.0"
+    environment:
+      NODEJS_VERSION: "13.7.0"
 
 install:
   # Get the latest stable version of Node.js.
@@ -44,37 +44,19 @@ install:
 
 build_script:
   # Build application in production mode.
-  - ng build %LIBRARY_NAME% --prod
+  - npm run build:lib
 
 #test_script:
-  # Run unit test for ngrx-message-bus project.
-#  - protractor projects/ngrx-message-bus/e2e/protractor.conf.js
-
-after_build:
-  # Copy README.md to distributed folder.
-  - copy README.md "dist/%LIBRARY_NAME%/" /Y
-
-before_deploy:
-  - SET SHOULD_DEPLOYMENT_DONE=false
-  - SET NPM_API_KEY=""
-  - SET NPM_ENDPOINT=""
-
-  - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET SHOULD_DEPLOYMENT_DONE=true
-  - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET NPM_API_KEY=%API_KEY_NPM%
-  - IF "%APPVEYOR_REPO_BRANCH%" == "release" SET NPM_ENDPOINT="www.npmjs.org"
-
-  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET SHOULD_DEPLOYMENT_DONE=true
-  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET NPM_API_KEY=%API_KEY_MY_GET%
-  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" SET NPM_ENDPOINT="www.myget.org"
+  # Run unit test for core project.
+#  - protractor projects/core/e2e/protractor.conf.js
 
 deploy_script:
-  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" cd /d "dist/%LIBRARY_NAME%"
 
-  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" echo registry=https://www.myget.org/F/%LIBRARY_NAME%/npm/ >> .npmrc
-  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" echo always-auth=true >> .npmrc
-  - IF "%APPVEYOR_REPO_BRANCH%" == "preview" echo //www.myget.org/F/%LIBRARY_NAME%/npm/:_authToken=%NPM_API_KEY% >> .npmrc
+  - sh: |
+      DEPLOYMENT_BRANCH_REGEX="^angular-\d+\/release$"
 
-  - IF "%APPVEYOR_REPO_BRANCH%" == "release" echo //registry.npmjs.org/:_authToken=%API_KEY_NPM% >> .npmrc
-
-  # Publish package to npm server.
-  - IF "%SHOULD_DEPLOYMENT_DONE%" == "true" npm publish
+      IF [ "$APPVEYOR_REPO_BRANCH" =~ "$DEPLOYMENT_BRANCH_REGEX" ]
+      THEN
+        echo //registry.npmjs.org/:_authToken=%API_KEY_NPM% >> ./dist/@message-bus/core/.npmrc
+        npm publish dist/@message-bus/core --dry-run
+      FI

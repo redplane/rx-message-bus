@@ -1,0 +1,23 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image"></div>
+    <mat-card-title>RPC Client</mat-card-title>
+    <mat-card-subtitle>Request sender</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="spinner-container" *ngIf="sendingMessage">
+      <mat-spinner></mat-spinner>
+      <div>
+        <b>Sending request. Waiting for response</b>
+      </div>
+    </div>
+
+    <div *ngIf="messageReceived" class="message-received">
+      <img src="/assets/images/message-received.png" class="img-fluid h-100">
+    </div>
+
+    <ng-container *ngIf="!sendingMessage">
+      <h3>Please click&nbsp;<button mat-button color="primary" mat-raised-button (click)="sendMessage()">Get RPC Server data</button>&nbsp;button to get data from RPC Server component</h3>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

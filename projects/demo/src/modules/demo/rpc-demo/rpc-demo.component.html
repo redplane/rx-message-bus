@@ -1,0 +1,26 @@
+<div class="mb-20">
+  <mat-card>
+    <mat-card-header class="mat-card-header">
+      <div class="mat-card-header-text">
+        <mat-card-title class="mat-card-title">RPC Message</mat-card-title>
+        <mat-card-subtitle>Description</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <b>rx-message-bus</b> supports rpc messages. RPC stands for <a href="https://www.techtarget.com/searchapparchitecture/definition/Remote-Procedure-Call-RPC#:~:text=Remote%20Procedure%20Call%20is%20a,systems%20like%20a%20local%20system."><b>R</b>emote <b>P</b>rocedure <b>C</b>all</a>. In short, RPC can help us to use 2 <b>asynchronous</b> operations into a <b>synchronous</b> operation.
+      <div>
+        At the below example. <b>RPC Client</b> communicates with <b>RPC Server</b> asynchronously, but the operation can be handled <b>synchronously</b> by using pipe.
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <rpc-broadcaster></rpc-broadcaster>
+  </div>
+  <div class="col-md-6">
+    <rpc-responder></rpc-responder>
+  </div>
+</div>
+

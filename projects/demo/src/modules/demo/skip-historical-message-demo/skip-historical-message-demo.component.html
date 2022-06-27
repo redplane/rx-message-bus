@@ -1,0 +1,60 @@
+<div class="mb-20">
+  <mat-card>
+    <mat-card-header class="mat-card-header">
+      <div class="mat-card-header-text">
+        <mat-card-title class="mat-card-title">Historical message</mat-card-title>
+        <mat-card-subtitle>Description</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <ul>
+        <li>By default, when a <b>message channel - message event</b> is subscribed, it will broadcast a message which has been broadcast previously.</li>
+        <li>Flow will be: <b>Message broadcast</b> -> <b>Message subscribe</b> -> <b>Able to receive the message broadcasted before</b></li>
+        <li>If <i>skipHistoricalMessage</i> is set, the previous will be skipped</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<div class="mb-20">
+  <mat-card>
+    <mat-card-content>
+      <mat-tab-group [color]="'primary'">
+
+        <!--Preview-->
+        <mat-tab label="{{'Preview' | translate}}">
+
+          <!--Received message-->
+          <ul>
+
+            <li>Skip historical changes: <mat-checkbox [(ngModel)]="skipHistoricalMessage"></mat-checkbox></li>
+
+            <li *ngIf="hasSubscriptionStarted && hasMessageReceived">
+              <b>Received message</b>: {{receivedMessage}}
+            </li>
+            <li *ngIf="hasSubscriptionStarted && !hasMessageReceived">
+              <b>Waiting for messages...</b>
+            </li>
+          </ul>
+
+          <!--Subscription status-->
+          <ul>
+            <li>
+              <b>Subscription status</b>: {{hasSubscriptionStarted ? 'Already' : 'Not yet'}}
+            </li>
+          </ul>
+
+
+          <button mat-raised-button
+                  color="primary"
+                  (click)="clickStartSubscription()">
+            Start subscription
+          </button>
+
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+

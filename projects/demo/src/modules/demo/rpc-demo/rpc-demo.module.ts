@@ -1,0 +1,32 @@
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RpcDemoComponent} from './rpc-demo.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatTabsModule} from '@angular/material/tabs';
+import {TranslateModule} from '@ngx-translate/core';
+import {RpcDemoRouteModule} from './rpc-demo.route';
+import {MatButtonModule} from '@angular/material/button';
+import {MessageBusModule} from '@message-bus/core';
+import {ToStaticFileContentPipeModule} from '../../shared/to-static-file-content/to-static-file-content-pipe.module';
+import {RpcBroadcasterModule} from './rpc-broadcaster/rpc-broadcaster.module';
+import {RpcResponderModule} from './rpc-responder/rpc-responder.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatTabsModule,
+    TranslateModule,
+    RpcDemoRouteModule,
+    MatButtonModule,
+    MessageBusModule.forRoot(),
+    ToStaticFileContentPipeModule,
+    RpcBroadcasterModule,
+    RpcResponderModule
+  ],
+  declarations: [
+    RpcDemoComponent
+  ]
+})
+export class RpcDemoModule {
+}
