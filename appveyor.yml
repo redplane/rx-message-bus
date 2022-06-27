@@ -16,33 +16,23 @@ environment:
   API_KEY_NPM:
     secure: nIeG09zqUgJaPWS4YclqB4s/BDnoy0DrNiwvLl+p9eQZknDycbInyKs4uEF6JBbk
 
-for:
-  -
-    branches:
-      only:
-        - angular-13/main
-        - /angular-13\/features\/.+/
-        - angular-13/release
-    environment:
-      NODEJS_VERSION: "17.2.0"
-
-  -
-    branches:
-      only:
-        - angular-11/main
-        - /angular-11\/features\/.+/
-        - angular-11/release
-    environment:
-      NODEJS_VERSION: "13.7.0"
-
 install:
+
+  - sh: |
+      IF [ "$APPVEYOR_REPO_BRANCH" =~ "^angular-13.*$" ]
+        THEN
+          NODEJS_VERSION="17.2.0"
+      ELIF [ "$APPVEYOR_REPO_BRANCH" =~ "^angular-11.*$" ]
+        THEN
+          NODEJS_VERSION="13.7.0"
+      FI
 
   # Get the latest stable version of Node.js.
   - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
-  - nvm install ${NODEJS_VERSION}
+  - nvm install $NODEJS_VERSION
 
-  - nvm use ${NODEJS_VERSION}
+  - nvm use $NODEJS_VERSION
 
   # Install npm package.
   - npm install --loglevel=error
