@@ -103,9 +103,15 @@ export class MessageBusService implements IMessageBusService {
 
   public hookMessage<T>(type: Type<T>, options?: IHookChannelOptions): Observable<T> {
 
+    const instance = new type();
+
+    if (!Reflect.hasMetadata(CHANNEL_NAME_METADATA, instance) || !Reflect.hasMetadata(EVENT_NAME_METADATA, instance)) {
+      throw new Error('Metadata is not found. Did you forget to add MessageEvent decorator on the target class ?');
+    }
+
     // Get the metadata of the class.
-    const channelName = Reflect.getMetadata(CHANNEL_NAME_METADATA, new type());
-    const eventName = Reflect.getMetadata(EVENT_NAME_METADATA, new type);
+    const channelName = Reflect.getMetadata(CHANNEL_NAME_METADATA, instance);
+    const eventName = Reflect.getMetadata(EVENT_NAME_METADATA, instance);
 
     return this.hookMessageChannel<T>(channelName, eventName);
   }
@@ -137,6 +143,10 @@ export class MessageBusService implements IMessageBusService {
     // Get the metadata of the class.
     const channelName = Reflect.getMetadata(CHANNEL_NAME_METADATA, message);
     const eventName = Reflect.getMetadata(EVENT_NAME_METADATA, message);
+
+    if (!Reflect.hasMetadata(CHANNEL_NAME_METADATA, message) || !Reflect.hasMetadata(EVENT_NAME_METADATA, message)) {
+      throw new Error('Metadata is not found. Did you forget to add MessageEvent decorator on the target class ?');
+    }
 
     this.addMessage(channelName, eventName, message);
   }

@@ -1,7 +1,5 @@
 import {Subscription} from 'rxjs';
 import {MessageBusService} from './message-bus.service';
-import {GreetingChannelEvent} from '../../../e2e/src/models/greeting.channel-event';
-import {Greeting} from '../../../e2e/src/models/greeting';
 import {MessageEvent} from '../../decorators';
 
 const GREETING_CHANNEL_NAME = 'greeting-channel';
@@ -9,6 +7,11 @@ const GREETING_EVENT_NAME = 'greeting';
 
 @MessageEvent(GREETING_CHANNEL_NAME, GREETING_EVENT_NAME)
 class GreetingEvent {
+  public constructor(public readonly message: string) {
+  }
+}
+
+class NoMetadataEvent {
   public constructor(public readonly message: string) {
   }
 }
@@ -89,5 +92,40 @@ describe('hookMessage test cases', () => {
     messageBusService.publish(message);
   }, 2000);
 
+  it('hookMessage throws exception when class does not have metadata', (done) => {
+
+    const message = new NoMetadataEvent('Hello world');
+    const messageBusService = new MessageBusService();
+
+    try {
+      // Hook channel initialization.
+      const hookTypedMessageSubscription = messageBusService.hookMessage(NoMetadataEvent)
+        .subscribe(value => {
+          fail();
+        });
+
+      // Add subscription to watch list.
+      subscription.add(hookTypedMessageSubscription);
+      messageBusService.publish(message);
+    } catch (exception) {
+      expect(exception != null);
+      expect((exception as Error).message.startsWith('Metadata is not found'));
+      done();
+    }
+  }, 2000);
+
+  it('publish throws exception when class does not have metadata', (done) => {
+
+    const message = new NoMetadataEvent('Hello world');
+    const messageBusService = new MessageBusService();
+
+    try {
+      messageBusService.publish(message);
+    } catch (exception) {
+      expect(exception != null);
+      expect((exception as Error).message.startsWith('Metadata is not found'));
+      done();
+    }
+  }, 2000);
   //#endregion
 });
