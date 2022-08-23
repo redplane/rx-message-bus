@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Type} from '@angular/core';
 import {Observable, ReplaySubject, Subject, throwError} from 'rxjs';
 import {filter, map, switchMap} from 'rxjs/operators';
 import {IMessageBusService} from '../interfaces/message-bus-service.interface';
@@ -7,6 +7,8 @@ import {ChannelInitializationEvent} from '../../models/channel-initialization-ev
 import {TypedChannelEvent} from '../../models/typed-channel-event';
 import {ExceptionCodes} from '../../constants/exception-codes';
 import {IHookChannelOptions} from '../../interfaces/hook-channel-options.interface';
+import {CHANNEL_NAME_METADATA, EVENT_NAME_METADATA} from '../../decorators';
+import 'reflect-metadata';
 
 @Injectable()
 export class MessageBusService implements IMessageBusService {
@@ -92,9 +94,20 @@ export class MessageBusService implements IMessageBusService {
       );
   }
 
-  // Hook typed message channel.
+  /* Hook typed message channel.
+  * @deprecated Use hookMessage method instead.
+  * */
   public hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, options?: IHookChannelOptions): Observable<T> {
     return this.hookMessageChannel<T>(channelEvent.channelName, channelEvent.eventName, options);
+  }
+
+  public hookMessage<T>(type: Type<T>, options?: IHookChannelOptions): Observable<T> {
+
+    // Get the metadata of the class.
+    const channelName = Reflect.getMetadata(CHANNEL_NAME_METADATA, new type());
+    const eventName = Reflect.getMetadata(EVENT_NAME_METADATA, new type);
+
+    return this.hookMessageChannel<T>(channelName, eventName);
   }
 
   /*
@@ -109,9 +122,23 @@ export class MessageBusService implements IMessageBusService {
     emitter.next(messageContainer);
   }
 
-  // Add typed message channel.
+  /* Add typed message channel.
+  * @deprecated Use publish method instead.
+  * */
   public addTypedMessage<T>(channelEvent: TypedChannelEvent<T>, message: T, lifeTime?: number): void {
     this.addMessage(channelEvent.channelName, channelEvent.eventName, message, lifeTime);
+  }
+
+  /*
+  * Publish message to event stream.
+  * Channel will be created automatically if it isn't available.
+  * */
+  public publish<T>(message: T): void {
+    // Get the metadata of the class.
+    const channelName = Reflect.getMetadata(CHANNEL_NAME_METADATA, message);
+    const eventName = Reflect.getMetadata(EVENT_NAME_METADATA, message);
+
+    this.addMessage(channelName, eventName, message);
   }
 
   // Delete messages that have been sent.

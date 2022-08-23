@@ -1,7 +1,9 @@
 import {discardPeriodicTasks, fakeAsync, flush, flushMicrotasks, tick} from '@angular/core/testing';
-import {BasicRpcService, IRpcService, ITypedRpcRequest} from 'ngrx-message-bus';
 import {catchError, take} from 'rxjs/operators';
 import {of, Subscription, TimeoutError} from 'rxjs';
+import {IRpcService} from '../interfaces';
+import {BasicRpcService} from './basic-rpc.service';
+import {ITypedRpcRequest} from '../../interfaces';
 
 class RemoteMessage implements ITypedRpcRequest<string, string> {
 

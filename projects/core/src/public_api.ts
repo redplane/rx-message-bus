@@ -4,6 +4,9 @@ export * from './modules/index';
 // Constant export.
 export * from './constants/index';
 
+// Decorator export.
+export * from './decorators/index';
+
 // Model export.
 export * from './models/index';
 
