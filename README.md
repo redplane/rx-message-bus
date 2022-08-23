@@ -20,21 +20,14 @@
 
 **1. Module lifetime**
 
-```
-import {MessageBusModule} from 'message-bus.module';
+```typescript
+import {MessageBusModule} from './message-bus.module';
 
 @NgModule({
   declarations: [],
   imports: [
-    FormsModule,
-    BrowserModule,
-    BrowserAnimationsModule, // required animations module
-    HttpClientModule,
-
-    // Application modules.
-    SharedModule,
-    AppRouteModule,
-    MessageBusModule
+    //... Module declaration
+    MessageBusModule.forRoot()
   ],
   providers: [
     AppSettings
@@ -47,17 +40,20 @@ export class AppModule {
 }
 ```
 
-```
+```typescript
+import {ChangeDetection} from '@angular/cli/lib/config/workspace-schema';
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'parent',
-  templateUrl: 'parent.component.html'
+  templateUrl: 'parent.component.html',
+  changeDetection: ChangeDetection.OnPush
 })
 export class ParentComponent implements OnInit {
 
   public constructor(@Inject(MESSAGE_BUS_SERVICE) public messageBusService: IMessageBusService) {
-  
-   }
+
+  }
 }
 ```
 
