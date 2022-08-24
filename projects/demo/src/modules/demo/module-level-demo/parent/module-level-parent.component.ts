@@ -30,10 +30,10 @@ export class ModuleLevelParentComponent extends ParentComponent {
     // Get current date.
     const date = new Date();
 
-    const channelEvent = new ModuleLevelMessageEvent();
     const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
+    const messageEvent = new ModuleLevelMessageEvent(data);
 
-    this._messageBusService.addTypedMessage(channelEvent, data);
+    this._messageBusService.publish(messageEvent);
   }
 
   public clickSendMessage(): void {

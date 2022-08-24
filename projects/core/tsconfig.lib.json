@@ -4,10 +4,12 @@
     "baseUrl": "./",
     "preserveSymlinks": true,
     "outDir": "../../out-tsc/lib",
-    "target": "es2015",
+    "target": "es5",
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "types": [],
     "lib": [
       "dom",

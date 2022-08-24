@@ -1,24 +1,13 @@
-import {TypedChannelEvent} from '@message-bus/core';
+import {MessageHook, TypedChannelEvent} from '@message-bus/core';
 import {MessageChannelNameConstant} from '../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../constants/message-event-name.constant';
 
-export class ModuleLevelMessageEvent extends TypedChannelEvent<string> {
-
-  //#region Properties
-
-  public readonly channelName: string;
-
-  public readonly eventName: string;
-
-  //#endregion
+@MessageHook(MessageChannelNameConstant.parent, MessageEventNameConstant.sendParentMessage)
+export class ModuleLevelMessageEvent {
 
   //#region Constructor
 
-  constructor() {
-    super();
-
-    this.channelName = MessageChannelNameConstant.parent;
-    this.eventName = MessageEventNameConstant.sendParentMessage;
+  public constructor(public readonly message: string) {
   }
 
   //#endregion

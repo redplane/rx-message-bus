@@ -42,12 +42,11 @@ export class ComponentLevelParentComponent extends ParentComponent {
 
   public clickSendTypedMessage(): void {
 
-    const channelEvent = new ModuleLevelMessageEvent();
     const date = new Date();
     const message = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
+    const messageEvent = new ModuleLevelMessageEvent(message);
 
-    this._messageBusService
-      .addTypedMessage(channelEvent, message);
+    this._messageBusService.publish(messageEvent);
   }
 
   //#endregion

@@ -1,11 +1,11 @@
 import {Subscription} from 'rxjs';
 import {MessageBusService} from './message-bus.service';
-import {MessageEvent} from '../../decorators';
+import {MessageHook} from '../../decorators';
 
 const GREETING_CHANNEL_NAME = 'greeting-channel';
 const GREETING_EVENT_NAME = 'greeting';
 
-@MessageEvent(GREETING_CHANNEL_NAME, GREETING_EVENT_NAME)
+@MessageHook(GREETING_CHANNEL_NAME, GREETING_EVENT_NAME)
 class GreetingEvent {
   public constructor(public readonly message: string) {
   }
