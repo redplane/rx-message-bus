@@ -5,6 +5,7 @@ import {MessageBusService} from './message-bus.service';
 import {RpcMessage} from '../../models/rpc-message';
 import {ITypedRpcRequest} from '../../interfaces/typed-rpc-request.interface';
 import {IHookMethodRequestOptions} from '../../interfaces/hook-method-request-options';
+import {Injectable} from '@angular/core';
 
 function timeoutWhen<T>(cond: boolean, value: number): OperatorFunction<T, T> {
   return function (source: Observable<T>): Observable<T> {
@@ -12,6 +13,7 @@ function timeoutWhen<T>(cond: boolean, value: number): OperatorFunction<T, T> {
   };
 }
 
+@Injectable()
 export class BasicRpcService extends MessageBusService implements IRpcService {
 
   //#region Properties
