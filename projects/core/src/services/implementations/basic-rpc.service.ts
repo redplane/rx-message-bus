@@ -22,6 +22,16 @@ export class BasicRpcService extends MessageBusService implements IRpcService {
 
   //#endregion
 
+  //#region Constructor
+
+  public constructor() {
+    super();
+
+    this.__keyToSubject = {};
+  }
+
+  //#endregion
+
   //#region Methods
 
   public sendRequestAsync<TRequest, TResponse>(

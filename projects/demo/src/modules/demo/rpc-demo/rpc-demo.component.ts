@@ -22,16 +22,9 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   private readonly _method = 'demo-method';
 
-  private _repliedRpcMessage = '';
-
   private _sendingCommand: boolean;
 
   private readonly _messageRespondTime = 5;
-
-  private _loadedTime = '';
-
-  // Whether message is being sent through rpc service or not.
-  private _sendingMessageInRpcService = false;
 
   // Subscription watch list.
   private _subscription: Subscription;
@@ -39,26 +32,6 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
   //#endregion
 
   //#region Accessors
-
-  public get sendingCommand(): boolean {
-    return this._sendingCommand;
-  }
-
-  public get loadedTime(): string {
-    return this._loadedTime;
-  }
-
-  public get messageRespondTime(): number {
-    return this._messageRespondTime;
-  }
-
-  public get sendingMessageInRpcService(): boolean {
-    return this._sendingMessageInRpcService;
-  }
-
-  public get repliedRpcMessage(): string {
-    return this._repliedRpcMessage;
-  }
 
   //#endregion
 
@@ -73,7 +46,7 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   //#endregion
 
-  //#region Methods
+  //#region Life cycle hooks
 
   public ngOnInit(): void {
 
@@ -115,35 +88,9 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
     }
   }
 
-  public clickSendCommand(): void {
+  //#endregion
 
-    this._sendingCommand = true;
-
-    const loadTimeSubscription = this.loadTimeAsync()
-      .pipe(
-        finalize(() => this._sendingCommand = false)
-      )
-      .subscribe(value => {
-        this._sendingCommand = false;
-        this._loadedTime = value;
-        this._changeDetectorRef.markForCheck();
-      });
-
-    this._subscription.add(loadTimeSubscription);
-  }
-
-  public clickSendMessageInRpcMessage(): void {
-
-    this._sendingMessageInRpcService = true;
-
-    const typedRequest: ITypedRpcRequest<string, string> = {namespace: this._namespace, method: this._method};
-    this._rpcService.sendRequestAsync(typedRequest, 'Hello world')
-      .subscribe(x => {
-        this._sendingMessageInRpcService = false;
-        this._repliedRpcMessage = x;
-        this._changeDetectorRef.markForCheck();
-      });
-  }
+  //#region Internal methods
 
   protected loadTimeAsync(): Observable<string> {
     const resolver = new ReplaySubject<string>(1);

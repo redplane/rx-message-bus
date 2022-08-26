@@ -39,8 +39,11 @@
             <ng-container *ngIf=shouldComponentAvailable>{{'Hide component' | translate}}</ng-container>
             <ng-container *ngIf=!shouldComponentAvailable>{{'Show component' | translate}}</ng-container>
           </button>
-          <button mat-button (click)="clickSendMessage()">Send message</button>
-          <button mat-button color="accent" (click)="clickDeleteMessage()">Delete message</button>
+          <button mat-button (click)="clickSendMessage()"
+                  [disabled]="!ableToSendMessage">Send message</button>
+          <button mat-button color="accent"
+                  [disabled]="!ableToSendMessage"
+                  (click)="clickDeleteMessage()">Delete message</button>
         </mat-tab>
       </mat-tab-group>
     </mat-card-content>
