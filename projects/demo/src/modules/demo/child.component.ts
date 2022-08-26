@@ -49,16 +49,15 @@ export abstract class ChildComponent implements OnDestroy {
     const hookParentMessageSubscription = this._messageBusService
       .hookMessageChannel(MessageChannelNameConstant.parent,
         MessageEventNameConstant.sendParentMessage)
-      .subscribe((message: string) => {
+      .subscribe(({message}) => {
         this._message = message;
         this._changeDetectorRef.markForCheck();
       });
 
-    const channelEvent = new ModuleLevelMessageEvent();
     const hookParentTypedMessageSubscription = this._messageBusService
-      .hookTypedMessageChannel(channelEvent)
-      .subscribe((value: string) => {
-        this._typedMessage = value;
+      .hookMessage(ModuleLevelMessageEvent)
+      .subscribe(({message}) => {
+        this._typedMessage = message;
         this._changeDetectorRef.markForCheck();
       });
 

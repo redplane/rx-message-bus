@@ -12,3 +12,6 @@ export * from './interfaces/index';
 
 // Service export
 export * from './services/index';
+
+// Decorator export.
+export * from './decorators/index';
