@@ -20,6 +20,9 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
+    files: [
+      './tests/variables.js'
+    ],
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,

@@ -1,10 +1,11 @@
 import {IRpcService} from '../interfaces/rpc-service.interface';
-import {Observable, of, OperatorFunction, ReplaySubject} from 'rxjs';
-import {catchError, filter, map, take, timeout} from 'rxjs/operators';
+import {Observable, OperatorFunction, ReplaySubject, Subject} from 'rxjs';
+import {take, timeout} from 'rxjs/operators';
 import {MessageBusService} from './message-bus.service';
 import {RpcMessage} from '../../models/rpc-message';
 import {ITypedRpcRequest} from '../../interfaces/typed-rpc-request.interface';
 import {IHookMethodRequestOptions} from '../../interfaces/hook-method-request-options';
+import {Injectable} from '@angular/core';
 
 function timeoutWhen<T>(cond: boolean, value: number): OperatorFunction<T, T> {
   return function (source: Observable<T>): Observable<T> {
@@ -12,55 +13,103 @@ function timeoutWhen<T>(cond: boolean, value: number): OperatorFunction<T, T> {
   };
 }
 
+@Injectable()
 export class BasicRpcService extends MessageBusService implements IRpcService {
+
+  //#region Properties
+
+  private readonly __keyToSubject: Record<string, Subject<any>>;
+
+  //#endregion
+
+  //#region Constructor
+
+  public constructor() {
+    super();
+
+    this.__keyToSubject = {};
+  }
+
+  //#endregion
 
   //#region Methods
 
-  public sendRequestAsync<TRequest, TResponse>(sentRequest: ITypedRpcRequest<TRequest, TResponse>,
-                                               data: TRequest,
-                                               timeoutInMilliseconds?: number): Observable<TResponse> {
-
+  public sendRequestAsync<TRequest, TResponse>(
+    sentRequest: ITypedRpcRequest<TRequest, TResponse>,
+    data: TRequest,
+    timeoutInMilliseconds?: number
+  ): Observable<TResponse> {
     // Built the message which should be sent.
-    const sentMessage = new RpcMessage<TRequest>(`${sentRequest.namespace}-request`,
+    const sentMessage = new RpcMessage<TRequest>(
+      `${sentRequest.namespace}-request`,
       sentRequest.method,
-      data);
+      data
+    );
 
-    // Whether exception has happened or not.
-    let hasException = false;
-
+    const actualKey = this._getRpcKey(
+      sentRequest.namespace,
+      sentRequest.method,
+      sentMessage.id
+    );
     const resolver = new ReplaySubject<TResponse>(1);
-    this.hookMessageChannel<RpcMessage<TResponse>>(
-      `${sentRequest.namespace}-reply`, sentRequest.method)
-      .pipe(
-        timeoutWhen(timeoutInMilliseconds > 0, timeoutInMilliseconds),
-        filter(incomingMessage => incomingMessage.id === sentMessage.id),
-        take(1),
-        map(incomingMessage => incomingMessage.data),
-        catchError(exception => {
-          resolver.error(exception);
-          hasException = true;
-          return of(void (0));
-        })
-      )
-      .subscribe((value: TResponse) => {
-        if (!hasException) {
-          resolver.next(value);
-        }
-      });
+    this.__keyToSubject[actualKey] = resolver;
 
-    // Send the request message.
-    this.addMessage<RpcMessage<TRequest>>(`${sentRequest.namespace}-request`, sentRequest.method, sentMessage);
-    return resolver.pipe(take(1));
+    // Broadcast about this request.
+    const actualRequestNamespace = this._getRequestNamespace(
+      sentRequest.namespace
+    );
+    this.addMessage(actualRequestNamespace, sentRequest.method, sentMessage);
+
+    return resolver.pipe(
+      timeoutWhen(timeoutInMilliseconds > 0, timeoutInMilliseconds),
+      take(1)
+    );
   }
 
-  public sendResponse<TRequest, TResponse>(sentMessage: ITypedRpcRequest<TRequest, TResponse>, messageId: string, data: TResponse): void {
-    const reply = new RpcMessage(`${sentMessage.namespace}-reply`, sentMessage.method, data, messageId);
-    this.addMessage(`${sentMessage.namespace}-reply`, sentMessage.method, reply);
+  public sendResponse<TRequest, TResponse>(
+    sentMessage: ITypedRpcRequest<TRequest, TResponse>,
+    messageId: string,
+    data: TResponse
+  ) {
+    const actualKey = this._getRpcKey(
+      sentMessage.namespace,
+      sentMessage.method,
+      messageId
+    );
+    if (!this.__keyToSubject[actualKey]) {
+      return;
+    }
+
+    const resolver = this.__keyToSubject[actualKey];
+    resolver.next(data);
   }
 
-  public hookMethodRequestAsync<TRequest, TResponse>(request: ITypedRpcRequest<TRequest, TResponse>,
-                                                     options?: IHookMethodRequestOptions): Observable<RpcMessage<TResponse>> {
-    return this.hookMessageChannel<RpcMessage<TResponse>>(`${request.namespace}-request`, request.method, options);
+  public hookMethodRequestAsync<TRequest, TResponse>(
+    request: ITypedRpcRequest<TRequest, TResponse>,
+    options?: IHookMethodRequestOptions
+  ): Observable<RpcMessage<TResponse>> {
+    const actualNamespace = this._getRequestNamespace(request.namespace);
+    return super.hookMessageChannel<RpcMessage<TResponse>>(
+      actualNamespace,
+      request.method,
+      options
+    );
+  }
+
+  //#endregion
+
+  //#region Internal methods
+
+  protected _getRpcKey(
+    namespace: string,
+    method: string,
+    messageId: string
+  ): string {
+    return `${namespace}.${method}.${messageId}`;
+  }
+
+  protected _getRequestNamespace(namespace: string): string {
+    return `${namespace}-request`;
   }
 
   //#endregion

@@ -1,5 +1,5 @@
 import {discardPeriodicTasks, fakeAsync, flush, flushMicrotasks, tick} from '@angular/core/testing';
-import {BasicRpcService, IRpcService, ITypedRpcRequest} from 'ngrx-message-bus';
+import {BasicRpcService, IRpcService, ITypedRpcRequest} from '@message-bus/core';
 import {catchError, take} from 'rxjs/operators';
 import {of, Subscription, TimeoutError} from 'rxjs';
 
