@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MessageChannelNameConstant} from '../../../../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../../../../constants/message-event-name.constant';
 import {Subscription} from 'rxjs';
@@ -21,7 +21,8 @@ export class MessageListenerComponent implements OnInit, OnDestroy {
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService) {
+  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected messageBusService: IMessageBusService,
+                     protected readonly _changeDetectorRef: ChangeDetectorRef) {
   }
 
 
@@ -34,13 +35,12 @@ export class MessageListenerComponent implements OnInit, OnDestroy {
       .hookMessageChannel(MessageChannelNameConstant.ui, MessageEventNameConstant.deleteMessage)
       .subscribe((message: string) => {
         this.message = message;
+        this._changeDetectorRef.markForCheck();
       });
   }
 
   public ngOnDestroy(): void {
-    if (this._hookMessageSubscription && !this._hookMessageSubscription.closed) {
-      this._hookMessageSubscription.unsubscribe();
-    }
+    this._hookMessageSubscription?.unsubscribe();
   }
 
   //#endregion

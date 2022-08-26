@@ -42,7 +42,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
     const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
 
     this._messageBusService.addMessage(MessageChannelNameConstant.parent,
-      MessageEventNameConstant.sendParentMessage, data);
+      MessageEventNameConstant.sendParentMessage, new ModuleLevelMessageEvent(data));
   }
 
   //#endregion

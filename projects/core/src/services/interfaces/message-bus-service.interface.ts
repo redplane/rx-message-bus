@@ -24,7 +24,7 @@ export interface IMessageBusService {
   * */
   hookMessageChannel<T>(channelName: string, eventName: string, options?: IHookChannelOptions): Observable<T>;
 
-  /* Hook typed message channel.
+  /*
   * @deprecated Use hookMessage method instead.
   * */
   hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, options?: IHookChannelOptions): Observable<T>;
@@ -60,8 +60,13 @@ export interface IMessageBusService {
   // Clear recent message that has been sent.
   deleteChannelMessage(channelName: string, eventName: string): void;
 
-  // Delete recent message that has been sent.
+  /*
+  * @deprecated Use deleteMessage method instead.
+  * */
   deleteTypedChannelMessage<T>(channelEvent: TypedChannelEvent<T>): void;
+
+  // Clear recent message that has been sent.
+  deleteMessage<T>(type: Type<T>): void;
 
   // Delete every channel message.
   deleteMessages(): void;

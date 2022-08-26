@@ -1,3 +1,6 @@
+/*
+* @deprecated Use class with hookMessage method instead.
+* */
 export abstract class TypedChannelEvent<T> {
 
   //#region Properties

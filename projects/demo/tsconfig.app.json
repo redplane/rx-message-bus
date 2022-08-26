@@ -1,17 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "../../out-tsc/app",
-    "types": [],
-    "paths": {
-      "@message-bus/core": [
-        "../../dist/@message-bus/core/public_api.d.ts"
-      ],
-      "@message-bus/core/*": [
-        "../../dist/@message-bus/core/public_api.d.ts"
-      ]
-    }
+    "types": []
   },
   "files": [
     "src/main.ts",

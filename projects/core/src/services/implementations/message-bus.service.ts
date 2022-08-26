@@ -94,13 +94,14 @@ export class MessageBusService implements IMessageBusService {
       );
   }
 
-  /* Hook typed message channel.
+  /*
   * @deprecated Use hookMessage method instead.
   * */
   public hookTypedMessageChannel<T>(channelEvent: TypedChannelEvent<T>, options?: IHookChannelOptions): Observable<T> {
     return this.hookMessageChannel<T>(channelEvent.channelName, channelEvent.eventName, options);
   }
 
+  // Hook message which is transferred through message bus service.
   public hookMessage<T>(type: Type<T>, options?: IHookChannelOptions): Observable<T> {
 
     const instance = new type();
@@ -197,6 +198,19 @@ export class MessageBusService implements IMessageBusService {
         emitter.next(messageContainer);
       }
     }
+  }
+
+  // Clear recent message that has been sent.
+  public deleteMessage<T>(type: Type<T>): void {
+    const instance = new type();
+    if (!Reflect.hasMetadata(CHANNEL_NAME_METADATA, instance) || !Reflect.hasMetadata(EVENT_NAME_METADATA, instance)) {
+      throw new Error('Metadata is not found. Did you forget to add MessageEvent decorator on the target class ?');
+    }
+
+    // Get the metadata of the class.
+    const channelName = Reflect.getMetadata(CHANNEL_NAME_METADATA, instance);
+    const eventName = Reflect.getMetadata(EVENT_NAME_METADATA, instance);
+    this.deleteChannelMessage(channelName, eventName);
   }
 
   // Hook to channel channel - event initialization.

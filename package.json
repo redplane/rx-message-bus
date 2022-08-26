@@ -8,6 +8,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "link:lib": "npm link dist/@message-bus/core",
+    "unlink:lib": "npm unlink dist/@message-bus/core",
     "postbuild:lib": "cpx \"./README.md\" \"dist/@message-bus/core\"",
     "build:lib": "ng-packagr -p projects/core/ng-package.json",
     "demo": "ng serve demo",
