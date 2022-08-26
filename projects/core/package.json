@@ -1,6 +1,6 @@
 {
   "name": "@message-bus/core",
-  "version": "13.0.0-beta.0002",
+  "version": "13.0.0-beta.3",
   "peerDependencies": {
     "@angular/common": "^13.*.*",
     "reflect-metadata": "^0.1.9",
@@ -27,6 +27,8 @@
     "ngrx",
     "message-bus",
     "shared-service",
-    "shared service"
+    "shared service",
+    "@message-bus/core",
+    "@message-bus"
   ]
 }
