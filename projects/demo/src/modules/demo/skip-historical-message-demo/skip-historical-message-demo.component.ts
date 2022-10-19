@@ -106,11 +106,11 @@ export class SkipHistoricalMessageDemoComponent implements OnInit, OnDestroy {
     this.deleteSubscription();
 
     // Send message.
-    this._messageBusService.addTypedMessage(new GreetingChannelEvent(), `${new Date()}: This is a sample message`);
+    this._messageBusService.addMessageInstance(new GreetingChannelEvent(`${new Date()}: This is a sample message`));
 
     this._historicalMessageSubscription = this._messageBusService
-      .hookTypedMessageChannel(new GreetingChannelEvent(), {skipHistoricalMessages: this.skipHistoricalMessage})
-      .subscribe((message: string) => {
+      .hookMessageChannelByType(GreetingChannelEvent, {skipHistoricalMessages: this.skipHistoricalMessage})
+      .subscribe(({message}) => {
         this._receivedMessage = message;
         this._hasMessageReceived = true;
       });

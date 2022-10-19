@@ -55,7 +55,7 @@ describe('hookMessage test cases', () => {
     const messageBusService = new MessageBusService();
 
     // Hook channel initialization.
-    const hookTypedMessageSubscription = messageBusService.hookMessage(GreetingEvent)
+    const hookTypedMessageSubscription = messageBusService.hookMessageChannelByType(GreetingEvent)
       .subscribe(value => {
         expect(value.message).toEqual(message.message);
         done();
@@ -80,7 +80,7 @@ describe('hookMessage test cases', () => {
     const messageBusService = new MessageBusService();
 
     // Hook channel initialization.
-    const hookTypedMessageSubscription = messageBusService.hookMessage(GreetingEvent)
+    const hookTypedMessageSubscription = messageBusService.hookMessageChannelByType(GreetingEvent)
       .subscribe(value => {
         expect(value.message).toEqual(message.message);
         done();
@@ -89,7 +89,7 @@ describe('hookMessage test cases', () => {
     // Add subscription to watch list.
     subscription.add(hookTypedMessageSubscription);
 
-    messageBusService.publish(message);
+    messageBusService.addMessageInstance(message);
   }, 2000);
 
   it('hookMessage throws exception when class does not have metadata', (done) => {
@@ -99,14 +99,14 @@ describe('hookMessage test cases', () => {
 
     try {
       // Hook channel initialization.
-      const hookTypedMessageSubscription = messageBusService.hookMessage(NoMetadataEvent)
+      const hookTypedMessageSubscription = messageBusService.hookMessageChannelByType(NoMetadataEvent)
         .subscribe(value => {
           fail();
         });
 
       // Add subscription to watch list.
       subscription.add(hookTypedMessageSubscription);
-      messageBusService.publish(message);
+      messageBusService.addMessageInstance(message);
     } catch (exception) {
       expect(exception != null);
       expect((exception as Error).message.startsWith('Metadata is not found'));
@@ -120,7 +120,7 @@ describe('hookMessage test cases', () => {
     const messageBusService = new MessageBusService();
 
     try {
-      messageBusService.publish(message);
+      messageBusService.addMessageInstance(message);
     } catch (exception) {
       expect(exception != null);
       expect((exception as Error).message.startsWith('Metadata is not found'));

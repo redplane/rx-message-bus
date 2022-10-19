@@ -12,7 +12,14 @@
       </div>
     </div>
     <ng-container *ngIf="hasMessage">
-      <h3>Please click&nbsp;<button mat-button color="primary" mat-raised-button (click)="sendResponse()">Response</button>&nbsp;data to send data back to the requester.</h3>
+      <div>
+        <h3>Please click&nbsp;<button mat-button color="primary"
+                                      mat-raised-button (click)="sendResponse()">Response</button>&nbsp;data to send data back to the requester.</h3>
+
+        <h3>Please click&nbsp;<button mat-button color="warn"
+                                      mat-raised-button (click)="sendException()">Throw error</button>&nbsp;data to &nbsp;<b style="color: red">throw exception</b>&nbsp; to the requester.</h3>
+
+      </div>
     </ng-container>
   </mat-card-content>
 </mat-card>

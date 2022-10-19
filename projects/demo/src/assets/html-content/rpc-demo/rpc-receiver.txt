@@ -5,8 +5,8 @@ const hookTimeQuerySubscription = this.messageBusService
   .pipe(
     delay(this._messageRespondTime * 1000)
   )
-  .subscribe((value: GetTimeCommandRequest) => {
-    const commandResponse = new GetTimeCommandResponse(value.id);
+  .subscribe((value: LoadTimeCommand) => {
+    const commandResponse = new GetTimeCommandResult(value.id);
     this.messageBusService.addTypedMessage(new TimeUpdateMessageEvent(), commandResponse);
   });
 

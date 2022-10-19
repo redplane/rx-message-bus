@@ -3,6 +3,7 @@ import {RPC_SERVICE, IRpcService, RpcMessage} from '@message-bus/core';
 import {Subscription} from 'rxjs';
 import {RpcNamespaces} from '../../../../constants/rpc-namespaces';
 import {RpcMethodNames} from '../../../../constants/rpc-method-names';
+import {LoadTimeCommand} from '../../../../models/rpc-methods/load-time-command';
 
 @Component({
   selector: 'rpc-responder',
@@ -49,7 +50,7 @@ export class RpcResponderComponent implements OnInit, OnDestroy {
 
     const message = new RpcMessage(RpcNamespaces.singleRpcNamespace, RpcMethodNames.getTime);
     const hookMessageSubscription = this._rpcService
-      .hookMethodRequestAsync(message)
+      .hookMethodRequestAsync(LoadTimeCommand)
       .subscribe((receivedMessage: RpcMessage<any>) => {
         this.__messageId = receivedMessage.id;
         console.log('Received message ' + receivedMessage.id);
@@ -72,11 +73,19 @@ export class RpcResponderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const message = new RpcMessage(RpcNamespaces.singleRpcNamespace, RpcMethodNames.getTime);
-    this._rpcService.sendResponse(message, this.__messageId, `${new Date().toISOString()}`);
+    this._rpcService.sendResponse(LoadTimeCommand, this.__messageId, `${new Date().toISOString()}`);
     this.__messageId = '';
     this._changeDetectorRef.markForCheck();
   }
 
+  public sendException(): void {
+    if (!this.__messageId) {
+      return;
+    }
+
+    this._rpcService.sendException(LoadTimeCommand, this.__messageId, 'This is a custom exception');
+    this.__messageId = '';
+    this._changeDetectorRef.markForCheck();
+  }
   //#endregion
 }

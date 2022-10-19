@@ -15,7 +15,7 @@
   </mat-card>
 </div>
 
-<div class="row">
+<div class="row mb-20">
   <div class="col-md-6">
     <rpc-broadcaster></rpc-broadcaster>
   </div>
@@ -24,3 +24,20 @@
   </div>
 </div>
 
+
+<div class="row mb-20">
+  <div class="col-12">
+    <mat-card>
+      <mat-card-header class="mat-card-header">
+        <div class="mat-card-header-text">
+          <mat-card-title class="mat-card-title">Logs</mat-card-title>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let message of systemMessages">
+          <div [innerHTML]="message"></div>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

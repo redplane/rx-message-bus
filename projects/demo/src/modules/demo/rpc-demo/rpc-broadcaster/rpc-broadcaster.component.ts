@@ -1,10 +1,11 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {RPC_SERVICE, IRpcService, RpcMessage} from '@message-bus/core';
-import {finalize, mergeMap} from 'rxjs/operators';
+import {catchError, finalize, mergeMap} from 'rxjs/operators';
 import {Subscription} from 'rxjs';
 import {RpcNamespaces} from '../../../../constants/rpc-namespaces';
 import {RpcMethodNames} from '../../../../constants/rpc-method-names';
 import {MessageModalService} from '../../../shared/message-modal/message-modal.service';
+import {LoadTimeCommand} from '../../../../models/rpc-methods/load-time-command';
 
 @Component({
   selector: 'rpc-broadcaster',
@@ -63,9 +64,8 @@ export class RpcBroadcasterComponent implements OnInit, OnDestroy {
     this.__sendingMessage = true;
     this.__messageReceived = false;
 
-    const request = new RpcMessage(RpcNamespaces.singleRpcNamespace, RpcMethodNames.getTime, void (0));
     const sendMessageSubscription = this._rpcService
-      .sendRequestAsync(request, void (0))
+      .sendRequestAsync(new LoadTimeCommand())
       .pipe(
         finalize(() => {
           this.__sendingMessage = false;
@@ -74,6 +74,9 @@ export class RpcBroadcasterComponent implements OnInit, OnDestroy {
         mergeMap((message: string) => {
           this.__messageReceived = true;
           return this._modalService.displayAsync(`Message has been received successfully: ${message}`, 'Received message');
+        }),
+        catchError(exception => {
+          return this._modalService.displayAsync(`${exception}`, 'Got exception');
         })
       )
       .subscribe();
