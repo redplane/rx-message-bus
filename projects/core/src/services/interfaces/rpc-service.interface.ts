@@ -12,13 +12,17 @@ export interface IRpcService {
                                         timeoutInMilliseconds?: number): Observable<TResponse>;
 
   // Send a response from requested function
-  sendResponse<TRequest, TResponse>(type: Type<TRequest>, messageId: string, data: TResponse): void;
+  sendResponseByType<TRequest, TResponse>(type: Type<TRequest>, messageId: string, data: TResponse): void;
 
-  sendException<TRequest, TException>(type: Type<TRequest>, messageId: string, exception: TException);
+  sendResponse<TResponse>(namespace: string, method: string, messageId: string, data: TResponse): void;
+
+  sendExceptionByType<TRequest, TException>(type: Type<TRequest>, messageId: string, exception: TException);
+
+  sendException<TException>(namespace: string, method: string, messageId: string, exception: TException);
 
   // Hook method request asynchronously
   hookMethodRequestAsync<TRequest, TResponse>(type: Type<TRequest>,
-                            options?: IHookMethodRequestOptions): Observable<RpcMessage<TResponse>>;
+                                              options?: IHookMethodRequestOptions): Observable<RpcMessage<TResponse>>;
 
   hookMethodsRequestsAsync<TResponse>(): Observable<RpcMessage<TResponse>>;
 

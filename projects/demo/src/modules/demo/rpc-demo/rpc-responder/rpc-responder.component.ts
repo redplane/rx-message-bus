@@ -48,7 +48,6 @@ export class RpcResponderComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
 
-    const message = new RpcMessage(RpcNamespaces.singleRpcNamespace, RpcMethodNames.getTime);
     const hookMessageSubscription = this._rpcService
       .hookMethodRequestAsync(LoadTimeCommand)
       .subscribe((receivedMessage: RpcMessage<any>) => {
@@ -67,13 +66,33 @@ export class RpcResponderComponent implements OnInit, OnDestroy {
 
   //#region Methods
 
+  public sendResponseByType(): void {
+    if (!this.__messageId) {
+      return;
+    }
+
+    this._rpcService.sendResponseByType(LoadTimeCommand, this.__messageId, `Send response by type: ${new Date().toISOString()}`);
+    this.__messageId = '';
+    this._changeDetectorRef.markForCheck();
+  }
+
   public sendResponse(): void {
 
     if (!this.__messageId) {
       return;
     }
 
-    this._rpcService.sendResponse(LoadTimeCommand, this.__messageId, `${new Date().toISOString()}`);
+    this._rpcService.sendResponse('system-time', 'get', this.__messageId, `Send response: ${new Date().toISOString()}`);
+    this.__messageId = '';
+    this._changeDetectorRef.markForCheck();
+  }
+
+  public sendExceptionByType(): void {
+    if (!this.__messageId) {
+      return;
+    }
+
+    this._rpcService.sendExceptionByType(LoadTimeCommand, this.__messageId, '[Exception by type] This is a custom exception');
     this.__messageId = '';
     this._changeDetectorRef.markForCheck();
   }
@@ -83,7 +102,7 @@ export class RpcResponderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._rpcService.sendException(LoadTimeCommand, this.__messageId, 'This is a custom exception');
+    this._rpcService.sendException('system-time', 'get', this.__messageId, '[Exception] This is a custom exception');
     this.__messageId = '';
     this._changeDetectorRef.markForCheck();
   }
