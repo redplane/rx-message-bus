@@ -73,7 +73,7 @@ export class RpcBroadcasterComponent implements OnInit, OnDestroy {
         }),
         mergeMap((message: string) => {
           this.__messageReceived = true;
-          return this._modalService.displayAsync(`Message has been received successfully: ${message}`, 'Received message');
+          return this._modalService.displayAsync(`${message}`, 'Received message');
         }),
         catchError(exception => {
           return this._modalService.displayAsync(`${exception}`, 'Got exception');

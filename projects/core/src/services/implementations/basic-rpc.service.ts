@@ -77,12 +77,17 @@ export class BasicRpcService extends MessageBusService implements IRpcService {
     );
   }
 
-  public sendResponse<TRequest, TResponse>(
-    type: Type<TRequest>,
+  public sendResponse<TResponse>(namespace: string, method: string,
     messageId: string,
     data: TResponse
   ) {
-    const resolver = this._getResolver(type, messageId);
+    const resolver = this._getResolver(namespace, method, messageId);
+    resolver.next(data);
+  }
+
+  public sendResponseByType<TRequest, TResponse>(type: Type<TRequest>,
+                                                 messageId: string, data: TResponse): void {
+    const resolver = this._getResolverByType(type, messageId);
     resolver.next(data);
   }
 
@@ -112,9 +117,14 @@ export class BasicRpcService extends MessageBusService implements IRpcService {
     return this.__methodsRequest$.asObservable();
   }
 
-  public sendException<TRequest, TException>(type: Type<TRequest>,
+  public sendException<TException>(namespace: string, method: string,
                                              messageId: string, exception: TException) {
-    const resolver = this._getResolver(type, messageId);
+    const resolver = this._getResolver(namespace, method, messageId);
+    resolver.error(exception);
+  }
+
+  public sendExceptionByType<TRequest, TException>(type: Type<TRequest>, messageId: string, exception: TException) {
+    const resolver = this._getResolverByType(type, messageId);
     resolver.error(exception);
   }
 
@@ -134,7 +144,7 @@ export class BasicRpcService extends MessageBusService implements IRpcService {
     return `${namespace}-request`;
   }
 
-  protected _getResolver<T>(type: Type<T>, messageId: string): Subject<any> {
+  protected _getResolverByType<T>(type: Type<T>, messageId: string): Subject<any> {
     const instance = new type();
     const namespace = Reflect.getMetadata(NAMESPACE_METADATA, instance);
     const method = Reflect.getMetadata(METHOD_METADATA, instance);
@@ -143,6 +153,10 @@ export class BasicRpcService extends MessageBusService implements IRpcService {
       throw new Error('Metadata is not found. Did you forget to add RpcRequest decorator on the target class ?');
     }
 
+    return this._getResolver(namespace, method, messageId);
+  }
+
+  protected _getResolver(namespace: string, method: string, messageId: string): Subject<any> {
     const actualKey = this._getRpcKey(
       namespace,
       method,
