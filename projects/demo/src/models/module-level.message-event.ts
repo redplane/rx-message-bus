@@ -1,4 +1,4 @@
-import {MessageHook, TypedChannelEvent} from '@message-bus/core';
+import {MessageHook} from '@message-bus/core';
 import {MessageChannelNameConstant} from '../constants/message-channel-name.constant';
 import {MessageEventNameConstant} from '../constants/message-event-name.constant';
 

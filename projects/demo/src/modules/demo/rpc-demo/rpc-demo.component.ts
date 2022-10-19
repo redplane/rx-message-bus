@@ -1,12 +1,7 @@
 import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {IMessageBusService, IRpcService, ITypedRpcRequest, MESSAGE_BUS_SERVICE, RPC_SERVICE} from '@message-bus/core';
+import {IMessageBusService, IRpcService, MESSAGE_BUS_SERVICE, RPC_SERVICE, RpcMessage} from '@message-bus/core';
 import {Observable, ReplaySubject, Subscription} from 'rxjs';
-import {TimeQueryMessageEvent} from '../../../models/time-query.message-event';
-import {GetTimeCommandRequest} from '../../../models/get-time-command-request';
-import {delay, finalize, take} from 'rxjs/operators';
-import {TimeUpdateMessageEvent} from '../../../models/time-update.message-event';
-import {GetTimeCommandResponse} from '../../../models/get-time-command-response';
-import * as moment from 'moment';
+import {LoadTimeCommand} from '../../../models/rpc-methods/load-time-command';
 
 @Component({
   selector: 'rpc-demo',
@@ -18,30 +13,33 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   //#region Properties
 
-  private readonly _namespace = 'demo-namespace';
+  private __systemMessages: string[];
 
-  private readonly _method = 'demo-method';
-
-  private _sendingCommand: boolean;
-
-  private readonly _messageRespondTime = 5;
+  private __sendingCommand: boolean;
 
   // Subscription watch list.
-  private _subscription: Subscription;
+  private readonly __subscription: Subscription;
 
   //#endregion
 
   //#region Accessors
 
+  public get systemMessages(): string[] {
+    return this.__systemMessages;
+  }
+
   //#endregion
 
   //#region Constructor
 
-  public constructor(@Inject(MESSAGE_BUS_SERVICE) protected readonly _messageBusService: IMessageBusService,
-                     @Inject(RPC_SERVICE) protected readonly _rpcService: IRpcService,
+  public constructor(@Inject(MESSAGE_BUS_SERVICE)
+                     protected readonly _messageBusService: IMessageBusService,
+                     @Inject(RPC_SERVICE)
+                     protected readonly _rpcService: IRpcService,
                      protected readonly _changeDetectorRef: ChangeDetectorRef) {
-    this._sendingCommand = false;
-    this._subscription = new Subscription();
+    this.__sendingCommand = false;
+    this.__systemMessages = [];
+    this.__subscription = new Subscription();
   }
 
   //#endregion
@@ -50,62 +48,28 @@ export class RpcDemoComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
 
-    // Initialize subscription watch list.
-    this._subscription = new Subscription();
-
-    // Fake listener to listen to time query command.
-    // Wait for 10 seconds and reply to requested command.
-    const hookTimeQuerySubscription = this._messageBusService
-      .hookTypedMessageChannel(new TimeQueryMessageEvent())
-      .pipe(
-        delay(this._messageRespondTime * 1000)
-      )
-      .subscribe((value: GetTimeCommandRequest) => {
-        const commandResponse = new GetTimeCommandResponse(value.id);
-        this._messageBusService.addTypedMessage(new TimeUpdateMessageEvent(), commandResponse);
-      });
-
-    const typedRequest: ITypedRpcRequest<string, string> = {namespace: this._namespace, method: this._method};
-    const hookRpcMessageSubscription = this._rpcService
-      .hookMethodRequestAsync(typedRequest, {
-        skipHistoricalMessages: true
-      })
-      .pipe(
-        delay(5000)
-      )
-      .subscribe(message => {
-        this._rpcService.sendResponse(typedRequest, message.id, 'Message has been resolved.');
+    const hookMethodsRequestsSubscription = this._rpcService
+      .hookMethodsRequestsAsync()
+      .subscribe((message: RpcMessage<any>) => {
+        const szMessage = `<b>${message.namespace}</b>-<b>${message.method}</b>-<b>${message.id}</b>: <i>${JSON.stringify(message.data)}</i>`;
+        this.__systemMessages.push(szMessage);
         this._changeDetectorRef.markForCheck();
       });
+    this.__subscription.add(hookMethodsRequestsSubscription);
 
-    this._subscription.add(hookTimeQuerySubscription);
-    this._subscription.add(hookRpcMessageSubscription);
+    const hookMethodRequestsSubscription = this._rpcService
+      .hookMethodRequestAsync(LoadTimeCommand)
+      .subscribe((message: RpcMessage<any>) => {
+        const szMessage = `<b>${message.namespace}</b>-<b>${message.method}</b>-<b>${message.id}</b>: <i>${JSON.stringify(message.data)}</i>`;
+        console.log(szMessage);
+      });
+    this.__subscription.add(hookMethodRequestsSubscription);
+
   }
 
   public ngOnDestroy(): void {
-    if (this._subscription && !this._subscription.closed) {
-      this._subscription.unsubscribe();
-    }
+    this.__subscription?.unsubscribe();
   }
 
   //#endregion
-
-  //#region Internal methods
-
-  protected loadTimeAsync(): Observable<string> {
-    const resolver = new ReplaySubject<string>(1);
-    this._messageBusService.hookTypedMessageChannel(new TimeUpdateMessageEvent())
-      .pipe(
-        take(1)
-      )
-      .subscribe((value: GetTimeCommandResponse) => {
-        resolver.next(moment(value.value).format('YYYY-MM-DD HH:mm:ss'));
-      });
-
-    this._messageBusService.addTypedMessage(new TimeQueryMessageEvent(), new GetTimeCommandRequest());
-    return resolver.pipe(take(1));
-  }
-
-  //#endregion
-
 }

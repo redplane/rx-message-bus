@@ -33,7 +33,7 @@ export class ModuleLevelParentComponent extends ParentComponent {
     const data = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
     const messageEvent = new ModuleLevelMessageEvent(data);
 
-    this._messageBusService.publish(messageEvent);
+    this._messageBusService.addMessageInstance(messageEvent);
   }
 
   public clickSendMessage(): void {

@@ -12,10 +12,6 @@
       </div>
     </div>
 
-    <div *ngIf="messageReceived" class="message-received">
-      <img src="/assets/images/message-received.png" class="img-fluid h-100">
-    </div>
-
     <ng-container *ngIf="!sendingMessage">
       <h3>Please click&nbsp;<button mat-button color="primary" mat-raised-button (click)="sendMessage()">Get RPC Server data</button>&nbsp;button to get data from RPC Server component</h3>
     </ng-container>

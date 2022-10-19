@@ -37,7 +37,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
     const message = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
 
     this._messageBusService
-      .addMessage(MessageChannelNameConstant.parent, MessageEventNameConstant.sendParentMessage, message);
+      .addMessage(MessageChannelNameConstant.parent, MessageEventNameConstant.sendParentMessage, {message});
   }
 
   public clickSendTypedMessage(): void {
@@ -46,7 +46,7 @@ export class ComponentLevelParentComponent extends ParentComponent {
     const message = `${date.toLocaleTimeString()} [${this.name}] says: Hello`;
     const messageEvent = new ModuleLevelMessageEvent(message);
 
-    this._messageBusService.publish(messageEvent);
+    this._messageBusService.addMessageInstance(messageEvent);
   }
 
   //#endregion

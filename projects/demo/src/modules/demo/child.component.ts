@@ -55,7 +55,7 @@ export abstract class ChildComponent implements OnDestroy {
       });
 
     const hookParentTypedMessageSubscription = this._messageBusService
-      .hookMessage(ModuleLevelMessageEvent)
+      .hookMessageChannelByType(ModuleLevelMessageEvent)
       .subscribe(({message}) => {
         this._typedMessage = message;
         this._changeDetectorRef.markForCheck();
