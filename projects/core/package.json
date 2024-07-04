@@ -1,10 +1,10 @@
 {
   "name": "@message-bus/core",
-  "version": "13.0.0-beta.5",
+  "version": "13.1.0",
   "peerDependencies": {
-    "@angular/common": "^13.*.*",
+    "@angular/common": ">=13",
     "reflect-metadata": "^0.1.9",
-    "@angular/core": "^13.*.*"
+    "@angular/core": ">=13"
   },
   "publishConfig": {
     "access": "public"
