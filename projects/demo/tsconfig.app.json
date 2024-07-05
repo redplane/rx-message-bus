@@ -3,7 +3,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "../../out-tsc/app",
-    "types": []
+    "types": [],
+    "paths": {
+      "@message-bus/core": [
+        "../core/src/public_api.ts"
+      ]
+    }
   },
   "files": [
     "src/main.ts",
